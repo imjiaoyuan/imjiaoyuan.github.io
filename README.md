@@ -4,7 +4,7 @@
 
 - 🏫 [CDUT](https://www.cdut.edu.cn/) - BSc in Environmental Science and Engineering, 6/2021 - 7/2025 .
 - 👨‍🎓 Member of _[HJLab](https://www.x-mol.com/groups/hj-lab)_, 12/2022 - 06/2024 .
-- 🧬 Shell / Python / R / Bioinformatics / NGS-analysis / Linux player .
+- 🧬 Shell / C / Python / R / Bioinformatics / NGS-analysis / Linux player .
 - 💻 Arch and GNU Cultist, first thing in the morning is 'yay -Syyu' .
 - 🎳 Favor the philosophy that Linux package managers should treat 'system' and 'general software' equally .
 - 📗 Blogger of the WeChat official account  '猫四叔' .
