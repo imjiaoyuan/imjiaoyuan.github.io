@@ -2,6 +2,7 @@
 
 **2024**
 
+- [2024生物学热点](posts/2024-10-09-2024-biology-hotspots.html) / 2024-10-09
 - [C 语言速查手册](posts/2024-10-09-c-manual.html) / 2024-10-09
 - [单细胞转录组图谱揭示拟南芥愈伤组织诱导过程中早期细胞命运转变轨迹](posts/2024-09-07-single-cell-transcriptome-mapping-reveals-early-cell-fate-transition-trajectories-during-callus-induction-in-arabidopsis.html) / 2024-09-07
 - [Bionanoaccess 安装](posts/2024-09-02-bionanoaccess-installation.html) / 2024-09-02

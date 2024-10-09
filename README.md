@@ -12,4 +12,4 @@
 - 🎨 Minimalist, favoring simple workflows and design, passionate about free software and open-source code .
 - 📫 You can reach me on GitHub at [imjiaoyuan](https://github.com/imjiaoyuan) or via email at imjiaoyuan@gmail.com.
 
-**[Read all my articles](./toc.md) / [TODO list](./TODO.md)**
+[Read all my posts](./toc.md) / [TODO list](./TODO.md) / [RSS](https://yuanj.top/rss.xml)
