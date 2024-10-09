@@ -26,8 +26,8 @@ for filename in os.listdir('posts'):
 # 按照 date 进行降序排序
 entries.sort(key=lambda x: datetime.strptime(x[0], '%Y-%m-%d'), reverse=True)
 
-# 生成 README.md 文件
-with open('README.md', 'r', encoding='utf-8') as readme_file:
+# 生成 toc.md 文件
+with open('toc.md', 'r', encoding='utf-8') as readme_file:
     readme_content = readme_file.read()
 
 # 找到 ### Posts 标题的位置
@@ -40,7 +40,7 @@ else:
     readme_content += '### Posts\n\n'
 
 # 写入目录
-with open('README.md', 'w', encoding='utf-8') as readme_file:
+with open('toc.md', 'w', encoding='utf-8') as readme_file:
     readme_file.write(readme_content)
     readme_file.write('### Posts\n\n')
     
@@ -54,11 +54,11 @@ with open('README.md', 'w', encoding='utf-8') as readme_file:
             readme_file.write(f'**{current_year}**\n\n')
         # 构建链接
         link = f"- [{title}](posts/{filename.replace('.md', '.html')}) / {date}"
-        # 写入 README.md 文件
+        # 写入 toc.md 文件
         readme_file.write(link + '\n')
     readme_file.write('\n')  # 在年份下方添加一个换行符
 
-print("README.md has been updated.")
+print("toc.md has been updated.")
 
 # 生成 RSS 文件
 rss = Element('rss', {'version': '2.0'})

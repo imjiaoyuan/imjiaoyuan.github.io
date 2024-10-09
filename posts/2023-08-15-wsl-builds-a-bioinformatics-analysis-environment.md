@@ -24,7 +24,7 @@ date: 2023-08-15
 
 ## WSL 的安装
 
-参考我的文章 [Windows10 & 11 安装 WSL2](https://yuanj.topposts/2023-05-20-install-wsl2-on-windows-10-and-11.html)
+参考我的文章 [Windows10 & 11 安装 WSL2](https://yuanj.top/posts/2023-05-20-install-wsl2-on-windows-10-and-11.html)
 
 ## WSL 的配置
 
@@ -56,7 +56,7 @@ sudo apt-get install git
 
 **conda**
 
-参考文章 [Linux 下安装 conda](hhttps://yuanj.topposts/2023-05-01-installing-conda-on-linux.html)
+参考文章 [Linux 下安装 conda](hhttps://yuanj.top/posts/2023-05-01-installing-conda-on-linux.html)
 
 **oh-my-zsh**
 
@@ -90,7 +90,7 @@ sudo apt-get install neofetch
 
 **其他**
 
-[Linux 下安装 BUSCO](https://yuanj.topposts/2023-07-21-installing-busco-in-linux.html)
+[Linux 下安装 BUSCO](https://yuanj.top/posts/2023-07-21-installing-busco-in-linux.html)
 
 ### 连接 VScode
 

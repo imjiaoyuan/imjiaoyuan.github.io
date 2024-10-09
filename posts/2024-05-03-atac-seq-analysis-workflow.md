@@ -18,7 +18,7 @@ ATAC-Seq 是“Assay for Transposase-Accessible Chromatin with high-throughput S
 - step5：差异分析
 - step6：基序分析、通路分析、核小体占据率分析、和其他组学分析的整合
 
-上游的预处理部分与 RNA-seq 的差不多，可以参考我之前的文章：https://yuanj.topposts/2024-03-27-rna-seq-upstream-analysis-learning.html
+上游的预处理部分与 RNA-seq 的差不多，可以参考我之前的文章：https://yuanj.top/posts/2024-03-27-rna-seq-upstream-analysis-learning.html
 
 ## 版本信息
 

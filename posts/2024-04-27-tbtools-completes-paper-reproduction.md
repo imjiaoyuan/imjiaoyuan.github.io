@@ -20,7 +20,7 @@ date: 2024-04-27
 - 顺式作用元件分析
 - 表达热图
 
-以上的分析基本都可以用 TBtools 来完成并做成好看的图片，这也是一个常规基因家族分析的流程。此处不涉及过于详细的步骤，更详细的步骤请参阅我的博客文章：https://yuanj.topposts/2023-06-01-gene-family-identification.html
+以上的分析基本都可以用 TBtools 来完成并做成好看的图片，这也是一个常规基因家族分析的流程。此处不涉及过于详细的步骤，更详细的步骤请参阅我的博客文章：https://yuanj.top/posts/2023-06-01-gene-family-identification.html
 
 作者在补充材料里提供了基因 ID、基因名和蛋白序列：
 
@@ -165,11 +165,11 @@ transcript:Os03t0610900-01	OsSAPK10
 
 ![](img/202404270924998.png)
 
-关于进化树的分析步骤及美化可以参阅：https://yuanj.topposts/2023-06-24-the-creation-and-beautification-of-gene-evolution-tree.html
+关于进化树的分析步骤及美化可以参阅：https://yuanj.top/posts/2023-06-24-the-creation-and-beautification-of-gene-evolution-tree.html
 
 ## 共线性分析
 
-共线性分析的步骤比较多，这里不展开赘述，参考我的博客文章：https://yuanj.topposts/2023-04-24-intraspecies-collinearity-analysis.html
+共线性分析的步骤比较多，这里不展开赘述，参考我的博客文章：https://yuanj.top/posts/2023-04-24-intraspecies-collinearity-analysis.html
 
 ![](img/202404270925423.png)
 
@@ -234,12 +234,12 @@ SOPMA :
 
 ![](img/202404270925092.png)
 
-将数据导出为 tsv 文件后，可以使用 Cytoscape 进行美化，可以参照我的博客文章：https://yuanj.topposts/2023-06-22-protein-interaction-network-beautification.html
+将数据导出为 tsv 文件后，可以使用 Cytoscape 进行美化，可以参照我的博客文章：https://yuanj.top/posts/2023-06-22-protein-interaction-network-beautification.html
 之前 STRING 数据库默认的互作蛋白网络不够美观，但是现在已经更新，默认的图已经很漂亮了，此处就不进行美化了。
 
 ## 顺式作用元件分析
 
-将上游 2000 的 cds 序列上传到 [plantcare 网站](http://bioinformatics.psb.ugent.be/webtools/plantcare/html/)，拿到结果后处理一下数据然后导入 TBtools 就可以进行绘图，详细步骤可以参考我的博客文章：https://yuanj.topposts/2023-03-29-cis-acting-element-analysis.html
+将上游 2000 的 cds 序列上传到 [plantcare 网站](http://bioinformatics.psb.ugent.be/webtools/plantcare/html/)，拿到结果后处理一下数据然后导入 TBtools 就可以进行绘图，详细步骤可以参考我的博客文章：https://yuanj.top/posts/2023-03-29-cis-acting-element-analysis.html
 
 ![](img/202404270926750.png)
 
@@ -251,7 +251,7 @@ SOPMA :
 
 ![](img/202404270926470.png)
 
-TBtools 热图美化可以参考：https://yuanj.topposts/2023-06-23-detailed-explanation-of-gene-expression-heatmap-creation-using-tbtools.html
+TBtools 热图美化可以参考：https://yuanj.top/posts/2023-06-23-detailed-explanation-of-gene-expression-heatmap-creation-using-tbtools.html
 
 ## 数据可用性
 

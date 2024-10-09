@@ -23,7 +23,7 @@ date: 2023-07-21
 
 ## 安装 conda
 
-conda 的安装参考 [Linux 下安装 conda](hhttps://yuanj.topposts/2023-05-01-installing-conda-on-linux.html)
+conda 的安装参考 [Linux 下安装 conda](hhttps://yuanj.top/posts/2023-05-01-installing-conda-on-linux.html)
 
 ## 安装所需依赖
 

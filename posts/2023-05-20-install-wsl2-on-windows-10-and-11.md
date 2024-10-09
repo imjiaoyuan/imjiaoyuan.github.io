@@ -98,4 +98,4 @@ apt list --upgradeable
 sudo apt autoremove
 ```
 
-关于 conda 的安装可以参考此文章 [Linux 下安装 conda](https://yuanj.topposts/2023-05-01-installing-conda-on-linux.html)
+关于 conda 的安装可以参考此文章 [Linux 下安装 conda](https://yuanj.top/posts/2023-05-01-installing-conda-on-linux.html)
