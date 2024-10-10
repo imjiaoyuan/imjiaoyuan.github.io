@@ -1,6 +1,7 @@
 ---
 title: 正则表达式
 date: 2023-09-05
+layout: post
 ---
 
 Python 使用正则表达式的一些知识。

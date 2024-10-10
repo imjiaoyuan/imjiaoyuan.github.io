@@ -1,6 +1,7 @@
 ---
 title: 详解 ATAC-Seq
 date: 2024-03-08
+layout: post
 ---
 
 ATAC-seq，全称 Assay for Transposase-Accessible Chromatin with high throughput sequencing，是 2013 年由斯坦福大学 William J. Greenleaf 和 Howard Y. Chang 实验室开发的用来研究染色质可及性（通常也理解为染色质的开放性）的方法。

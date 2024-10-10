@@ -1,6 +1,7 @@
 ---
 title: 表观遗传学之 WGBS
 date: 2024-04-05
+layout: post
 ---
 
 在说 WGBS 之前，先来说说 DNA 甲基化。DNA 甲基化是最早被发现、也是研究最深入的表观遗传调控机制之一。广义上的 DNA 甲基化是指 DNA 序列上特定的碱基，在 DNA 甲基转移酶（DNA methyltransferase，DNMT）的催化作用下，以 S-腺苷甲硫氨酸（S-adenosyl methionine，SAM）作为甲基供体，通过共价键结合的方式获得一个甲基基团的化学修饰过程。这种 DNA 甲基化修饰可以发生在胞嘧啶的 C-5 位、腺嘌呤的 N-6 位以及鸟嘌呤的 G-7 位等位点。

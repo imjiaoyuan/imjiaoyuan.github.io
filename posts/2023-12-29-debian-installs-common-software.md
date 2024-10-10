@@ -1,6 +1,7 @@
 ---
 title: Debian 安装常用软件
 date: 2023-12-29
+layout: post
 ---
 
 记录一下 Debian 上安装常用软件的一些命令。

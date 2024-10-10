@@ -1,6 +1,7 @@
 ---
 title: 与 Deseq2 斗智斗勇
 date: 2024-03-05
+layout: post
 ---
 
 今天要做一个差异表达分析，理所当然的用上 Deseq2 包。

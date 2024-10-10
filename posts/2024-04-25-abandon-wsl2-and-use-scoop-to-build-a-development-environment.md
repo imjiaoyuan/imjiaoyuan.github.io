@@ -1,6 +1,7 @@
 ---
 title: 抛弃 WSL2 使用 scoop 搭建开发环境
 date: 2024-04-25
+layout: post
 ---
 
 之前一直是用 WSL2 来作为开发环境的，博客、数据分析和编程等都在 WSL2 里进行，虽然 WSL2 已经很方便，但是我仍然心里有疙瘩，因为两个原因：Hyper-V 的性能损失和无法自动释放内存/硬盘。
@@ -170,6 +171,7 @@ shopt -s histappend
 Installed apps:
 
 Name              Version          Source Updated             Info
+layout: post
 ----              -------          ------ -------             ----
 7zip              23.01            main   2024-05-04 15:06:19
 coreutils         5.97.3           main   2024-05-04 15:07:45

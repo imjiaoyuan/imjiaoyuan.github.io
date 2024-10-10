@@ -1,6 +1,7 @@
 ---
 title: Debian 编译安装最新版 R
 date: 2023-12-29
+layout: post
 ---
 
 Debian 默认自带的 R 版本太低了，所以需要自己编译安装最新版的 R。
@@ -31,6 +32,7 @@ sudo make install
 
 也没什么需要注意的，只要把依赖都装好了，后面的都是很顺其自然的。
 
+layout: post
 ---
 
 **2024/02/01 更新**

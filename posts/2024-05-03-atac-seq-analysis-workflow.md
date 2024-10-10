@@ -1,6 +1,7 @@
 ---
 title: ATAC-Seq 分析流程
 date: 2024-05-03
+layout: post
 ---
 
 ATAC-Seq 是“Assay for Transposase-Accessible Chromatin with high-throughput Sequencing”的缩写。 ATAC-Seq 方法依赖于使用高活性转座酶 Tn5 的下一代测序（NGS）文库的构建。将 NGS 接头连接到转座酶上，该转座酶可以使染色质断裂并同时将这些接头整合到开放的染色质区域中。构建的文库可通过 NGS 测序，并使用生物信息学分析具有可及或可访问染色质的基因组区域。

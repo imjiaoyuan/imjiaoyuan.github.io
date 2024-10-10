@@ -1,6 +1,7 @@
 ---
 title: 多组学揭示香蕉皮褐变过程中低温诱导的 WRKY 因子调控网络重构
 date: 2024-08-05
+layout: post
 ---
 
 文章题为"Low temperature-induced regulatory network rewiring via WRKY regulators during banana peel browning"。该文章发表于 Plant Physiology（中科院一区，IF=6.5，第一作者：Wenjun Zhu，通讯作者： Peitao Lü）。

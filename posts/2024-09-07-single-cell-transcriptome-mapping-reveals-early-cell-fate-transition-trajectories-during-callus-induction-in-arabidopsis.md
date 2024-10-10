@@ -1,6 +1,7 @@
 ---
 title: 单细胞转录组图谱揭示拟南芥愈伤组织诱导过程中早期细胞命运转变轨迹
 date: 2024-09-07
+layout: post
 ---
 
 文章题为"A single-cell transcriptome atlas reveals the trajectory of early cell fate transition during callus induction in Arabidopsis"。该文章发表于 Plant Communications（中科院一区，IF=9.4，第一作者：Ruilian Yin，通讯作者：Xun Xu）。

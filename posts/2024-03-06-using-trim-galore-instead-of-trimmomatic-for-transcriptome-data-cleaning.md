@@ -1,6 +1,7 @@
 ---
 title: 使用 Trim Galore 替代 Trimmomatic 进行转录组数据清洗
 date: 2024-03-06
+layout: post
 ---
 
 最初第一次使用 Trimmomatic 的时候就很头疼，代码那么长，而且那些参数都很不好懂 ... 但是当时也就凑活着用了，最近读到几篇论文都用 trim Galore 来进行测序数据的清洗，于是试用了一下，确实比起 Trimmomatic 要好一些。

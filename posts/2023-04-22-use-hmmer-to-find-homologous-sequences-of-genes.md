@@ -1,6 +1,7 @@
 ---
 title: 使用 HMMER 查找基因的同源序列
 date: 2023-04-22
+layout: post
 ---
 
 使用 HMMER 查找同源基因比 blast 更加准确，速度也更快，但使用方法很少有文章讲清楚，本文记录我使用 HMMER 的操作。

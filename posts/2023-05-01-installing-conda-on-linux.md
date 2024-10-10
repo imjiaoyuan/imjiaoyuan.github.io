@@ -1,6 +1,7 @@
 ---
 title: Linux 下安装 conda
 date: 2023-05-01
+layout: post
 ---
 
 做生信的话，conda 应该是必要的软件之一吧？记录一下安装过程以及源的配置。

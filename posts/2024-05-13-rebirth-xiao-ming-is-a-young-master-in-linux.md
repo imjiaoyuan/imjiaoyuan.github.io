@@ -1,6 +1,7 @@
 ---
 title: 重生之小明在 Linux 当少爷
 date: 2024-05-13
+layout: post
 ---
 
 “嘶嘶嘶”“头好痛啊”
@@ -147,5 +148,6 @@ aarch64-linux-gnu-gcov               fc-query                      join         
 
 看着家里这么多的手下，小明心里高兴极了：“这带出去得多帅？”
 
+layout: post
 ---
 编不下去了🤣有灵感了再编吧

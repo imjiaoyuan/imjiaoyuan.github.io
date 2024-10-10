@@ -1,6 +1,7 @@
 ---
 title: 表观遗传学之 Chip-Seq
 date: 2024-03-27
+layout: post
 ---
 
 染色质免疫沉淀-测序（Chip-sequencing，简称 Chip-seq）用于分析蛋白质与 DNA 的交互作用。此技术结合了染色质免疫沉淀（Chip）和高通量 DNA 测序，旨在鉴定与 DNA 结合的蛋白质位点，从而精确绘制全基因组上目标蛋白的结合区域。在 Chip-seq 出现之前，Chip-on-chip 技术是研究蛋白质-DNA 相互作用的常用方法。

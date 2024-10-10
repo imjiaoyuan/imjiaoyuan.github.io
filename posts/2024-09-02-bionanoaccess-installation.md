@@ -1,6 +1,7 @@
 ---
 title: Bionanoaccess 安装
 date: 2024-09-02
+layout: post
 ---
 
 之前帮一位老师安装了 bionano，过程还是比较繁琐的，根据官网的安装文档进行了一些补充。

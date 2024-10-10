@@ -1,6 +1,7 @@
 ---
 title: 拟南芥根部的单细胞分辨率调控景观
 date: 2024-08-30
+layout: post
 ---
 
 文章题为"The regulatory landscape of Arabidopsis thaliana roots at single-cell resolution"。该文章发表于 Nature Communications（中科院一区，IF=14.7，第一作者：Michael W. Dorrity，通讯作者：Josh T. Cuperus）。

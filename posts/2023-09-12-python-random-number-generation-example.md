@@ -1,6 +1,7 @@
 ---
 title: Python 生成随机数例子
 date: 2023-09-12
+layout: post
 ---
 
 最近在学习 Pyhotn，突然想到实验课作业里需要几百个噪音的数据，于是使用 Pyhton 生成随机数来模拟一下。

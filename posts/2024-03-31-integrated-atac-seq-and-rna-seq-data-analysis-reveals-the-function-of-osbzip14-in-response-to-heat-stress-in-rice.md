@@ -1,6 +1,7 @@
 ---
 title: 整合 ATAC Seq 和 RNA Seq 数据分析揭示水稻中 OsbZIP14 响应热应激的功能
 date: 2024-03-31
+layout: post
 ---
 
 本周推荐的文章为 03 月 22 日黄进课题组每周的文献分享组会上，由焦元（2021 级环境科学与工程专业本科生）分享的题为“Integrated ATAC-Seq and RNA-Seq Data Analysis to Reveal OsbZIP14 Function in Rice in Response to Heat Stress”的文章。该文章发表于 International Journal of Molecular Sciences（中科院二区，IF=5.6，第一作者：Fuxiang Qiu，通讯作者：Huaqin He）。

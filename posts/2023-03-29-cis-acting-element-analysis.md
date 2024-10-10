@@ -1,6 +1,7 @@
 ---
 title: 顺式作用元件分析
 date: 2023-03-29
+layout: post
 ---
 
 顺式作用元件 (cis-acting element) 存在于基因旁侧序列中能影响基因表达的序列。

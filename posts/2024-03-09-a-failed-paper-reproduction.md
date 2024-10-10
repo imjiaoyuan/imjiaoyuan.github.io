@@ -1,6 +1,7 @@
 ---
 title: 一次失败的论文复现
 date: 2024-03-09
+layout: post
 ---
 
 最近在学习多组学分析，于是决定从论文复现入手，找了一篇感觉可以的文章 [《Integrated ATAC-Seq and RNA-Seq Data Analysis to Reveal OsbZIP14 Function in Rice in Response to Heat Stress》](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10057503/) 就直接开干了。

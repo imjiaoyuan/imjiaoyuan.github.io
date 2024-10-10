@@ -1,6 +1,7 @@
 ---
 title: 修复 Debian 下 wine 应用没有图标的问题
 date: 2024-01-06
+layout: post
 ---
 
 换到 cinnamon 桌面后，[deepin-wine](https://github.com/zq1997/deepin-wine) 源安装的所有 wine 应用都没有程序菜单的图标了，写一个 desktop 文件即可解决。

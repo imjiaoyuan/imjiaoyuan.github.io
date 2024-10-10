@@ -1,6 +1,7 @@
 ---
 title: 磷酸盐饥饿反应调节受体样激酶 OsADK1 是菌根共生和磷酸盐饥饿反应所必需的
 date: 2024-04-03
+layout: post
 ---
 
 文章题为"A phosphate starvation response-regulated receptor-like kinase, OsADK1, is required for mycorrhizal symbiosis and phosphate starvation responses"。该文章发表于 New Phytologist（中科院一区，IF=9.3，第一作者：Jincai Shi，通讯作者：Ertao Wang）。

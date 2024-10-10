@@ -1,6 +1,7 @@
 ---
 title: TBtools 完成论文复现
 date: 2024-04-27
+layout: post
 ---
 
 文章题为"Identification and expression pattern analysis of the _OsSnRK2_ gene family in rice"。该文章发表于 Frontiers in Plant Science（中科院二区，IF=5.6，第一作者：Tongyuan Yu，通讯作者：Dawei Xue）。

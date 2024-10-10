@@ -1,6 +1,7 @@
 ---
 title: Debian 装机踩坑
 date: 2023-12-29
+layout: post
 ---
 
 前两天在台式机上装了 Debian12，说真的，坑不少啊，一个英伟达驱动折腾的我死去活来的 ...
@@ -62,6 +63,7 @@ X 与 Wayland 的主要差异在于它们的图形系统架构。在 X 系统中
 
 主题忘了是什么了，后来图标换成了 [vimix-icon-theme](https://github.com/vinceliuice/vimix-icon-theme)，主题是 [vimix-gtk-themes](https://github.com/vinceliuice/vimix-gtk-themes)
 
+layout: post
 ---
 
 **2023/01/04 更新**

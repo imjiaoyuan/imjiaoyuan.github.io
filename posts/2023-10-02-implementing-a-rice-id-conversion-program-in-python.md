@@ -1,6 +1,7 @@
 ---
 title: 用 Python 实现水稻 ID 转换程序
 date: 2023-10-02
+layout: post
 ---
 
 使用 Python 实现水稻 OS ID 与 LOCs ID 互相转化、提取序列等功能。

@@ -1,6 +1,7 @@
 ---
 title: R4.3.2 安装 Seurat 报错
 date: 2024-02-03
+layout: post
 ---
 
 今天在 Debian 上安装 Seurat 报错，说是缺少依赖的 R 包，但是安装依赖的两个 R 包又报错。

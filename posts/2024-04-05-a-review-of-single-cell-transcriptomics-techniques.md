@@ -1,6 +1,7 @@
 ---
 title: 单细胞转录组技术综述
 date: 2024-04-05
+layout: post
 ---
 
 ## Abstract

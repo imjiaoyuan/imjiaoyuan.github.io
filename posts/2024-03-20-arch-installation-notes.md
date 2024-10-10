@@ -1,6 +1,7 @@
 ---
 title: Arch 安装记录
 date: 2024-03-20
+layout: post
 ---
 
 最近微信出新版的原生 Linux 客户端了，加上为了 aur 和 wiki，装上了 ArchLinux。
@@ -409,6 +410,7 @@ sudo vim /etc/fonts/conf.d/64-language-selector-prefer.conf
 </fontconfig>
 ```
 
+layout: post
 ---
 
 20240629 更新：系统改为默认使用鸿蒙字体，所以字体优先级修改为：

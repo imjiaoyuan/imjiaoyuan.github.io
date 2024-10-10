@@ -1,6 +1,7 @@
 ---
 title: 还是 WSL 舒服一点
 date: 2024-06-11
+layout: post
 ---
 
 用了一段时间的 scoop，实在是忍不了了，还是灰溜溜地开了 WSL😢

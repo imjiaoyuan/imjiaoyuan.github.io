@@ -1,6 +1,7 @@
 ---
 title: 编码和非编码调控之间的相互作用驱动拟南芥种子到幼苗的转变
 date: 2024-04-10
+layout: post
 ---
 
 文章题为"Interplay between coding and non-coding regulation drives the Arabidopsis seed-to-seedling transition"。该文章发表于 scientific data（中科院一区，IF=16.6，第一作者：Benjamin J. M. Tremblay，通讯作者：Benjamin J. M. Tremblay。

@@ -1,6 +1,7 @@
 ---
 title: Arch 下的应用方案
 date: 2024-08-22
+layout: post
 ---
 
 Arch 滚起来爽，一直滚一直爽！虽说现在 Linux 生态还是不如 Windows，不过只要不用某些特别的专有软件（点名 Adobe 和 Autodesk）和工业软件，想要日常使用还是可以的，下面分享下我的应用方案。

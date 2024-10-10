@@ -1,6 +1,7 @@
 ---
 title: 关于博客更新的三两事
 date: 2023-10-09
+layout: post
 ---
 
 写博客这么久了，还是挺有感触的，记录一下写博客的一些经历。
@@ -24,10 +25,12 @@ date: 2023-10-09
 - 加载速度很慢（当时不会自己加速静态资源）
 - 代码高亮很丑
 
+layout: post
 ---
 
 当时为了加载速度快，我使用的是 gitee pages，每次都要自己手动刷新网页，很不爽，而且速度貌似也不是那么的快，如果静态资源太多，还是依旧的慢。
 
+layout: post
 ---
 
 后来又用了一段时间的 [stellar](https://xaoxuu.com/wiki/stellar/) 和 [keep 主题](https://github.com/XPoet/hexo-theme-keep)，但似乎加载速度都不是很如意，加上当时水平差，不会对一些 css、js 文件进行加速，导致问题无法解决。不过一个进步就是，从最初的 gitee pages 换成了 GitHub+Vercel+自定义域名。
@@ -86,6 +89,7 @@ vercel_deploy:
     - vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
 ```
 
+layout: post
 ---
 
 **2023/10/09 更新**

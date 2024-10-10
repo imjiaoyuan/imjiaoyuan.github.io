@@ -1,6 +1,7 @@
 ---
 title: 突然发现博客已经一年多了
 date: 2024-05-15
+layout: post
 ---
 
 今天在 V2 上看到 Randy 的 [帖子](https://www.v2ex.com/t/1040807#reply118)，好奇之余，去看了下这位大佬的 GitHub，突然发现了之前使用过的一个评论系统 [cusdis](https://github.com/djyde/cusdis)，这才突然反应过来，这个博客已经是一年多了，没想到时间过的这么快，近期忙于课程与复习，都忘了这一茬了。

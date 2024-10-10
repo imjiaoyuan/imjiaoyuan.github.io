@@ -1,6 +1,7 @@
 ---
 title: 当我换上了 Debian12 Linux
 date: 2024-01-02
+layout: post
 ---
 
 历经千辛万苦，最终还是换上了 Debian ...
@@ -69,6 +70,7 @@ sudo systemctl enable clash.service
 
 Linux 用起来实际上跟 Windows 差别以已经不时很大了，主要是使用习惯的问题，比如 fcitx5 切换输入法是快捷键 Ctrl+空格，而 Windows 是 Ctrl+Shift，还有文件系统也不一样，Linux 里一切皆文件，不管什么，改改配置文件就好，Linux 差的最大的就是软件生态了，不过目前看 ... 似乎暂时够用了，如果需要 Windows, 我还有一台笔记本～
 
+layout: post
 ---
 
 **2024/01/04 更新**
@@ -88,6 +90,7 @@ sudo apt purge transmission* goldendict pidgin kasumi hexchat* simple-scan gnome
 
 还有就是这输入法 ... fcitx5 中文输入法能够输入的标点符号少了很多，还需要再调教一下。
 
+layout: post
 ---
 
 **2024/01/06 更新**

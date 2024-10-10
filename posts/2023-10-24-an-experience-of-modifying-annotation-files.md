@@ -1,6 +1,7 @@
 ---
 title: 一次修改注释文件的经历
 date: 2023-10-24
+layout: post
 ---
 
 今天有一位师姐在看到我之前的 [基因家族鉴定](https://yuanj.top/posts/2023-06-01-gene-family-identification.html) 帖子之后，请我帮忙修改一份注释文件，他们找了公司测得的文件，格式与标准的注释文件有所差别，于是我使用 Excel 和 Notepad++对文件的格式进行了修改。

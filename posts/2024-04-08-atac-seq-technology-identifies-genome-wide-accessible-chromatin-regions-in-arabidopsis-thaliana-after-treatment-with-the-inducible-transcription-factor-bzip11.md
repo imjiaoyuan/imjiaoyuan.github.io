@@ -1,6 +1,7 @@
 ---
 title: 在对拟南芥进行诱导转录因子 bZIP11 处理后利用 ATAC-Seq 技术鉴定其全基因组可及染色质区域
 date: 2024-04-08
+layout: post
 ---
 
 文章题为"Genome-wide identification of accessible chromatin regions by ATAC-seq upon induction of the transcription factor bZIP11 in Arabidopsis"。该文章发表于 scientific data（中科院二区，IF=9.8，第一作者：Alicia M. Hellens，通讯作者：François F. Barbier。

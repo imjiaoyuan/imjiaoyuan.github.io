@@ -1,6 +1,7 @@
 ---
 title: 社交媒体真的这么重要
 date: 2023-10-12
+layout: post
 ---
 
 今天无意中读到一篇文章 [《People Without Social Media: Why They Don’t Use It》](https://dataoverhaulers.com/people-without-social-media/) 感觉有点启发。

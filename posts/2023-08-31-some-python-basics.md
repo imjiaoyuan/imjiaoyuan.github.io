@@ -1,6 +1,7 @@
 ---
 title: 一些 Python 基础知识
 date: 2023-08-31
+layout: post
 ---
 
 整理一些学习 Python 过程中遇到的一些知识。

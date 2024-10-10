@@ -1,6 +1,7 @@
 ---
 title: Python 计算等效 A 声级
 date: 2023-09-13
+layout: post
 ---
 
 利用 Python 计算国家环境噪声监测技术规范中的等效声级。
