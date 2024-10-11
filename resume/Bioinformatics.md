@@ -4,17 +4,17 @@
 
 - 焦元 / 2003 / 甘肃敦煌 / 汉族
 - 成都理工大学（环境科学与工程）/ 2021 级本科 / 英语（CET-4）
-- 内容输出：博客（yuanj.top|10k+访客）/ 公众号（猫四叔|1k+粉丝）
+- 内容输出：博客（yuanj.top / 10k+访客）/ 公众号（猫四叔 / 1.1k 粉丝）
 - GitHub：github.com/imjiaoyuan
-- 联系方式：电话（17344338724）/ 邮箱（imjiaoyuan@gmail.com.com）
-- 爱好：篮球、阅读、编程与数学
+- 联系方式：电话（17344338724）/ 邮箱（imjiaoyuan@gmail.com）
 
 # **个人技能**
 
 - 能够编写 Linux 服务器脚本和 R / Python 代码进行高通量测序数据分析流程与基因家族分析
+- 具有长期使用 Linux 发行版 ArchLinux / Debian 的经历，熟悉命令行环境
 - 熟悉 NCBI / EBI / ENSEMBL / UCSC 等常用生物信息学数据库
 - 能够进行 Gromacs 分子动力学模拟的常规流程
-- 熟练掌握 AutoCAD 二维绘图与 Cytoscape / IGV / Circos 等数据可视化软件
+- 掌握 AutoCAD 二维绘图与 Cytoscape / IGV / Circos 等数据可视化软件
 
 # **项目经历**
 
@@ -31,6 +31,6 @@
 - 贾雁茹，靳雨璠，**焦元**，等 . 植物青素 Phytocyanin 蛋白家族研究进展综述 [J]. 植物科学学报，2024
 - 江珊，吴龙英，赵宝生，黄佳惠，蒋宇喆，**焦元**，黄进 . 植物耐受高温胁迫的分子机制研究进展 [J]. 中国农学通报，2024, 40(9): 132-138.
 - Wu L, Wang R, Li M, Du Z, Jin Y, Shi Y, Jiang W, Chen J, **Jiao Y**, Hu B, Huang J. Functional analysis of a rice 12-oxo-phytodienoic acid reductase gene (OsOPR1) involved in Cd stress tolerance. Mol Biol Rep. 2024 Jan 25;51(1):198.
-- Tong J, Wu L, Li B, Jiang N, Huang J, Wu D, Zhou L, Yang Q, **Jiao Y**, Chen J,Zhao K, Pei X. image-based vegetation analysis of desertified area by using a combination of imageJ and Photoshop software. Environ Monit Assess. 2024 Feb 26;196(3):306. doi: 10.1007/s10661-024-12479-4. PMID: 38407649.
+- Tong J, Wu L, Li B, Jiang N, Huang J, Wu D, Zhou L, Yang Q, **Jiao Y**, Chen J, Zhao K, Pei X. Image-based vegetation analysis of desertified area by using a combination of ImageJ and Photoshop software. Environ Monit Assess. 2024 Feb 26;196(3):306.
 
 <!-- <div STYLE="page-break-after: always;"></div> -->
