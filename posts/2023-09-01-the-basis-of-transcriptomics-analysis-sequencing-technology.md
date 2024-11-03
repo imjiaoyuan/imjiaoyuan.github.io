@@ -151,5 +151,5 @@ RNA-seq 不仅可以用于识别新的转录本、检测剪接位点的变异和
 - [百度百科 - 基因簇](https://baike.baidu.com/item/%E5%9F%BA%E5%9B%A0%E7%B0%87#:~:text=%E5%9F%BA%E5%9B%A0%E7%B0%87%EF%BC%88gene%20cluster%EF%BC%89%E6%8C%87%20%E5%9F%BA%E5%9B%A0%E5%AE%B6%E6%97%8F,%E4%B8%AD%E7%9A%84%E5%90%84%E6%88%90%E5%91%98%E7%B4%A7%E5%AF%86%E6%88%90%E7%B0%87%E6%8E%92%E5%88%97%E6%88%90%E5%A4%A7%E4%B8%B2%E7%9A%84%E9%87%8D%E5%A4%8D%E5%8D%95%E4%BD%8D%EF%BC%8C%E4%BD%8D%E4%BA%8E%E6%9F%93%E8%89%B2%E4%BD%93%E7%9A%84%20%E7%89%B9%E6%AE%8A%E5%8C%BA%E5%9F%9F%20%E3%80%82)
 - [百度百科- cDNA](https://baike.baidu.com/item/cDNA/3852504)
 - [可逆终止子 – Illumina 统治 NGS 行业十数载的核心](https://zhuanlan.zhihu.com/p/498869620)
-- [技术 | 一文读懂二代测序](https://zhuanlan.zhihu.com/p/543393511)
+- [一文读懂二代测序](https://zhuanlan.zhihu.com/p/543393511)
 - [第二代测序原理的详细解析！](https://mp.weixin.qq.com/s/zNFvod8B-VhX7Kq7OgoRMA)
