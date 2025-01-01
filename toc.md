@@ -1,9 +1,11 @@
 ### Posts
 
+**2025**
+
+- [2024 Summary](posts/2025-01-01-2024-summary.html) / 2025-01-01
+
 **2024**
 
-- [2024生物学热点](posts/2024-10-09-2024-biology-hotspots.html) / 2024-10-09
-- [C 语言速查手册](posts/2024-10-09-c-manual.html) / 2024-10-09
 - [单细胞转录组图谱揭示拟南芥愈伤组织诱导过程中早期细胞命运转变轨迹](posts/2024-09-07-single-cell-transcriptome-mapping-reveals-early-cell-fate-transition-trajectories-during-callus-induction-in-arabidopsis.html) / 2024-09-07
 - [Bionanoaccess 安装](posts/2024-09-02-bionanoaccess-installation.html) / 2024-09-02
 - [拟南芥根部的单细胞分辨率调控景观](posts/2024-08-30-single-cell-resolution-regulatory-landscape-in-arabidopsis-roots.html) / 2024-08-30
@@ -29,8 +31,8 @@
 - [抛弃 WSL2 使用 scoop 搭建开发环境](posts/2024-04-25-abandon-wsl2-and-use-scoop-to-build-a-development-environment.html) / 2024-04-25
 - [为什么蛋白质都是左撇子](posts/2024-04-18-why-are-proteins-left-handed.html) / 2024-04-18
 - [暴风雨夜的思考](posts/2024-04-16-thoughts-on-a-stormy-night.html) / 2024-04-16
-- [编码和非编码调控之间的相互作用驱动拟南芥种子到幼苗的转变](posts/2024-04-10-interplay-between-coding-and-noncoding-regulation-drives-the-seed-to-seedling-transition-in-arabidopsis.html) / 2024-04-10
 - [Hi-C技术带你走进 DNA 的三维空间](posts/2024-04-10-hi-c-technology-takes-you-into-the-three-dimensional-space-of-dna.html) / 2024-04-10
+- [编码和非编码调控之间的相互作用驱动拟南芥种子到幼苗的转变](posts/2024-04-10-interplay-between-coding-and-noncoding-regulation-drives-the-seed-to-seedling-transition-in-arabidopsis.html) / 2024-04-10
 - [在对拟南芥进行诱导转录因子 bZIP11 处理后利用 ATAC-Seq 技术鉴定其全基因组可及染色质区域](posts/2024-04-08-atac-seq-technology-identifies-genome-wide-accessible-chromatin-regions-in-arabidopsis-thaliana-after-treatment-with-the-inducible-transcription-factor-bzip11.html) / 2024-04-08
 - [表观遗传学之 WGBS](posts/2024-04-05-epigenetics-wgbs.html) / 2024-04-05
 - [单细胞转录组技术综述](posts/2024-04-05-a-review-of-single-cell-transcriptomics-techniques.html) / 2024-04-05
@@ -40,8 +42,8 @@
 - [RNA-Seq 上游分析实践](posts/2024-03-30-rna-seq-upstream-analysis-practice.html) / 2024-03-30
 - [挖掘 TFBS 的利器--DAP-Seq](posts/2024-03-29-dap-seq-a-powerful-tool-for-mining-tfbs.html) / 2024-03-29
 - [使用 Linux 三年以来的感受](posts/2024-03-27-my-experience-of-using-linux-for-three-years.html) / 2024-03-27
-- [RNA-Seq 上游分析学习](posts/2024-03-27-rna-seq-upstream-analysis-learning.html) / 2024-03-27
 - [表观遗传学之 Chip-Seq](posts/2024-03-27-epigenetics-chip-seq.html) / 2024-03-27
+- [RNA-Seq 上游分析学习](posts/2024-03-27-rna-seq-upstream-analysis-learning.html) / 2024-03-27
 - [Arch 更换内核](posts/2024-03-25-arch-kernel-replacement.html) / 2024-03-25
 - [Arch 安装记录](posts/2024-03-20-arch-installation-notes.html) / 2024-03-20
 - [修复 WPS 伪粗体问题与 PDF 导出错误问题](posts/2024-03-20-fixed-the-wps-pseudo-bold-issue-and-pdf-export-error-issue.html) / 2024-03-20
@@ -64,13 +66,13 @@
 
 - [我的 2023 年](posts/2023-12-31-my-2023.html) / 2023-12-31
 - [Debian 安装常用软件](posts/2023-12-29-debian-installs-common-software.html) / 2023-12-29
-- [Debian 安装中文输入法](posts/2023-12-29-install-chinese-input-method-on-debian.html) / 2023-12-29
 - [Debian 编译安装最新版 R](posts/2023-12-29-debian-compiles-and-installs-the-latest-version-of-r.html) / 2023-12-29
+- [Debian 安装中文输入法](posts/2023-12-29-install-chinese-input-method-on-debian.html) / 2023-12-29
 - [Debian 装机踩坑](posts/2023-12-29-debian-installation-pitfalls.html) / 2023-12-29
 - [十二月病情](posts/2023-12-15-december-illness.html) / 2023-12-15
 - [月末成都散心](posts/2023-12-02-relax-in-chengdu-at-the-end-of-the-month.html) / 2023-12-02
-- [奋斗还是躺平](posts/2023-11-30-struggle-or-lie-down.html) / 2023-11-30
 - [今天去了四川大学](posts/2023-11-30-i-went-to-sichuan-university-today.html) / 2023-11-30
+- [奋斗还是躺平](posts/2023-11-30-struggle-or-lie-down.html) / 2023-11-30
 - [谈谈一些日常](posts/2023-11-27-talk-about-some-daily.html) / 2023-11-27
 - [DESeq2 差异表达分析](posts/2023-11-24-deseq2-differential-expression-analysis.html) / 2023-11-24
 - [Linux 下 R 使用新罗马字体](posts/2023-11-23-r-uses-times-new-roman-font-under-linux.html) / 2023-11-23
@@ -88,9 +90,9 @@
 - [使用 HMMER 网页工具进行结构域分析](posts/2023-10-11-domain-analysis-using-the-hmmer-web-tool.html) / 2023-10-11
 - [最新版 HMMER 查找同源基因](posts/2023-10-10-the-latest-version-of-hmmer-to-find-homologous-genes.html) / 2023-10-10
 - [关于博客更新的三两事](posts/2023-10-09-a-few-things-about-blog-updates.html) / 2023-10-09
-- [用 Python 实现水稻 ID 转换程序](posts/2023-10-02-implementing-a-rice-id-conversion-program-in-python.html) / 2023-10-02
 - [蛋白质的结构组织层次](posts/2023-10-02-the-structural-organization-of-proteins.html) / 2023-10-02
 - [孤独是一个人的狂欢](posts/2023-10-02-loneliness-is-a-carnival-for-one-person.html) / 2023-10-02
+- [用 Python 实现水稻 ID 转换程序](posts/2023-10-02-implementing-a-rice-id-conversion-program-in-python.html) / 2023-10-02
 - [露从今夜白，月是故乡明](posts/2023-10-01-the-dew-is-white-from-tonight-and-the-moon-is-bright-in-my-hometown.html) / 2023-10-01
 - [希望让你重获自由](posts/2023-09-27-i-hope-you-ll-be-free.html) / 2023-09-27
 - [重玩世界征服者 3](posts/2023-09-23-replay-world-conqueror-3.html) / 2023-09-23

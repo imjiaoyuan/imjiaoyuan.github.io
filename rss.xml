@@ -5,16 +5,10 @@
     <link>https://yuanj.top</link>
     <description>思绪来得快去得也快，偶尔会在这里停留</description>
     <item>
-      <title>2024生物学热点</title>
-      <link>https://yuanj.top/posts/2024-10-09-2024-biology-hotspots.html</link>
-      <pubDate>Wed, 09 Oct 2024 00:00:00 GMT</pubDate>
-      <description>2024生物学热点 - 2024-10-09</description>
-    </item>
-    <item>
-      <title>C 语言速查手册</title>
-      <link>https://yuanj.top/posts/2024-10-09-c-manual.html</link>
-      <pubDate>Wed, 09 Oct 2024 00:00:00 GMT</pubDate>
-      <description>C 语言速查手册 - 2024-10-09</description>
+      <title>2024 Summary</title>
+      <link>https://yuanj.top/posts/2025-01-01-2024-summary.html</link>
+      <pubDate>Wed, 01 Jan 2025 00:00:00 GMT</pubDate>
+      <description>2024 Summary - 2025-01-01</description>
     </item>
     <item>
       <title>单细胞转录组图谱揭示拟南芥愈伤组织诱导过程中早期细胞命运转变轨迹</title>
@@ -167,16 +161,16 @@
       <description>暴风雨夜的思考 - 2024-04-16</description>
     </item>
     <item>
-      <title>编码和非编码调控之间的相互作用驱动拟南芥种子到幼苗的转变</title>
-      <link>https://yuanj.top/posts/2024-04-10-interplay-between-coding-and-noncoding-regulation-drives-the-seed-to-seedling-transition-in-arabidopsis.html</link>
-      <pubDate>Wed, 10 Apr 2024 00:00:00 GMT</pubDate>
-      <description>编码和非编码调控之间的相互作用驱动拟南芥种子到幼苗的转变 - 2024-04-10</description>
-    </item>
-    <item>
       <title>Hi-C技术带你走进 DNA 的三维空间</title>
       <link>https://yuanj.top/posts/2024-04-10-hi-c-technology-takes-you-into-the-three-dimensional-space-of-dna.html</link>
       <pubDate>Wed, 10 Apr 2024 00:00:00 GMT</pubDate>
       <description>Hi-C技术带你走进 DNA 的三维空间 - 2024-04-10</description>
+    </item>
+    <item>
+      <title>编码和非编码调控之间的相互作用驱动拟南芥种子到幼苗的转变</title>
+      <link>https://yuanj.top/posts/2024-04-10-interplay-between-coding-and-noncoding-regulation-drives-the-seed-to-seedling-transition-in-arabidopsis.html</link>
+      <pubDate>Wed, 10 Apr 2024 00:00:00 GMT</pubDate>
+      <description>编码和非编码调控之间的相互作用驱动拟南芥种子到幼苗的转变 - 2024-04-10</description>
     </item>
     <item>
       <title>在对拟南芥进行诱导转录因子 bZIP11 处理后利用 ATAC-Seq 技术鉴定其全基因组可及染色质区域</title>
@@ -233,16 +227,16 @@
       <description>使用 Linux 三年以来的感受 - 2024-03-27</description>
     </item>
     <item>
-      <title>RNA-Seq 上游分析学习</title>
-      <link>https://yuanj.top/posts/2024-03-27-rna-seq-upstream-analysis-learning.html</link>
-      <pubDate>Wed, 27 Mar 2024 00:00:00 GMT</pubDate>
-      <description>RNA-Seq 上游分析学习 - 2024-03-27</description>
-    </item>
-    <item>
       <title>表观遗传学之 Chip-Seq</title>
       <link>https://yuanj.top/posts/2024-03-27-epigenetics-chip-seq.html</link>
       <pubDate>Wed, 27 Mar 2024 00:00:00 GMT</pubDate>
       <description>表观遗传学之 Chip-Seq - 2024-03-27</description>
+    </item>
+    <item>
+      <title>RNA-Seq 上游分析学习</title>
+      <link>https://yuanj.top/posts/2024-03-27-rna-seq-upstream-analysis-learning.html</link>
+      <pubDate>Wed, 27 Mar 2024 00:00:00 GMT</pubDate>
+      <description>RNA-Seq 上游分析学习 - 2024-03-27</description>
     </item>
     <item>
       <title>Arch 更换内核</title>
@@ -359,16 +353,16 @@
       <description>Debian 安装常用软件 - 2023-12-29</description>
     </item>
     <item>
-      <title>Debian 安装中文输入法</title>
-      <link>https://yuanj.top/posts/2023-12-29-install-chinese-input-method-on-debian.html</link>
-      <pubDate>Fri, 29 Dec 2023 00:00:00 GMT</pubDate>
-      <description>Debian 安装中文输入法 - 2023-12-29</description>
-    </item>
-    <item>
       <title>Debian 编译安装最新版 R</title>
       <link>https://yuanj.top/posts/2023-12-29-debian-compiles-and-installs-the-latest-version-of-r.html</link>
       <pubDate>Fri, 29 Dec 2023 00:00:00 GMT</pubDate>
       <description>Debian 编译安装最新版 R - 2023-12-29</description>
+    </item>
+    <item>
+      <title>Debian 安装中文输入法</title>
+      <link>https://yuanj.top/posts/2023-12-29-install-chinese-input-method-on-debian.html</link>
+      <pubDate>Fri, 29 Dec 2023 00:00:00 GMT</pubDate>
+      <description>Debian 安装中文输入法 - 2023-12-29</description>
     </item>
     <item>
       <title>Debian 装机踩坑</title>
@@ -389,16 +383,16 @@
       <description>月末成都散心 - 2023-12-02</description>
     </item>
     <item>
-      <title>奋斗还是躺平</title>
-      <link>https://yuanj.top/posts/2023-11-30-struggle-or-lie-down.html</link>
-      <pubDate>Thu, 30 Nov 2023 00:00:00 GMT</pubDate>
-      <description>奋斗还是躺平 - 2023-11-30</description>
-    </item>
-    <item>
       <title>今天去了四川大学</title>
       <link>https://yuanj.top/posts/2023-11-30-i-went-to-sichuan-university-today.html</link>
       <pubDate>Thu, 30 Nov 2023 00:00:00 GMT</pubDate>
       <description>今天去了四川大学 - 2023-11-30</description>
+    </item>
+    <item>
+      <title>奋斗还是躺平</title>
+      <link>https://yuanj.top/posts/2023-11-30-struggle-or-lie-down.html</link>
+      <pubDate>Thu, 30 Nov 2023 00:00:00 GMT</pubDate>
+      <description>奋斗还是躺平 - 2023-11-30</description>
     </item>
     <item>
       <title>谈谈一些日常</title>
@@ -503,12 +497,6 @@
       <description>关于博客更新的三两事 - 2023-10-09</description>
     </item>
     <item>
-      <title>用 Python 实现水稻 ID 转换程序</title>
-      <link>https://yuanj.top/posts/2023-10-02-implementing-a-rice-id-conversion-program-in-python.html</link>
-      <pubDate>Mon, 02 Oct 2023 00:00:00 GMT</pubDate>
-      <description>用 Python 实现水稻 ID 转换程序 - 2023-10-02</description>
-    </item>
-    <item>
       <title>蛋白质的结构组织层次</title>
       <link>https://yuanj.top/posts/2023-10-02-the-structural-organization-of-proteins.html</link>
       <pubDate>Mon, 02 Oct 2023 00:00:00 GMT</pubDate>
@@ -519,6 +507,12 @@
       <link>https://yuanj.top/posts/2023-10-02-loneliness-is-a-carnival-for-one-person.html</link>
       <pubDate>Mon, 02 Oct 2023 00:00:00 GMT</pubDate>
       <description>孤独是一个人的狂欢 - 2023-10-02</description>
+    </item>
+    <item>
+      <title>用 Python 实现水稻 ID 转换程序</title>
+      <link>https://yuanj.top/posts/2023-10-02-implementing-a-rice-id-conversion-program-in-python.html</link>
+      <pubDate>Mon, 02 Oct 2023 00:00:00 GMT</pubDate>
+      <description>用 Python 实现水稻 ID 转换程序 - 2023-10-02</description>
     </item>
     <item>
       <title>露从今夜白，月是故乡明</title>
