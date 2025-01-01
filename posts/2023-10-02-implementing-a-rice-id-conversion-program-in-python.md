@@ -12,7 +12,7 @@ GitHub 仓库：[OStools](https://github.com/imjiaoyuan/OStools) 还在不断更
 
 安装 Python 后，Windows 系统运行`start.exe`，Linux 系统运行`main.py`。
 
-![](img/202309292124230.png)
+![](https://images.yuanj.top/202309292124230.png)
 
 ## 实现
 

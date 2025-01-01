@@ -18,7 +18,7 @@ RNA-seq 则是了解植物基因表达和筛选抗逆基因的有力工具。随
 
 ATAC-seq 峰注释结果显示（图 1），热胁迫下水稻启动子区的 THS 略有增加。大多数 THS 原本定位于一个基因，但热应激处理后，定位到一个基因的 THSs 比例下降，而定位两个或三个基因的 THSs 比例略有增加。这表明在热胁迫条件下，水稻启动子区的染色质可及性发生了变化，而这种变化可能导致相关基因的转录活性也随之改变。
 
-![](img/202403310816394.png)
+![](https://images.yuanj.top/202403310816394.png)
 
 <div style="text-align:center; margin-bottom:20px;">
 <em>图 1 对照和热应激处理中的 THS 基因组分布</em>
@@ -26,7 +26,7 @@ ATAC-seq 峰注释结果显示（图 1），热胁迫下水稻启动子区的 TH
 
 作者通过富集基序分析鉴定并筛选出了 5 个具有热响应转录因子的水稻基因（图 2），其中有 3 个受热应激显著调控。为了验证 ATAC-seq 和 RNA-seq 分析结果的准确性，作者进行了 RT-qPCR 实验（图 2）。实验验证了 OsbZIP14、OsHSF7 和 OsMYB30 三个基因的表达，结果显示这三个基因均显著下调，与之前 RNA-seq 的分析结果一致。
 
-![](img/202403310817966.png)
+![](https://images.yuanj.top/202403310817966.png)
 
 <div style="text-align:center; margin-bottom:20px;">
 <em>图 2 富集基序分析与差异表达分析</em>
@@ -34,7 +34,7 @@ ATAC-seq 峰注释结果显示（图 1），热胁迫下水稻启动子区的 TH
 
 为了明确 OsbZIP14 转录因子的功能，作者进行了 OsbZIP14 基因的亚细胞定位分析（图 3）。他们使用两种载体分别转化水稻原生质体细胞和烟草表皮细胞，并观察到 OsbZIP14 蛋白位于细胞核。此外，作者还利用酵母双杂实验验证了 OsbZIP14 的转录活化作用。综合这些结果表明，OsbZIP14 是一种具有转录激活功能的转录因子。
 
-![](img/202403310818490.png)
+![](https://images.yuanj.top/202403310818490.png)
 
 <div style="text-align:center; margin-bottom:20px;">
 <em>图 3 亚细胞定位与酵母双杂实验</em>
@@ -42,13 +42,13 @@ ATAC-seq 峰注释结果显示（图 1），热胁迫下水稻启动子区的 TH
 
 为了鉴定 OsbZIP14 的相互作用蛋白，作者通过建立酵母双杂交文库，转化含有 OsbZIP14 质粒的酵母细胞，并在三种缺陷培养基中筛选阳性克隆。最终成功鉴定出与 OsbZIP14 在热胁迫下相互作用的水稻蛋白。随后，作者使用 HDOCK 软件对蛋白质进行建模，并使用 PLIP 和 PDBsum 工具进行分析。发现 OsbZIP58 的 ASN74 和 OsbZIP14 的 GLU274 之间存在氢键（图 4）。此外，在 Q6ZLB0（OsbZIP58 蛋白）中的 31 个接口氨基酸残基和 Q0E476（OsbZIP14 蛋白）中的 28 个接口氨基酸残基之间存在盐桥和氢键（图 5）。这表明 OsbZIP58 与 OsbZIP14 之间存在相互作用。
 
-![](img/202403310818430.png)
+![](https://images.yuanj.top/202403310818430.png)
 
 <div style="text-align:center; margin-bottom:20px;">
 <em>图 4 PLIP 工具分析结果</em>
 </div>
 
-![](img/202403310818015.png)
+![](https://images.yuanj.top/202403310818015.png)
 
 <div style="text-align:center; margin-bottom:20px;">
 <em>图 5 PDBsum 工具分析结果</em>
@@ -56,7 +56,7 @@ ATAC-seq 峰注释结果显示（图 1），热胁迫下水稻启动子区的 TH
 
 为了进一步确认 OsbZIP14 和 OsbZIP58 产物之间的直接相互作用，通过 PCR 克隆 OsbZIP14 和 OsbZIP58 的 ORF，构建了三种载体质粒，并将相应质粒转移到水稻原生质体中，培养 9 小时后观察。处理后的样品中观察到黄光，对照组则没有黄光，这表明水稻中 OsbZIP14 和 OsbZIP58 蛋白之间存在直接相互作用。
 
-![](img/202403310819929.png)
+![](https://images.yuanj.top/202403310819929.png)
 
 <div style="text-align:center; margin-bottom:20px;">
 <em>图 6 双分子荧光互补实验</em>
@@ -64,7 +64,7 @@ ATAC-seq 峰注释结果显示（图 1），热胁迫下水稻启动子区的 TH
 
 为了验证 OsbZIP14 基因在水稻中的功能，作者将过表达 OsbZIP14 基因的植株和野生型植株在 45°C 下培养 36 小时。可以观察到两种植株的叶尖都表现出枯萎、变黄和老化（图 7），但过表达植株的生长状况优于野生型植株。为了进一步研究热处理的影响，作者将培养 36 小时后的植株放置在室温下继续培养一个月（图 8）。结果显示，过表达植株的生长情况仍然优于野生型植株，且过表达植株的存活率也高于野生型植株。
 
-![](img/202403310819409.png)
+![](https://images.yuanj.top/202403310819409.png)
 
 <div style="text-align:center; margin-bottom:20px;">
 <em>图 7 热胁迫对 OsbZIP14OE 及 WT 植株生长的影响与存活率</em>
@@ -73,7 +73,7 @@ ATAC-seq 峰注释结果显示（图 1），热胁迫下水稻启动子区的 TH
 以上结果表明，过表达 OsbZIP14 基因有助于水稻从热胁迫中恢复生长。
 为了进一步研究 OsbZIP14 在水稻中响应热胁迫的作用，作者将敲除 OsbZIP14 的植株与野生型植株在热胁迫下进行培养，结果表明，敲除 OsbZIP14 的植株更矮且分蘖更少，表明 OsbZIP14 促进了热胁迫下水稻植株的生长发育。同时作者检测到在敲除 OsbZIP14 的植株中 OsbZIP58 的相对表达水平相比野生型植株的相对表达水平更高，表明 OsbZIP14 对 OsbZIP58 的表达具有负调控作用。
 
-![](img/202403310820137.png)
+![](https://images.yuanj.top/202403310820137.png)
 
 <div style="text-align:center; margin-bottom:20px;">
 <em>图 8 敲除 OsbZIP14 的植株与野生型植株在热胁迫下的生长对比与 OsbZIP58 相对表达水平</em>

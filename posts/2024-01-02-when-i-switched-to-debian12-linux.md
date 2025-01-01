@@ -8,7 +8,7 @@ layout: post
 
 先来张桌面图
 
-![](img/202401021323392.png)
+![](https://images.yuanj.top/202401021323392.png)
 
 安装的软件有：
 
@@ -64,7 +64,7 @@ sudo systemctl enable clash.service
 
 至于系统信息，直接看下图
 
-![](img/202401021340831.png)
+![](https://images.yuanj.top/202401021340831.png)
 
 不过有一说一，Debian 确实稳定，但是使用起来体验还是真的不如 POP_OS 这种经过优化的，后面考虑换到 POP_OS，Ubuntu 现在夹杂了太多私货，实在不敢恭维了 ...
 
@@ -79,7 +79,7 @@ layout: post
 
 更爱 debian 了！cinnamon 桌面唯独有问题的就是 wine 应用图标不显示和登录页面比较丑，但是这俩似乎不是很大的问题？还是可以调教的。字体换上了 ubuntu 的字体，很好看，终端字体是 windows 的 Consolas，很不错。
 
-![](img/20240104105911.png)
+![](https://images.yuanj.top/20240104105911.png)
 
 下面的软件是 GNOME 环境下可以卸掉的没用的软件：
 

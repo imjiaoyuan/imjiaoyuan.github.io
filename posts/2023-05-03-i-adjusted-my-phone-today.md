@@ -68,7 +68,7 @@ layout: post
 
 下载地址：https://www.123pan.com/s/JYtA-rPW0v.html 提取码：8VAE
 
-![](img/20230503213105.png)
+![](https://images.yuanj.top/20230503213105.png)
 
 点击刷新，这时手机上会提示给授权使用 USB 调试，一定要点允许
 

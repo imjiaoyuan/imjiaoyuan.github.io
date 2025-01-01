@@ -90,7 +90,7 @@ write.table(result2, 'sampl3_vs_sample3.DESeq4.txt', col.names = NA, sep = '\t',
 
 把结果可视化后我一看，跟作者的相差的太大了 ... 而这里设置的 p 值和 log2FC 的阈值都是与作者一致的。
 
-![](img/202403091748006.png)
+![](https://images.yuanj.top/202403091748006.png)
 
 不仅如此，鉴定出的差异基因数量也有很大的差别，作者明确说了`In total, 24283 genes were identified in both the heat stress treated and control samples. To identify the critical functional genes related to heat stress resistance, differentially expressed genes (DEGs) were filtered based on the criteria |log2(fold change)| ≥ 1 and p-Value < 0.05. Overall, 1942 upregulated and 3617 downregulated genes were screened.`
 

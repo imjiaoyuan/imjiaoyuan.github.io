@@ -87,12 +87,12 @@ https://github.com/cooderl/wewe-rss/blob/main/docker-compose.sqlite.yml
 
 这俩 RSS 服务配合 TG 的 RSS 机器人，实在是舒适~
 
-![](img/202407051721935.png)
+![](https://images.yuanj.top/202407051721935.png)
 
 最后就是把这个服务器当作 syncthing 的一个中继服务器，方便暑假回家从服务器上直接同步数据过去，syncthing 还是很好用的，高中的时候我就用过，只不过那个时候没有服务器，就在局域网内同步文件。
 
-![](img/202407051841334.png)
+![](https://images.yuanj.top/202407051841334.png)
 
 syncthing的占用很小，主要是rsshub的占用多一点，即使是这样，现在还有小一半的内存和25G的硬盘空余：
 
-![](img/202407051845101.png)
+![](https://images.yuanj.top/202407051845101.png)

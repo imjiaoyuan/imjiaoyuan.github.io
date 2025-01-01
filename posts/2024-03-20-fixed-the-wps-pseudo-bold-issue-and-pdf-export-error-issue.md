@@ -16,7 +16,7 @@ yay -S libtiff5
 
 然后是粗体黑块问题：
 
-![](img/202403202207036.png)
+![](https://images.yuanj.top/202403202207036.png)
 
 论坛上查到是 freetyp2 的一个 bug，切换到旧版 freetyp2 就可以了，于是用 pacman 给它降级，先安装 downgrade ：
 

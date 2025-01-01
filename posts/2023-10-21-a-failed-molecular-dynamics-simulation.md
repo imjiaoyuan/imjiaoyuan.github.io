@@ -10,7 +10,7 @@ layout: post
 
 在生成拓扑文件时遇到问题：
 
-![](img/202310211410168.png)
+![](https://images.yuanj.top/202310211410168.png)
 
 查了文档得知，这是因为 NAI 这个残基不在 gromacs 的标准残基库中，查了一些资料，参照 [计算机化学公社](http://bbs.keinsci.com/thread-428-1-1.html) 上的帖子打算用 acpype 来生成 gromacs 的拓扑文件，而不是用 gromacs 自带的 pdb2gmx，但还是报错，依旧是非标准残基导致的。
 

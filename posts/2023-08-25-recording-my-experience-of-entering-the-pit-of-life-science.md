@@ -22,13 +22,13 @@ layout: post
 
 贴几张我做的图片~
 
-![](img/20230825204439.png)
+![](https://images.yuanj.top/20230825204439.png)
 
-![](img/20230825204530.png)
+![](https://images.yuanj.top/20230825204530.png)
 
-![](img/20230825204555.png)
+![](https://images.yuanj.top/20230825204555.png)
 
-![](img/20230825204628.png)
+![](https://images.yuanj.top/20230825204628.png)
 
 ## 开始写博客
 
