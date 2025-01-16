@@ -1,0 +1,839 @@
+多糖	Polysaccharides
+单糖	Monosaccharides
+淀粉	starch
+纤维素	Cellulose
+糖原	Glycogen
+差向异构体	Epimers
+变旋	Mutarotation
+异头效应	Anomeric effect
+异头碳	Anomeric Carbon
+异头中心	Anomalous Center
+异头物	Heteromorph
+还原糖	Reducing sugar
+转化糖	Invert Sugar
+壳多糖	Chitosan
+肽聚糖	Peptidoglycan
+革兰氏阳性菌	Gram-positive bacteria
+革兰氏阴性菌	Gram-negative bacteria
+磷壁酸	Teichoic acid
+胞外基质	Extracellular matrix
+糖胺聚糖	Glycosaminoglycans
+蛋白聚糖	Proteoglycan
+糖蛋白	Glycoprotein
+饱和脂肪酸	Saturated fatty acids
+不饱和脂肪酸	Unsaturated fatty acids
+反式脂肪酸	Trans fatty acids
+酸值	Acid value
+碘值	Iodine value
+皂化值	Saponification value
+乳化	emulsification
+三酰甘油	Triglycerides
+脂肪	Fat
+乙酰值	Acetyl value
+皂化作用	Saponification
+蜡	wax
+磷脂	Phospholipids
+甘油磷脂	Glycerophospholipids
+卵磷脂	Lecithin
+磷脂酰胆碱	Phosphatidylcholine
+磷脂酰乙醇胺	Phosphatidylethanolamine
+脑磷脂	Cephalin
+心磷脂	Cardiolipin
+双磷脂酰甘油	Diphosphatidylglycerol
+类固醇	Steroids
+胆固醇	cholesterol
+植物固醇	Plant Sterols
+固醇衍生物	Sterol derivatives
+活性脂质	Active lipids
+脂锚定蛋白	Lipid anchored protein
+脱辅基蛋白	Apoprotein
+载脂蛋白	Apolipoprotein
+膜脂	Membrane lipids
+外周膜蛋白	Peripheral membrane proteins
+内在膜蛋白	Intrinsic membrane proteins
+兼在蛋白	Protein
+流动镶嵌模型	Fluid Mosaic Model
+质粒	Plasmids
+核苷	Nucleosides
+核苷酸	Nucleotides
+糖苷	Glycoside
+糖苷键	Glycosidic bond
+回文结构	Palindrome
+双螺旋模型	Double helix model
+重复序列	Repeating sequence
+DNA超螺旋	DNA supercoiling
+C值悖论	The C-value paradox
+折叠悖论	The Folding Paradox
+单顺反子	Monocistronic
+多顺反子	Polycistronic
+tRNA的三叶草结构	The tRNA cloverleaf structure
+tRNA的倒L结构	Inverted L structure of tRNA
+核内小RNA	Small nuclear RNA
+核仁小RNA	Small nucleolar RNA
+环状RNA	Circular RNA
+核内不均一RNA	Nuclear heterogeneous RNA
+微RNA	MicroRNA
+小干扰RNA	Small interfering RNA
+RNA干扰	RNA interference
+xistRNA	kistRNA
+tmRNA	tmRNA
+向导RNA	Guide RNA
+gsRNA	gsRNA
+摩尔磷吸光系数	Molar phosphorus absorption coefficient
+增色效应	Color enhancement effect
+减色效应	Hypochromatic effect
+单核苷酸多态性	Single Nucleotide Polymorphism
+核酸变性	Nucleic acid denaturation
+溶解温度	Dissolving temperature
+DNA复性	DNA duplication
+southern印迹法	Southern blotting
+northern印迹法	Northern blot
+退火	annealing
+基因探针	Gene probe
+核酸分子杂交	Nucleic acid hybridization
+琼脂糖凝胶电泳	Agarose gel electrophoresis
+电泳	Electrophoresis
+聚丙烯酰胺凝胶电泳	Polyacrylamide gel electrophoresis
+卫星DNA	Satellite DNA
+sanger测序法	Sanger sequencing
+加减法测序	Addition-subtraction sequencing
+化学法测序	Chemical sequencing
+双脱氧链终止法	Dideoxy chain termination
+DNA微阵列	DNA Microarray
+基因芯片	Gene chip
+定磷法	Phosphorus determination method
+定氮法	Nitrogen determination method
+紫外分光光度法	UV spectrophotometry
+维生素	Vitamins
+视黄醇	Retinol
+生育酚	Tocopherol
+核黄素	Riboflavin
+吡哆醛	Pyridoxal
+钴胺素	Cobalamin
+抗坏血酸	ascorbic acid
+生物素	Biotin
+叶酸	Folic acid
+烟酸	niacin
+烟酰胺	Niacinamide
+激素	hormone
+第二信使	Second Messenger
+G蛋白	G protein
+脱敏现象	Desensitization
+G蛋白偶联受体	G protein-coupled receptors
+新陈代谢	Metabolism
+高能磷酸化合物	High energy phosphate compounds
+磷酸化势	Phosphorylation potential
+糖酵解	Glycolysis
+发酵	Fermentation
+乳酸发酵	Lactic acid fermentation
+乙醇发酵	Ethanol fermentation
+底物水平磷酸化	Substrate level phosphorylation
+巴斯德效应	Pasteur effect
+己糖激酶	Hexokinase
+磷酸果糖激酶	Phosphofructokinase
+柠檬酸循环	Citric acid cycle
+乙醛酸循环	Glyoxylate cycle
+乙醛酸途径	Glyoxylate pathway
+氧化磷酸化	Oxidative phosphorylation
+电子传递链	Electron transport chain
+呼吸链Q循环	Respiratory chain Q cycle
+P/O比	P/O Ratio
+化学渗透假说	Chemiosmotic hypothesis
+ATP合酶	ATP synthase
+解偶联剂	Uncoupler
+氧化磷酸化抑制剂	Oxidative phosphorylation inhibitors
+3-磷酸甘油穿梭	3-Glycerol Phosphate Shuttle
+苹果酸-天冬氨酸穿梭	Malate-Aspartate Shuttle
+戊糖磷酸途径	Pentose phosphate pathway
+糖异生	Gluconeogenesis
+可立氏循环	Coleman cycle
+乳糖不耐受	Lactose intolerance
+糖原降解	Glycogen degradation
+光合作用	Photosynthesis
+光合磷酸化	Photophosphorylation
+卡尔文循环	Calvin cycle
+循环光合磷酸化	Cyclic photophosphorylation
+非循环光合磷酸化	Non-cyclic photophosphorylation
+肉碱转移体系	Carnitine transfer system
+β氧化	Beta oxidation
+酮体	Ketone bodies
+酮症	Ketosis
+脂肪动员	Fat Mobilization
+动脉粥样硬化	Atherosclerosis
+酮体合成	Ketone body synthesis
+联合脱氨作用	Combined deamination
+尿素循环	Urea cycle
+苯丙酮尿症	Phenylketonuria
+尿黑酸症	Alkaptonuria
+白化病	Albinism
+痛风	gout
+双关酶	Double enzyme
+信号转导蛋白	Signal transduction proteins
+正前馈作用	Positive and negative action
+单价反馈抑制	Univalent feedback inhibition
+染色体	Chromosomes
+组蛋白	Histone
+染色质重塑	Chromatin remodeling
+半保留复制	Semiconservative replication
+跨越合成	Cross-synthesis
+DNA聚合酶	DNA polymerase
+DNA连接酶	DNA ligase
+单链结合蛋白	Single-chain binding protein
+DNA拓扑异构酶	DNA topoisomerase
+DNA引发酶	DNA priming enzyme
+前导链	Leading strand
+后随链	Follow-up chain
+冈崎片段	Okazaki Fragment
+终止子	Terminator
+自主复制序列	Autonomously replicating sequence
+5-氟脱氧尿苷	5-Fluorodeoxyuridine
+端粒酶	Telomerase
+端粒	Telomeres
+DNA突变	DNA mutations
+同源重组	Homologous recombination
+移码突变	Frameshift mutation
+开放阅读框	Open reading frame
+错配修复	Mismatch Repair
+切除修复	Excision repair
+易错修复	Bug Fixes
+沉默突变	Silent mutation
+错义突变	Missense mutation
+无义突变	Nonsense mutation
+校正突变	Correction mutation
+反向重复序列	Inverted repeat sequence
+转化	Conversion
+遗传重组	Genetic recombination
+特异位点重组	Site-specific recombination
+转座重组	Transposition recombination
+启动子	Promoter
+顺势左右元件	Follow the trend of left and right components
+增强子	Enhancer
+沉默子	Silent
+插入序列	Insert sequence
+转录	Transcription
+RNA聚合酶	RNA polymerase
+反式作用因子	trans-acting factor
+操纵子	Operon
+乳糖操纵子模型	Lactose operon model
+RNA逆转录	RNA reverse transcription
+遗传密码	Genetic code
+密码子的简并性	Codon degeneracy
+密码子的摆动性	Codon wobble
+摆动假说	The swing hypothesis
+变偶性	Variation
+三联体密码	Triplet Cipher
+变异密码子	Variant codon
+SD序列	SD sequence
+核糖体结合位点	Ribosome binding site
+分子伴侣	Molecular chaperone
+信号肽	Signal peptide
+信号学说	Signal Theory
+组成型表达	Constitutive expression
+调节型表达	Regulated expression
+负控诱导	Negative control induction
+乳糖操纵子	Lactose operon
+负控阻遏	Negative control
+色氨酸操纵子	Tryptophan operon
+衰减作用	Attenuation
+弱化作用	Weakening effect
+反义RNA	Antisense RNA
+核糖开关	Riboswitch
+基因工程	Genetic Engineering
+限制性核酸内切酶	Restriction endonucleases
+CRISPR/cas9	CRISPR/cas9
+克隆	clone
+载体	Carrier
+基因文库	Gene library
+聚合酶链式反应	Polymerase chain reaction
+定位诱变	Site-directed mutagenesis
+定点突变	Site-directed mutagenesis
+原位杂交	In situ hybridization
+基因组学	Genomics
+人类基因组计划	Human Genome Project
+RNA编辑	RNA editing
+限制图谱	Restriction map
+基因家族	Gene family
+基因敲除	Gene knockout
+基因敲低	Gene knockdown
+系统生物学	Systems Biology
+表观遗传学	Epigenetics
+裸子植物	Gymnosperms
+苔藓植物	Bryophytes
+蕨类植物	Ferns
+原形成层	Protocambium
+顶端分生组织	Apical meristem
+维管系统	Vascular system
+羊齿植物	Fern
+显花植物	Flowering plants
+隐花植物	Cryptogams
+种子植物	Seed plants
+单子叶植物	Monocots
+原植体	Original plant
+孢子生殖	Spore reproduction
+卵式生殖	Oviparous reproduction
+同配生殖	Isogamy
+异配生殖	Anisogamy
+花序分生组织	Inflorescence meristem
+无融合生殖	Apomixis
+真果	True Fruit
+假果	Hypothetical
+单性结实	Parthenocarpy
+阳地植物	Sunny Plants
+阴地植物	Shade Plants
+系统性抗性	Systemic resistance
+获得性抗性	Acquired resistance
+基因密度	Gene density
+高效液相色谱	High performance liquid chromatography
+核磁共振谱法	NMR spectroscopy
+高速涌动蛋白	High-speed surging protein
+重叠基因	Overlapping genes
+滑动DNA夹	Sliding DNA clamp
+跨损伤合成	Translesion synthesis
+转录单位	Transcription unit
+转录起点	Transcription start point
+小胞浆RNA	Small cytoplasmic RNA
+细胞核小核糖核蛋白体(SRNP)	Small nuclear ribonucleoprotein (SRNP)
+不对称转录	Asymmetric transcription
+外显子	Exon
+内含子	Intron
+mRNA帽子	mRNA cap
+无意义密码子	Nonsense codon
+反密码子	Anticodon
+密码子	Codon
+泛素化	Ubiquitination
+核定位信号序列	Nuclear localization signal sequence
+报告基因	Reporter Gene
+分子杂交	Molecular hybridization
+染色体步移	Chromosome transfer
+DNA随机扩增多态性	random amplified polymorphism DNA
+细胞色素	Cytochrome
+辅酶Q	Coenzyme Q
+离子载体抑制剂	Ionophore inhibitors
+生物氧化	Biological oxidation
+胞间连丝	Plasmodesmata
+传递细胞	Transfer cells
+原生质	protoplasm
+原生质体	Protoplasts
+真核细胞	Eukaryotic cells
+原核细胞	Prokaryotic cells
+细胞核	Nucleus
+细胞质	Cytoplasm
+质膜	Plasma membrane
+细胞器	Organelles
+质体	Plastid
+线粒体	Mitochondria
+内膜系统	Endomembrane system
+内质网	Endoplasmic reticulum
+核糖核蛋白体	Ribonucleosome
+微梁系统	Micro beam system
+初生纹孔场	Primary pit field
+纹孔	Pit
+具缘纹孔	Marginal pits
+细胞分化	Cell differentiation
+细胞脱分化	Cell dedifferentiation
+细胞的全能性	Cellular totipotency
+组织	organize
+原分生组织	Protomestem
+居间分生组织	Intercalary meristem
+气孔器	Stomata
+周皮	Periderm
+皮孔	Lenticel
+穿孔	perforation
+厚角组织	Thick cornea
+输导组织	Conducting tissue
+组织系统	Organizational System
+木质部	Xylem
+韧皮部	Phloem
+侵填体	Invasion
+胼胝体	Corpus callosum
+器官	organ
+主根与	Taproot and
+定根	Root
+根系	Root system
+直根系	Taproot system
+须根系	Fibrous root system
+不活动中心	Inactive Center
+切向分裂	Tangential Splitting
+径向分裂	Radial Split
+横向分裂	Horizontal Split
+初生生长	Primary Growth
+初生结构	Primary structure
+内皮层	Endothelial layer
+凯氏带	Caspian band
+通道细胞	Channel cells
+中柱鞘	Pericycle
+外始式	External start
+维管柱	Vascular column
+内起源	Internal Origin
+次生生长	Secondary Growth
+次生结构	Secondary structure
+维管射线	Vascular rays
+次生射线	Secondary rays
+根瘤	Root Nodules
+菌根	Mycorrhiza
+内生菌根	Endomycorrhizae
+外生菌根	Ectomycorrhiza
+叶痕	Leaf Scar
+维管束痕	Vascular bundle trace
+芽鳞痕	Bud scar
+活动芽	Activity Buds
+休眠芽	Dormant buds
+单轴分枝	Single axis branching
+合轴分枝	Sympodial branching
+假二叉分枝	Pseudo-binary branching
+二叉分枝	Binary branching
+分蘖	Tillering
+淀粉鞘	Starch sheath
+维管束	Vascular bundle
+有限维管束	Limited vascular bundle
+无限维管束	Infinite vascular bundle
+内始式	Internal
+髓射线	Medullary ray
+初生射线	Primary rays
+束中形成层	Midfascicular cambium
+束间形成层	interfascicular cambium
+增殖分裂	Proliferation
+早材和晚材	Earlywood and Latewood
+年轮	Annual rings
+心材和边材	Heartwood and Sapwood
+树皮	Bark
+补充组织	Supplementary tissue
+完全叶	Complete leaf
+不完全叶	Incomplete leaves
+单叶和复叶	Simple and compound leaves
+叶镶嵌	Leaf Mosaic
+等面叶	Isophyllum
+异面叶	Heterophyllous leaves
+栅栏组织	Fence Organization
+海绵组织	Spongy tissue
+副卫细胞	Accessory cells
+泡状细胞	Bullous cells
+花环形结构	Flower ring structure
+离层	Delamination
+叶迹和叶隙	Leaf tracks and leaf gaps
+枝迹和枝隙	Branch traces and branch gaps
+顶端优势	Top Advantage
+肉质直根和块根	Fleshy taproot and tuberous roots
+额外形成层	Additional cambium
+苞片和总苞	Bracts and involucres
+同功器官和同源器官	Homologous organs and homologous organs
+初生加厚分生组织	primary thickening meristem
+转输组织	Transfer tissue
+种	kind
+双名法	Binomial nomenclature
+维管植物	Vascular plants
+孢子植物	Spore plants
+高等植物	Higher plants
+低等植物	Lower plants
+颈卵器植物	Archegonium
+变种和变型	Variants and variants
+模式标本	Type specimen
+颈卵器	Archegonium
+精子器	Sperm organ
+配子体	Gametophyte
+孢子体	Sporophyte
+前裸子植物	Pregymnosperms
+无限花序	Infinite inflorescence
+聚合果	Aggregate Fruit
+叶序	Leaf arrangement
+叶脉序	Leaf venation
+植物化石	Plant fossils
+下胚轴	Hypocotyl
+真花学说	True Flower Theory
+形成层	Cambium
+双受精	Double fertilization
+伴胞	Companion cell
+初生分生组织	Primary meristem
+心皮	Carpel
+大型叶	Large leaves
+接合生殖	Conjugation
+世代交替	Generational change
+脐胝体	Cerebral palsy
+担子	Burden
+成膜体	Film-forming body
+筛管分子	Sieve tube molecules
+原胚	Proembryo
+原丝体	Protonema
+原叶体	Protophyte
+上位花盘	Upper flower disc
+合蕊柱	Gynostemma
+子实体	Fruiting body
+颖果	Caryopsis
+多胚现象	Polyembryony
+裂生多胚现象	Fission polyembryony
+子座	Child
+核型胚乳	Nuclear endosperm
+伞房花序	Corymb
+连萼蒽果	Anthracene
+厚囊性发育	Thick cystic development
+二体雄蕊	Distamens
+传粉滴	Pollination Drops
+萌盖	Cute cover
+叶隙	Leaf Gap
+上胚轴	Epicotyl
+小穗	Spikelets
+雄球花	Male cones
+两被花	Two flowers
+珠领	Bead collar
+浆片	Paddle
+聚伞花序	Cyme
+双游现象	Double Tour Phenomenon
+分果	Fruit division
+雄配子体	Male gametophyte
+基生叶	Basal leaves
+果心线	Fruit heart line
+假萌苞	False buds
+离生单雌蕊	Free single pistil
+茉莉花序	Jasmine inflorescence
+萝型胚囊	Radish-type embryo sac
+蝶形花冠	Butterfly corolla
+倒生胚珠	Anatropous ovule
+萌果	Cute Fruit
+种螨	Seed mites
+子叶出土幼苗	Cotyledon emergence seedlings
+特立中央胎座	Unique central placenta
+珠鳞	Pearl scales
+释片	Release
+后含物	Post-inclusion
+胶质鞘	Glial sheath
+孢子叶穗和孢子囊	Sporangium and sporangium
+核膜	Nuclear membrane
+潜伏芽	Latent bud
+上向覆瓦状指	Upward imbricate finger
+复合组织	Composite tissue
+杯状聚伞花序	Cup-shaped cyme
+同源器官	Homologous organs
+锁状联合	Lock joint
+异型世代交替	Heterotypic generational alternation
+有限花序	Determinate inflorescence
+假蝶形花冠	Pseudocalli
+唇瓣	Label
+子房下位	Inferior ovary
+冠毛	pappus
+小坚果	Nuts
+叶迹	Leaf trace
+异形胞	Heterocyst
+同动器官	Synkinetic Organ
+轮伞花序	Cymbidium
+杂性同株	Heterosexual
+四强雄蕊	Four strong stamens
+套被	Quilt
+花程式	Flower Programming
+孢萌	Spore
+cDNA	cDNA
+引物	Primers
+基因组文库	Genomic library
+荧光原位杂交	Fluorescence in situ hybridization
+染色质免疫沉淀	Chromatin immunoprecipitation
+免疫共沉淀	Co-immunoprecipitation
+代谢物阻遏效应	Metabolite repression effect
+弱化效应	Weakening effect
+前导肽	Leader peptide
+顺式调控	Cis-regulation
+严紧反应	Severe response
+弱化子	Weakener
+衰减子	Attenuator
+葡萄糖效应	Glucose effect
+魔斑核苷酸	Magic Spot Nucleotide
+上游启动子元件	Upstream promoter element
+上游激活序列	Upstream activation sequence
+基因扩增	Gene amplification
+基因重排	Gene rearrangement
+基因转换	Gene conversion
+基因簇	Gene cluster
+基因丢失	Gene loss
+转录因子	Transcription Factors
+转座子	Transposon
+癌症	cancer
+肿瘤	Tumor
+癌基因	Oncogene
+主动免疫治疗	Active immunotherapy
+被动免疫治疗	Passive immunotherapy
+原病毒	Provirus
+基因领域效应	Gene domain effect
+Rb基因	Rb gene
+整合感染	Integrated infection
+p53	p53
+逆转录	Reverse transcription
+逆转录酶	Reverse transcriptase
+逆转录病毒	Retrovirus
+基因领域	Genetic field
+CAR-T细胞疗法	CAR-T cell therapy
+光周期	Photoperiod
+开花素	Flowering hormone
+同源域保守框	Homeodomain conserved box
+模式生物	Model Organisms
+成熟组织	Mature organization
+薄壁组织	Parenchyma
+保护组织	Protecting organizations
+机械组织	Mechanical organization
+分泌组织	Secretory tissue
+微管	Microtubules
+微丝	Microwire
+中间丝	Intermediate filament
+维管组织	Vascular tissue
+管胞	Tracheid
+运动细胞	Sports cells
+丙氨酸循环	Alanine cycle
+胰岛素抵抗	Insulin resistance
+无效循环	Invalid loop
+泛素连接酶	Ubiquitin ligase
+起始因子	Initiation Factor
+终止因子	Termination Factor
+核定位序列	Nuclear localization sequence
+引发体	Initiator
+细胞核小核糖核蛋白体/snRNP	snRNP
+转录泡	Transcription bubble
+内含子的变位剪接	Alternative splicing of introns
+信号识别蛋白	Signal recognition protein
+泛素	Ubiquitin
+泛蛋白	Ubiquitin
+校正tRNA	Proofreading tRNA
+氨酰-tRNA	Aminoacyl-tRNA
+氨酰-tRNA合成酶	Aminoacyl-tRNA synthetase
+肽酰-tRNA	Peptidyl-tRNA
+起始tRNA	Initiator tRNA
+同工tRNA	Iso-tRNA
+多聚核糖体	Polyribosome
+遗传密码的变偶性	The variability of the genetic code
+实时定量PCR	Real-time quantitative PCR
+蛋白质组	Proteome
+蛋白质组学	Proteomics
+二组分系统	Two-component system
+安慰诱导物	Placebo Inducers
+癌	cancer
+病毒癌基因	Viral oncogenes
+抑癌基因	Tumor suppressor genes
+禽流行性感冒	Avian influenza
+病毒载体	Viral vectors
+脂质体	Liposomes
+基因治疗	Gene therapy
+体内疗法	In vivo therapy
+间接体内疗法	Ex vivo therapy
+肿瘤的免疫治疗	Immunotherapy of tumors
+肿瘤的主动免疫治疗	Active immunotherapy for tumors
+肿瘤的被动免疫治疗	Passive Immunotherapy of Tumors
+同源框	Homeobox
+序列位置标签	Sequence position label
+串联重复序列	Tandem repeats
+转录图	Transcription diagram
+限制性片段长度多态	Restriction fragment length polymorphism
+遗传图谱	Genetic map
+物理图谱	Physical map
+吲哚乙酸	Indoleacetic acid
+细胞分裂素	Cytokinin
+脱落酸	Abscisic acid
+定向运动	Orienteering
+花序	inflorescence
+上位子房	Superior ovary
+下位子房	Lower ovary
+柠檬酸转运	Citrate transport
+酰基载体蛋白	Acyl carrier protein
+脂肪肝	Fatty liver
+必需脂肪酸	Essential fatty acids
+ω氧化	Omega Oxidation
+α氧化	Alpha oxidation
+剂量补偿	Dose compensation
+自由组合定律	Law of independent combination
+孟德尔学说	Mendel's theory
+基因的多效性	Pleiotropy of genes
+X连锁遗传	X-linked inheritance
+连锁	chain
+碱基置换	Base substitution
+PKU症	PKU
+别嘌呤醇	Allopurinol
+自毁容貌症	Self-destructive facial syndrome
+雷纳综合征	Rayna syndrome
+转氨基作用	Transamination
+一碳单位	One carbon unit
+嘌呤核苷酸循环	Purine nucleotide cycle
+生物固氮	Biological nitrogen fixation
+帕金森症	Parkinson's disease
+高血氨症	Hyperammonemia
+尿素循环代谢病	Urea cycle disorders
+反足细胞	Antipodal cells
+离区	Leaving the area
+胚囊	Embryo sac
+木质部脊	Xylem ridges
+平周分裂	Pingzhou split
+马蹄形细胞	Horseshoe cells
+同功器官	Analogous organs
+单体雄蕊	Monomer stamen
+聚花果	Cluster Fruit
+角果	Silique
+侧生分生组织	Lateral meristem
+变态	abnormal
+花图式	Flower Pattern
+传粉	Pollination
+共质体途径	Symplasmic pathway
+环髓带	Circummedullar zone
+子房	ovary
+质外体途径	Apoplast pathway
+异形叶性	Heteromorphic leaves
+气孔	Pores
+反转录	Reverse transcription
+回交	Backcross
+理想群体	Ideal Group
+稳态	Steady State
+群落	Community
+种群	Population
+进化	evolution
+发育	development
+应激性	Stress
+生态系统	Ecosystem
+生物圈	Biosphere
+同位素示踪	Isotope tracing
+必需元素	Required elements
+糖类	carbohydrate
+脂质	Lipids
+甘油三酯	Triglycerides
+脂肪酸	fatty acid
+蛋白质	protein
+氨基酸	Amino Acids
+蛋白质变性	Protein denaturation
+肽	Peptides
+核酸	Nucleic Acids
+DNA双螺旋结构	DNA double helix
+细胞学说	Cell theory
+分级分离	Fractionation
+细胞溶胶	Cytosol
+核被膜	Nuclear envelope
+染色质	Chromatin
+核周腔	Perinuclear space
+核纤层	Nuclear lamina
+核孔	Nuclear pores
+常染色质和异染色质	Euchromatin and heterochromatin
+核小体	Nucleosome
+核仁	Nucleolus
+核仁组织者	Nucleolar organizer
+核基质	Nuclear matrix
+高尔基体	Golgi apparatus
+核糖体	Ribosome
+溶酶体	Molten Body
+液泡	Vacuole
+叶绿体	Chloroplast
+微体	Microbody
+乙醛酸循环体	Glyoxysome
+细胞骨架	Cytoskeleton
+鞭毛	flagellum
+中心粒	Centriole
+中心体	Centrosome
+细胞桥粒	Desmosome
+细胞壁	Cell wall
+质壁分离	Plasmolysis
+细胞连接	Cell connection
+生物膜	Biofilm
+细胞通讯	Cell Communication
+细胞代谢	Cell Metabolism
+酶	Enzymes
+竞争抑制剂	Competitive inhibitors
+主动转运	Active transport
+胞吞	Endocytosis
+胞吐	Exocytosis
+协同转运	Co-transport
+被动运输	Passive transport
+细胞呼吸	Cellular respiration
+质子动力势	Proton motive force
+呼吸熵	Respiratory Entropy
+叶绿素	Chlorophyll
+光反应	Light reaction
+光系统	Optical system
+暗反应	Dark reaction
+光和电子传递链	Light and electron transport chain
+光呼吸	Photorespiration
+光饱和点	Light saturation point
+细胞周期	Cell cycle
+细胞分裂	Cell division
+检控点	Inspection Point
+有丝分裂	Mitosis
+减数分裂	Meiosis
+纺锤体	Spindle
+细胞凋亡	Apoptosis
+细胞坏死	Cell necrosis
+凋亡小体	apoptotic body
+细胞全能性	Cell totipotency
+干细胞	Stem Cells
+造血干细胞	Hematopoietic stem cells
+细胞自噬	Autophagy
+细胞衰老	Cellular Senescence
+上皮组织	Epithelial tissue
+结缔组织	Connective tissue
+肌肉组织	Muscle tissue
+神经组织	Nervous tissue
+内环境	Internal Environment
+反馈调节	Feedback Regulation
+负反馈	Negative Feedback
+营养素	Nutrients
+基础代谢率	Basal metabolic rate
+必需氨基酸	Essential Amino Acids
+常量元素	Constant elements
+消化	Digestion
+吸收	absorb
+胞外消化	Extracellular digestion
+反刍动物	Ruminants
+血液凝固	Blood coagulation
+血浆	plasma
+血细胞	Blood cells
+血清	serum
+血液循环	Blood circulation
+心动周期	Cardiac cycle
+呼吸	breathe
+腹式呼吸	Abdominal breathing
+胸式呼吸	Chest breathing
+肺活量	Lung capacity
+体温调节	Thermoregulation
+恒温动物	Warm-blooded animals
+变温动物	Poikilotherm
+异温动物	Heterothermic animals
+免疫系统	Immune system
+细胞免疫	Cellular immunity
+体液免疫	Humoral immunity
+抗体	Antibody
+抗原	antigen
+补体系统	Complement system
+补体蛋白质	Complement proteins
+干扰素	Interferon
+淋巴系统	Lymphatic system
+适应性免疫	Adaptive immunity
+免疫应答	Immune response
+免疫接种	Immunization
+单克隆抗体	Monoclonal antibodies
+克隆选择学说	Clonal selection theory
+过敏反应	Allergic reactions
+自身免疫病	Autoimmune diseases
+内分泌系统	Endocrine system
+体液调节	Fluid regulation
+糖尿病	diabetes
+神经元	Neurons
+动作电位	Action Potential
+静息电位	Resting potential
+突触	Synapse
+神经节	Ganglion
+反射	reflection
+中枢神经系统	Central nervous system
+周围神经系统	Peripheral nervous system
+内脏神经系统	Visceral nervous system
+植物性神经系统	Autonomic nervous system
+反射弧	Reflex Arc
+肌丝滑行学说	Sliding filament theory
+骨骼	skeleton
+无性生殖	Asexual reproduction
+有性生殖	Sexual Reproduction
+生殖系统	Reproductive system
+桑葚胚	Morula
+囊胚	Blastocyst
+原肠胚	gastrula
+中胚层	Mesoderm
+受精卵	Fertilized egg
+受精	Fertilization
+顶体反应	Acrosome reaction
+绝育	sterilization
+人工流产	Abortion
+分生组织	Meristem
+根尖	root tip
+不定根	Adventitious roots
+跨膜途径	Transmembrane pathway
+静止中心	Still Center
+垂周分裂	Peripapillary division
+根压	Root Pressure
+蒸腾作用	Transpiration

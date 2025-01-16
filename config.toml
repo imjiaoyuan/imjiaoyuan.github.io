@@ -1,0 +1,38 @@
+baseurl = "https://yuanj.top"
+title = "JiaoYuan's blog"
+languageCode = "en-us"
+paginate = "7"                          # 每页的文章数量
+theme = ["cloud"]
+
+[Params]
+  post_meta = ["date"]
+  mainSections = ["posts"]                           # 设定文章目录
+
+[Params.topbar]
+  subtitle = "思绪来得快去得也快，偶尔会在这里停留"     # 顶栏副标题
+
+[Params.sidebar]
+  home = "right"                                         # 侧栏的位置
+  widgets = ["misc", "taglist", "recent"]     # 侧栏要显示的项目
+
+[Params.widgets]
+  recent_num = 15                 # 设定RECENT POSTS栏的文章数量
+  tags_counter = true             # 是否显示tags的文章数量
+  [[Params.widgets.misc.custom]]  # MISC栏可以定义多个页面或url，页面应新建于content目录下
+    title = "Google"
+    url = "https://www.google.com/search?q=site:yuanj.top/posts"
+  [[Params.widgets.misc.custom]]
+    title = "E-Mail"
+    url = "/images/email.png"
+  [[Params.widgets.misc.custom]]
+    title = "GitHub"
+    url = "https://github.com/imjiaoyuan"
+  [[Params.widgets.misc.custom]]
+    title = "feed"
+    url = "/index.xml"
+
+[markup]
+  defaultMarkdownHandler = "goldmark"
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
