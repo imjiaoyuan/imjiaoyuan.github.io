@@ -31,8 +31,7 @@
 		<div class="wrapper flex">
 			<div class="primary">
 			{{ block "main" . }}
-			{{ block "main" . }}{{ end }}
-				{{ with .Content }}
+			{{ with .Content }}
 				<div class="content main__content clearfix">
 					{{ . }}
 				</div>
@@ -42,7 +41,6 @@
 			{{ block "sidebar" . }}{{ partial "sidebar.html" . }}{{ end }}
 		</div>
 		{{ block "footer" . }}{{ partial "footer.html" . }}{{ end }}
-		{{ block "footer" . }}{{ end }}
 	</div>
 <script async defer src="{{ "js/menu.js" | relURL }}"></script>
 {{ range .Site.Params.customJS -}}

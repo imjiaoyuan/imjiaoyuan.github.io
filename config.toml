@@ -1,7 +1,7 @@
 baseurl = "https://yuanj.top"
 title = "JiaoYuan's blog"
 languageCode = "en-us"
-paginate = "7"                          # 每页的文章数量
+pagination = { pagerSize = 10 }
 theme = ["cloud"]
 
 [Params]

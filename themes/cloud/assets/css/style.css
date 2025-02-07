@@ -450,15 +450,10 @@ select {
 .menu__btn-title {
 	position: relative;
 	display: block;
-	padding: 10px 15px;
 	padding: .625rem .9375rem;
 	font-weight: 700;
 	text-align: right;
 	cursor: pointer;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	-o-user-select: none;
 	user-select: none;
 }
 
@@ -497,7 +492,6 @@ button:not(:-moz-focusring):focus > .menu__btn-title {
 
 .menu__link {
 	display: block;
-	padding: 10px 15px;
 	padding: .625rem .9375rem;
 	font-weight: 700;
 	color: #fff;
@@ -512,9 +506,7 @@ button:not(:-moz-focusring):focus > .menu__btn-title {
 	z-index: 1;
 	width: 100%;
 	visibility: hidden;
-	-webkit-transform: scaleY(0);
 	transform: scaleY(0);
-	-webkit-transform-origin: top left;
 	transform-origin: top left;
 }
 
@@ -522,12 +514,11 @@ button:not(:-moz-focusring):focus > .menu__btn-title {
 	visibility: visible;
 	border-top: 1px solid rgba(255, 255, 255, .1);
 	border-bottom: 1px solid rgba(255, 255, 255, .1);
-	-webkit-transform: scaleY(1);
 	transform: scaleY(1);
 }
 
-.menu__list--transition {
-	transition: visibility .15s ease, transform .15s ease, -webkit-transform .15s ease;
+.js .menu__list--transition {
+	transition: visibility .15s ease, transform .15s ease;
 }
 
 @media screen and (min-width: 767px) {
@@ -542,13 +533,10 @@ button:not(:-moz-focusring):focus > .menu__btn-title {
 	.menu__list,
 	.js .menu__list {
 		position: relative;
-		display: -webkit-flex;
 		display: flex;
-		-webkit-flex-wrap: wrap;
 		flex-wrap: wrap;
 		visibility: visible;
 		border: 0;
-		-webkit-transform: none;
 		transform: none;
 	}
 
@@ -560,27 +548,23 @@ button:not(:-moz-focusring):focus > .menu__btn-title {
 /* Posts/Pages */
 .post__header,
 .main__header {
-	margin-bottom: 20px;
 	margin-bottom: 1.25rem;
 }
 
 .main__title {
-	font-size: 28px;
 	font-size: 1.75rem;
 }
 
 .main__content {
-	margin-bottom: 20px;
 	margin-bottom: 1.25rem;
 }
 
 .meta {
-	font-size: 13px;
 	font-size: .8125rem;
 	vertical-align: baseline;
+	color: #666;
 }
 
-.meta,
 .meta a {
 	color: #666;
 }
@@ -614,25 +598,21 @@ button:not(:-moz-focusring):focus > .menu__btn-title {
 
 .post__meta {
 	padding: 5px 0;
-	margin-top: 10px;
 	margin-top: .625rem;
 	border-top: 1px dotted #ebebeb;
 	border-bottom: 1px dotted #ebebeb;
 }
 
 .post__lead {
-	margin-top: 4px;
 	margin-top: .25rem;
 	margin-bottom: 0;
-	font-size: 16px;
 	font-size: 1rem;
 	font-style: italic;
 }
 
 .post__thumbnail {
 	max-width: 1030px;
-	margin: 0 0 20px;
-	margin-bottom: 0 0 1.25rem;
+	margin-bottom: 1.25rem;
 }
 
 .post__thumbnail img {
@@ -652,27 +632,23 @@ button:not(:-moz-focusring):focus > .menu__btn-title {
 
 .content .alignnone {
 	display: block;
-	margin: 20px 0;
 	margin: 1.25rem 0;
 }
 
 .content .aligncenter {
 	display: block;
-	margin: 20px auto;
 	margin: 1.25rem auto;
 }
 
 .content .alignleft {
 	display: inline;
 	float: left;
-	margin: 5px 20px 20px 0;
 	margin: .3125rem 1.25rem 1.25rem 0;
 }
 
 .content .alignright {
 	display: inline;
 	float: right;
-	margin: 5px 0 20px 20px;
 	margin: .3125rem 0 1.25rem 1.25rem;
 }
 
@@ -682,7 +658,7 @@ button:not(:-moz-focusring):focus > .menu__btn-title {
 
 .content ul,
 .content ol {
-	margin: 0 0 20px 40px;
+	margin: 0 0 1.25rem 40px;
 }
 
 .content ul ul,
@@ -697,18 +673,14 @@ button:not(:-moz-focusring):focus > .menu__btn-title {
 }
 
 .post__footer {
-	margin-top: 20px;
 	margin-top: 1.25rem;
 }
 
 /* Post tags */
 .tags {
-	margin-bottom: 20px;
 	margin-bottom: 1.25rem;
-	font-size: 12px;
 	font-size: .75rem;
 	line-height: 1;
-	color: #fff;
 }
 
 .tags__item {
@@ -740,15 +712,12 @@ button:not(:-moz-focusring):focus > .menu__btn-title {
 
 /* List content */
 .list__item {
-	padding-bottom: 20px;
 	padding-bottom: 1.25rem;
-	margin-bottom: 20px;
 	margin-bottom: 1.25rem;
 	border-bottom: 1px solid #ebebeb;
 }
 
 .list__header {
-	margin-bottom: 10px;
 	margin-bottom: .625rem;
 }
 
@@ -906,12 +875,10 @@ textarea {
 
 .widget__title {
 	border-left: 5px solid #000000;
-	background: #3f72af;;
+	background: #3f72af;
 	margin: 0;
 	position: relative;
-	padding: 3px;
-	padding-left: 10px;
-	font-size: 16px;
+	padding: 3px 10px;
 	font-size: .8rem;
 	font-weight: bold;
 	color: #ffffff;
@@ -1004,7 +971,6 @@ textarea {
 	}
 
 	.topbar__title {
-		font-size: 24px;
 		font-size: 1.5rem;
 	}
 
@@ -1043,32 +1009,32 @@ textarea {
 	}
 
 	.list__title {
-		font-size: 16px;
 		font-size: 1rem;
 	}
 
 	.list__lead {
-		font-size: 14px;
 		font-size: .875rem;
 	}
 
 	.list__meta {
 		display: block;
-		font-size: 11px;
 		font-size: .6875rem;
 	}
 }
 
 @media screen and (min-width: 1930px) {
-    body {
-        font-size: 18px;
-    }
-    .container {
-        max-width: 810px;
-    }
+	body {
+		font-size: 18px;
+	}
+
+	.container {
+		max-width: 810px;
+	}
+
 	.widget-taglist__link {
 		font-size: 18px;
 	}
+
 	.list__title {
 		font-size: 20px;
 	}
