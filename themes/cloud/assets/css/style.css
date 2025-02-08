@@ -62,7 +62,6 @@ body {
 .container--outer {
 	width: 100%;
 	margin: 0 auto;
-	/* border: 0 2px 0 2px solid rgba(0, 0, 0, 0.78); */
 }
 
 .wrapper {
@@ -88,7 +87,7 @@ body {
     flex: 1 0 31.66%;
     -webkit-order: 2;
     order: 2;
-	padding: 10px; 
+	padding: 10px;
     min-width: 0;
     margin: 0 0 0 2.5%;
 	background: #dbe2ef;
