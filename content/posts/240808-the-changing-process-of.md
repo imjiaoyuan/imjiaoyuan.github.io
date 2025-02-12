@@ -21,13 +21,13 @@ date: 2024-08-08
 
 !![](https://images.yuanj.top/202408082104786.png)
 
-这些大家都可以参考一下之前的文章 [突然发现博客已经一年多了](https://yuanj.top/posts/n1n7c4b2/)、[如何搭建一个不用服务器的，简便的博客？](https://mp.weixin.qq.com/s?__biz=Mzg4NTgyMTAzNQ==&mid=2247485640&idx=1&sn=ec01c0fa1ff5d414ccde9ac41643aec2&chksm=cfa253ccf8d5dada44007a531f38063855b11d96d147783d5d8e218f3d67f299f6d29efef0e7&token=1524384470&lang=zh_CN#rd)。
+这些大家都可以参考一下之前的文章 [突然发现博客已经一年多了](https://yuanj.top/posts/240515-i-suddenly-realized-that/)、[如何搭建一个不用服务器的，简便的博客？](https://mp.weixin.qq.com/s?__biz=Mzg4NTgyMTAzNQ==&mid=2247485640&idx=1&sn=ec01c0fa1ff5d414ccde9ac41643aec2&chksm=cfa253ccf8d5dada44007a531f38063855b11d96d147783d5d8e218f3d67f299f6d29efef0e7&token=1524384470&lang=zh_CN#rd)。
 
 实际上，自从有博客之后，我的重心一直在博客上，因为它很自由，一切由我说了算，还记得公众号刚开始发的一些脚本和软件的文章，老是被删，而博客就不会有这些问题，博客上呢生信和随笔偏多，而公众号里都是一些博客上我觉得不错的文章，就把它迁移过来。
 
 ## 转机
 
-公众号的阅读量和关注量上涨最快的是 [使用 Linux 三年以来的感受](https://yuanj.top/posts/m3d4t6a5/)、[把私生活放进 Telegram 里](https://yuanj.top/posts/g6y0x3d9/) 和 [抛弃 WSL2 使用 scoop 搭建开发环境](https://yuanj.top/posts/u5b5f4n8/)，那几个月阅读量一直在几万，而这几篇文章实际上也表明了我如今“折腾主阵地”的变化，以前就是玩玩 Windows 搞搞软件，如今似乎是变“成熟”了，对以前所纠结的东西已经不那么在乎，现在更在乎的是一直精神，比如我用 Arch，虽然桌面依旧不那么理想，但是我爱上了 KISS 原则，喜欢系统与软件包具有同等地位的包管理器，乐于探索 Linux 更深处的奥秘，这也是这篇文章的主题——公众号文章内容的变化也是我的成长之路，可以说公众号和博客见证了我一步步的成长。
+公众号的阅读量和关注量上涨最快的是 [使用 Linux 三年以来的感受](https://yuanj.top/posts/my-experience-of-linux/)、[把私生活放进 Telegram 里](https://yuanj.top/posts/240524-put-your-private-life/) 和 [抛弃 WSL2 使用 scoop 搭建开发环境](https://yuanj.top/posts/240425-abandon-wsl2-use-scoop/)，那几个月阅读量一直在几万，而这几篇文章实际上也表明了我如今“折腾主阵地”的变化，以前就是玩玩 Windows 搞搞软件，如今似乎是变“成熟”了，对以前所纠结的东西已经不那么在乎，现在更在乎的是一直精神，比如我用 Arch，虽然桌面依旧不那么理想，但是我爱上了 KISS 原则，喜欢系统与软件包具有同等地位的包管理器，乐于探索 Linux 更深处的奥秘，这也是这篇文章的主题——公众号文章内容的变化也是我的成长之路，可以说公众号和博客见证了我一步步的成长。
 
 ## 如今
 

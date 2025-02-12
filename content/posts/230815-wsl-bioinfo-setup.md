@@ -26,7 +26,7 @@ date: 2023-08-15
 
 ## WSL 的安装
 
-参考我的文章 [Windows10 & 11 安装 WSL2](https://www.yuanj.top/posts/309de741/)
+参考官方文档：https://learn.microsoft.com/zh-cn/windows/wsl/install
 
 ## WSL 的配置
 
@@ -58,7 +58,7 @@ sudo apt-get install git
 
 **conda**
 
-参考文章 [Linux 下安装 conda](https://www.yuanj.top/posts/1d0dd329/)
+网上教程很多，就不赘述了
 
 **oh-my-zsh**
 
@@ -88,11 +88,7 @@ sudo apt-get install nodejs
 sudo apt-get install neofetch
 ```
 
-输入 neofetch 即可查看系统版本、CPU、内存等信息
-
-**其他**
-
-[Linux 下安装 BUSCO](https://www.yuanj.top/posts/24ed802/)
+输入 fastfetch 即可查看系统版本、CPU、内存等信息
 
 ### 连接 VScode
 

@@ -11,7 +11,7 @@ date: 2023-10-20
 
 睡觉的时候听了一下 AppleMusic 的雨声电台，还是很不错的。
 
-<img src="/images/202310201907820.jpg" width=250px/>
+<img src="https://images.yuanj.top/202310201907820.jpg" width=250px/>
 
 躺了一会之后就起来，发现今天的太阳还不错，于是拿了瑜伽垫到天台上躺着晒了一会太阳，很舒服~
 
