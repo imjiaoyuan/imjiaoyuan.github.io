@@ -23,13 +23,13 @@ date: 2023-08-25
 
 贴几张我做的图片~
 
-![](https://images.yuanj.top/20230825204439.png)
+![](https://images.yuanj.top/blog/20230825204439.png)
 
-![](https://images.yuanj.top/20230825204530.png)
+![](https://images.yuanj.top/blog/20230825204530.png)
 
-![](https://images.yuanj.top/20230825204555.png)
+![](https://images.yuanj.top/blog/20230825204555.png)
 
-![](https://images.yuanj.top/20230825204628.png)
+![](https://images.yuanj.top/blog/20230825204628.png)
 
 ## 开始写博客
 

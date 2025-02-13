@@ -7,7 +7,7 @@ date: 2024-03-20
 
 <!--more-->
 
-![](https://images.yuanj.top/202403201841486.png)
+![](https://images.yuanj.top/blog/20240320184148.png)
 
 启动盘用的是 Ventoy，由于安装介质中的控制台不能用校园网（或者说是我不会），使用 USB 共享网络。下面便是安装与配置的步骤。
 
@@ -25,7 +25,7 @@ systemctl stop reflector.service
 ls /sys/firmware/efi/efivars
 ```
 
-![](https://images.yuanj.top/202403201843195.png)
+![](https://images.yuanj.top/blog/20240320184319.png)
 
 输出了一堆东西（efi 变量），则说明已在 UEFI 模式。
 
@@ -195,7 +195,7 @@ vim /etc/default/grub
 
 去掉 GRUB_CMDLINE_LINUX_DEFAULT 一行中最后的 quiet 参数，把 loglevel 的数值从 3 改成 5，这样是为了后续如果出现系统错误，方便排错。再加入 nowatchdog 参数，这可以显著提高开关机速度。
 
-![](https://images.yuanj.top/202403201858693.png)
+![](https://images.yuanj.top/blog/20240320185869.png)
 
 如果要引导 Windows，还需要添加新的一行 GRUB_DISABLE_OS_PROBER=false。
 
@@ -302,7 +302,7 @@ EDITOR=vim visudo
 
 去掉`#%wheel ALL=(ALL:ALL) ALL`的注释
 
-![](https://images.yuanj.top/202403201907539.png)
+![](https://images.yuanj.top/blog/20240320190753.png)
 
 切换到新用户：
 
