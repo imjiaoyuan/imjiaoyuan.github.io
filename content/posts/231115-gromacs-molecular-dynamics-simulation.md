@@ -126,7 +126,7 @@ pip install DuIvyTools
 dit xvg_show -f potential.xvg
 ```
 
-!![](https://images.yuanj.top/202311151946742.png)
+![](https://images.yuanj.top/202311151946742.png)
 
 ## NVT 温度平衡
 
@@ -156,7 +156,7 @@ gmx energy -f nvt.edr -o temperature.xvg
 dit xvg_show -f temperature.xvg
 ```
 
-!![](https://images.yuanj.top/202311151946187.png)
+![](https://images.yuanj.top/202311151946187.png)
 
 ## NPT 压力平衡
 
@@ -182,7 +182,7 @@ gmx energy -f npt.edr -o pressure.xvg
 dit xvg_show -f pressure.xvg
 ```
 
-!![](https://images.yuanj.top/202311151947851.png)
+![](https://images.yuanj.top/202311151947851.png)
 
 密度分析：
 
@@ -198,7 +198,7 @@ gmx energy -f npt.edr -o density.xvg
 dit xvg_show -f pressure.xvg
 ```
 
-!![](https://images.yuanj.top/202311151947188.png)
+![](https://images.yuanj.top/202311151947188.png)
 
 ## 正式的动力学模拟
 
@@ -238,7 +238,7 @@ gmx rms -s md_0_1.tpr -f md_0_1_noPBC.xtc -o rmsd.xvg -tu ns
 dit xvg_show -f rmsd.xvg
 ```
 
-!![](https://images.yuanj.top/202311151947005.png)
+![](https://images.yuanj.top/202311151947005.png)
 
 计算相对于模拟之前晶体的结构差异，可以使用下面的命令：
 
@@ -262,6 +262,6 @@ gmx gyrate -s md_0_1.tpr -f md_0_1_noPBC.xtc -o gyrate.xvg
 dit xvg_show -f gyrate.xvg
 ```
 
-!![](https://images.yuanj.top/202311151957493.png)
+![](https://images.yuanj.top/202311151957493.png)
 
 这一套流程都是按照默认参数和步骤来的，实际上我也不太懂，但是大多数情况下使用默认参数是足以满足实验需求。

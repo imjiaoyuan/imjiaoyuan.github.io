@@ -13,13 +13,13 @@ date: 2024-05-15
 
 当时用的最久的 Hexo 主题就是根据 Butterfly 魔改的这个极简风格的（似乎我一直比较喜欢极简风）。
 
-!![](https://images.yuanj.top/202405152205908.png)
+![](https://images.yuanj.top/202405152205908.png)
 
 部署方式上面从最开始的码云到 GitHub，再到部署平台 Vercel、Netlify 什么的，记得有一段时间还一直在折腾 Gitlab CI/CD 自动部署到 Vercel 这些平台。再就是评论系统也各种折腾，什么 Valine、Waline、Twikoo 等等，现在想想，不禁感叹，当时是真有精力啊🤣
 
 再到后来，就觉得 Hexo 不好用了，因为个人觉得 npm 这玩意安装插件和包的时候似乎容易出错（或许是我技术不行），而且有的时候需要版本更新的话，就更不好弄了，Hexo 很多的插件也动不动就停更了，所以就换到 hugo 了，当时也折腾过几个主题，比如 [Loveit](https://github.com/dillonzq/LoveIt)，但是我发现，这玩意自带的东西好像有点多？那些东西我又用不上，所以就开始继续魔改 ... 主要是删掉不用的插件和功能，后面越改越感觉抽象 ... 索性换主题了，用过 [Coder](https://github.com/luizdepra/hugo-coder)、[cocoa](https://github.com/nishanths/cocoa-hugo-theme) 和 [devise](https://github.com/austingebauer/devise)（这个挺小巧精致），但是多多少少都有点不太满意，最后使用 [Mainroad](https://github.com/Vimux/Mainroad)，然后参照云风 blog 进行了一番魔改，最后的效果似乎还不错，后面发到 [v2ex](https://www.v2ex.com/t/1023939#reply123) 上，吸收了一些建议，又改了一些，现在感觉还算良好，主要是精简、快（毕竟 css 很少）。
 
-!![](https://images.yuanj.top/202405152222421.png)
+![](https://images.yuanj.top/202405152222421.png)
 
 至于部署和评论，一律懒得折腾，push 到 GitHub 套上 Vercel，加上 giscus 就行了，如果你访问不了 or 没法评论？那可就不是我的问题了。
 
