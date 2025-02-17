@@ -17,16 +17,15 @@ theme = ["cloud"]
 
 [Params.widgets]
   recent_num = 15
-  tags_counter = true
-  [[Params.widgets.misc.custom]]
-  title = "Google"
-  url = "https://www.google.com/search?q=site:yuanj.top/posts"
   [[Params.widgets.misc.custom]]
   title = "E-Mail"
   url = "/images/email.png"
   [[Params.widgets.misc.custom]]
   title = "GitHub"
   url = "https://github.com/imjiaoyuan"
+  [[Params.widgets.misc.custom]]
+  title = "Friends"
+  url = "/friends"
   [[Params.widgets.misc.custom]]
   title = "feed"
   url = "/index.xml"
