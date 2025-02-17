@@ -1,0 +1,106 @@
+<div class="widget">
+  <h4 class="widget__title">SEARCH</h4>
+  <div class="widget__content search-widget-content">
+    <input type="text" id="search-input" placeholder="搜索..." autocomplete="off">
+    <div id="search-results"></div>
+  </div>
+</div>
+
+<script>
+// 预处理文章数据
+var posts = [
+  {{ range where .Site.RegularPages "Section" "posts" }}
+  {
+    "title": {{ .Title | jsonify }},
+    "url": "{{ .Permalink }}",
+    "content": {{ .Plain | jsonify }}
+  },
+  {{ end }}
+];
+
+var searchInput = document.getElementById('search-input');
+var searchResults = document.getElementById('search-results');
+
+searchInput.addEventListener('input', function(e) {
+  e.preventDefault();
+  var query = this.value.toLowerCase();
+  if (!query) {
+    searchResults.innerHTML = '';
+    return;
+  }
+
+  var results = posts.filter(function(post) {
+    return post.title.toLowerCase().includes(query) || 
+           post.content.toLowerCase().includes(query);
+  });
+
+  var html = '';
+  if (results.length) {
+    results.forEach(function(post) {
+      html += `<div class="search-result"><a href="${post.url}" target="_blank" rel="noopener">${post.title}</a></div>`;
+    });
+  } else {
+    html = '<div class="search-result"><span>未找到相关文章</span></div>';
+  }
+  searchResults.innerHTML = html;
+});
+
+document.querySelector('form').addEventListener('submit', function(e) {
+  e.preventDefault();
+});
+</script>
+
+<style>
+/* 只针对搜索模块的样式 */
+.search-widget-content {
+  margin-left: -20px;
+  padding-right: 20px;
+  margin-bottom: -5px;
+}
+
+#search-input {
+  width: 100%;
+  padding: 2px 4px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  outline: none;
+  box-sizing: border-box;
+  margin-top: 5px;
+  height: 24px;
+}
+
+#search-input:focus {
+  border-color: #666;
+}
+
+#search-results {
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+.search-result {
+  padding: 3px 0;
+}
+
+.search-result a {
+  display: block;
+  color: #333;
+  text-decoration: none;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.search-result:last-child a {
+  border-bottom: none;
+}
+
+.search-result a:hover {
+  color: #666;
+}
+
+.search-result span {
+  color: #666;
+  font-style: italic;
+}
+</style> 
