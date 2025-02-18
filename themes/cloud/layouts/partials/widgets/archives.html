@@ -1,0 +1,43 @@
+<div class="widget-archives widget">
+	<h4 class="widget__title">ARCHIVES</h4>
+	<div class="widget__content">
+		{{ range (where .Site.RegularPages "Section" "posts").GroupByDate "2006" }}
+		<div class="widget__item archive-year">
+			<span class="archive-year-text">{{ .Key }} ({{ len .Pages }})</span>
+			<div class="archive-months">
+				{{ range .Pages.GroupByDate "January" }}
+				<div class="archive-month">
+					<span class="archive-month-text" onclick="toggleArchivePosts(this)">{{ .Key }} ({{ len .Pages }})</span>
+					<div class="archive-posts">
+						{{ range .Pages }}
+						<div class="archive-post">
+							<a href="{{ .RelPermalink }}" class="archive-post-link">{{ .Title }}</a>
+						</div>
+						{{ end }}
+					</div>
+				</div>
+				{{ end }}
+			</div>
+		</div>
+		{{ end }}
+	</div>
+</div>
+
+<script>
+function toggleArchivePosts(element) {
+    var posts = element.nextElementSibling;
+    // 关闭其他所有打开的文章列表
+    var allPosts = document.getElementsByClassName('archive-posts');
+    for(var i = 0; i < allPosts.length; i++) {
+        if(allPosts[i] !== posts && allPosts[i].style.display === "block") {
+            allPosts[i].style.display = "none";
+        }
+    }
+    // 切换当前点击的月份的文章列表
+    if(posts.style.display === "block") {
+        posts.style.display = "none";
+    } else {
+        posts.style.display = "block";
+    }
+}
+</script> 

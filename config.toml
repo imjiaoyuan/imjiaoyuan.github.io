@@ -13,7 +13,7 @@ theme = ["cloud"]
 
 [Params.sidebar]
   home = "right"
-  widgets = ["misc", "search", "recent"]
+  widgets = ["misc", "search", "recent", "archives"]
 
 [Params.widgets]
   recent_num = 15
