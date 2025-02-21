@@ -879,7 +879,7 @@ textarea {
 .widget__item {
 	display: list-item;
 	padding: 5px 0 0 0;
-	font-size: .75rem;
+	font-size: .825rem;
 	list-style-type: disc;
 	margin-left: 10px;
 	text-decoration: underline;
@@ -980,20 +980,20 @@ textarea {
 .archive-year-text {
   color: #000;
   text-decoration: underline;
-  font-size: .75rem;
+  font-size: .825rem;
 }
 
 .archive-month-text {
   cursor: pointer;
   color: #000;
   text-decoration: underline;
-  font-size: .75rem;
+  font-size: .825rem;
 }
 
 .archive-post-link {
   color: #000;
   text-decoration: underline;
-  font-size: .75rem;
+  font-size: .825rem;
 }
 
 .archive-post-link:hover,
