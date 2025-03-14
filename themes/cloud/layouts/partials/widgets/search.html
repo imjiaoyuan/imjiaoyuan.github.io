@@ -7,46 +7,50 @@
 </div>
 
 <script>
-// 预处理文章数据
-var posts = [
-  {{ range where .Site.RegularPages "Section" "posts" }}
-  {
-    "title": {{ .Title | jsonify }},
-    "url": "{{ .Permalink }}",
-    "content": {{ .Plain | jsonify }}
-  },
-  {{ end }}
-];
+document.addEventListener('DOMContentLoaded', function() {
+  // 预处理文章数据
+  var posts = [
+    {{ range where .Site.RegularPages "Section" "posts" }}
+    {
+      "title": {{ .Title | jsonify }},
+      "url": "{{ .Permalink }}",
+      "content": {{ .Plain | jsonify }}
+    },
+    {{ end }}
+  ];
 
-var searchInput = document.getElementById('search-input');
-var searchResults = document.getElementById('search-results');
+  var searchInput = document.getElementById('search-input');
+  var searchResults = document.getElementById('search-results');
 
-searchInput.addEventListener('input', function(e) {
-  e.preventDefault();
-  var query = this.value.toLowerCase();
-  if (!query) {
-    searchResults.innerHTML = '';
-    return;
-  }
+  // 确保元素存在再添加事件监听器
+  if (searchInput && searchResults) {
+    searchInput.addEventListener('input', function(e) {
+      e.preventDefault();
+      var query = this.value.toLowerCase();
+      if (!query) {
+        searchResults.innerHTML = '';
+        return;
+      }
 
-  var results = posts.filter(function(post) {
-    return post.title.toLowerCase().includes(query) || 
-           post.content.toLowerCase().includes(query);
-  });
+      var results = posts.filter(function(post) {
+        return post.title.toLowerCase().includes(query) || 
+               post.content.toLowerCase().includes(query);
+      });
 
-  var html = '';
-  if (results.length) {
-    results.forEach(function(post) {
-      html += `<div class="search-result"><a href="${post.url}" target="_blank" rel="noopener">${post.title}</a></div>`;
+      var html = '';
+      if (results.length) {
+        results.forEach(function(post) {
+          html += `<div class="search-result"><a href="${post.url}" target="_blank" rel="noopener">${post.title}</a></div>`;
+        });
+      } else {
+        html = '<div class="search-result"><span>未找到相关文章</span></div>';
+      }
+      searchResults.innerHTML = html;
     });
-  } else {
-    html = '<div class="search-result"><span>未找到相关文章</span></div>';
   }
-  searchResults.innerHTML = html;
-});
 
-document.querySelector('form').addEventListener('submit', function(e) {
-  e.preventDefault();
+  // 删除不存在的 form 元素的事件监听器
+  // 如果确实需要阻止表单提交，应该将 input 包装在 form 标签中
 });
 </script>
 
