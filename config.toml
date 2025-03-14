@@ -19,7 +19,7 @@ theme = ["cloud"]
   recent_num = 15
   [[Params.widgets.misc.custom]]
   title = "E-Mail"
-  url = "/images/email.png"
+  url = "/email.html"
   [[Params.widgets.misc.custom]]
   title = "GitHub"
   url = "https://github.com/imjiaoyuan"
