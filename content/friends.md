@@ -37,18 +37,59 @@ logo: https://yuanj.top/favicon.ico
 description: 思绪来得快去得也快，偶尔会在这里停留
 ```
 
-<script src="https://giscus.app/client.js"
-        data-repo="imjiaoyuan/imjiaoyuan.github.io"
-        data-repo-id="R_kgDOKXKUsQ"
-        data-category="Announcements"
-        data-category-id="DIC_kwDOKXKUsc4CZj38"
-        data-mapping="title"
-        data-strict="0"
-        data-reactions-enabled="0"
-        data-emit-metadata="0"
-        data-input-position="bottom"
-        data-theme="light"
-        data-lang="en"
-        crossorigin="anonymous"
-        async>
+<div class="widget comments-widget">
+  <h4 class="widget__title">Comments</h4>
+  <div id="comments" class="widget__content">
+    <div id="comment-form">
+      <a href="https://github.com/imjiaoyuan/imjiaoyuan.github.io/issues/new?title=Friend Link Request" 
+         target="_blank"
+         class="comment-link">
+         Go to Issues to View or Add Friend Link Request
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+.comments-widget {
+  margin-top: 2rem;
+}
+
+#comment-form {
+  text-align: center;
+  padding: 10px 17px 10px 2px;
+}
+
+.comment-link {
+  color: #333;
+  text-decoration: underline;
+}
+
+.comment-link:hover {
+  color: #666;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const owner = 'imjiaoyuan';
+  const repo = 'imjiaoyuan.github.io';
+  const issueTitle = 'Friend Link Request';
+  const btn = document.querySelector('.comment-link');
+
+  async function checkIssue() {
+    try {
+      const response = await fetch(`https://api.github.com/search/issues?q=repo:${owner}/${repo}+"${issueTitle}"+in:title`);
+      const data = await response.json();
+      
+      if (data.items && data.items.length > 0) {
+        btn.href = data.items[0].html_url;
+      }
+    } catch (error) {
+      console.error('Error checking issue:', error);
+    }
+  }
+
+  checkIssue();
+});
 </script>
