@@ -37,14 +37,15 @@ document.addEventListener('DOMContentLoaded', function() {
                post.content.toLowerCase().includes(query);
       });
 
-      var html = '';
+      var html = '<ul class="widget__list">';
       if (results.length) {
         results.forEach(function(post) {
-          html += `<div class="search-result"><a href="${post.url}" target="_blank" rel="noopener">${post.title}</a></div>`;
+          html += `<li class="widget__item"><a class="widget__link" href="${post.url}">${post.title}</a></li>`;
         });
       } else {
-        html = '<div class="search-result"><span>未找到相关文章</span></div>';
+        html += '<li class="widget__item"><span class="widget__link">未找到相关文章</span></li>';
       }
+      html += '</ul>';
       searchResults.innerHTML = html;
     });
   }
@@ -81,29 +82,29 @@ document.addEventListener('DOMContentLoaded', function() {
 #search-results {
   margin-top: 6px;
   font-size: 14px;
+  margin-left: 17px;  /* 修改为17px以与其他widget对齐 */
 }
 
-.search-result {
-  padding: 3px 0;
+/* 搜索结果样式 */
+#search-results .widget__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.search-result a {
+#search-results .widget__item {
+  padding: 0;
+  border: 0;
+}
+
+#search-results .widget__link {
   display: block;
+  padding: 2px 0;
   color: #333;
   text-decoration: none;
-  border-bottom: 1px solid #eee;
 }
 
-.search-result:last-child a {
-  border-bottom: none;
-}
-
-.search-result a:hover {
+#search-results .widget__link:hover {
   color: #666;
-}
-
-.search-result span {
-  color: #666;
-  font-style: italic;
 }
 </style> 
