@@ -24,6 +24,11 @@ Here are some high-quality blogs that I subscribed to through RSS
 - [Owen 的博客](https://www.owenyoung.com/)：追求注意力自由、热爱闲暇时间并注重朴素生活哲学的独立博客作者
 - [胡涂说](https://hutusi.com/)：现居上海的终身学习者，热爱读书、音乐、电影和编程
 - [阮一峰的网络日志](https://www.ruanyifeng.com/)：《科技爱好者周刊》作者，经济学博士，CN 博客奠基人
+- [Limboy](https://limboy.me/)：专注于 Mac 和 Web 开发，喜欢尝试新事物，热衷创作
+- [云风的 BLOG](https://blog.codingnow.com/)：毕业于中南大学，原网易游戏核心成员、杭州研究中心总监
+- [子書承宇](https://zishu.is-cool.dev)：DIY 硬件、折腾「树莓派、电脑系统、脚本、靶场、软路由」、音游
+- [Mayx 的博客](https://mabbs.github.io/)：爱好编程与 ACGN，擅长编写 Python、JS、Bash 等脚本
+- [idealclover](https://idealclover.top)：南大毕业的软件工程师，博客内容很丰富
 
 ## Add me
 
