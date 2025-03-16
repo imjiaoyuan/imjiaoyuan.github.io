@@ -10,8 +10,12 @@
 	{{- if .Site.Params.opengraph }}{{ template "_internal/opengraph.html" . }}{{- end }}
 	{{- if .Site.Params.schema }}{{ template "_internal/schema.html" . }}{{- end }}
 
-	{{ $style := resources.Get "css/style.css" | resources.ExecuteAsTemplate "css/style.css" . -}}
-	<link rel="stylesheet" href="{{ $style.RelPermalink }}">
+	{{- if $style := resources.Get "css/style.css" }}
+		{{ $style := $style | resources.ExecuteAsTemplate "css/style.css" . -}}
+		<link rel="stylesheet" href="{{ $style.RelPermalink }}">
+	{{- else }}
+		<link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+	{{- end }}
 	{{ range .Site.Params.customCSS -}}
 	<link rel="stylesheet" href="{{ . | relURL }}">
 	{{- end }}
@@ -38,7 +42,7 @@
 		</div>
 		{{ block "footer" . }}{{ partial "footer.html" . }}{{ end }}
 	</div>
-<script async defer src="{{ "js/menu.js" | relURL }}"></script>
+<script async defer src="{{ "ts/menu.ts" | relURL }}"></script>
 {{ range .Site.Params.customJS -}}
 <script src="{{ . | relURL }}"></script>
 {{- end }}

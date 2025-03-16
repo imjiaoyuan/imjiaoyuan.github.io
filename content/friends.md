@@ -38,7 +38,7 @@ description: 思绪来得快去得也快，偶尔会在这里停留
 ```
 
 <div class="widget comments-widget">
-  <h4 class="widget__title">Comments</h4>
+  <h4 class="widget__title">Add Friend Link Request</h4>
   <div id="comments" class="widget__content">
     <div id="comment-form">
       <a href="https://github.com/imjiaoyuan/imjiaoyuan.github.io/issues/new?title=Friend Link Request" 
