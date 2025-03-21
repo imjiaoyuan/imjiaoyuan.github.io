@@ -14,7 +14,7 @@ scoop 整体感觉是不错的，但是还有一些问题：
 - scoop 的命令似乎对 git bash 的支持并不好，比如我要通过 bash 更新所有软件`scoop update -k *`，它会先检查 buckets 的更新，然后目标定向为当前目录下的所有文件夹 ...
 - 有些软件自己会更新，容易导致和 scoop 版本不匹配
 
-![](https://images.yuanj.top/blog/20240611164091.png)
+![](/images/20240611164091.png)
 
 而且，bash 在 Windows Terminal 里是很不错很美观的，但是在 vscode 里面就似乎不是很舒服了 ... 
 
@@ -70,7 +70,7 @@ autoMemoryReclaim=dropcache
 
 但是现在发现好像不需要了，最新版的 WSL2 据说可以自动回收内存了，我也感受到了，在经历了编译时占用 CPU 98%和 15 GB 内存后，编译结束 CPU 立刻降下去了，内存也降到 4GB 一直停着了，也算是可以了。
 
-![](https://images.yuanj.top/blog/20240611165082.png)
+![](/images/20240611165082.png)
 
 WSL2 主要还可以用 pymol、gromacs、deeptools 等等的软件，Windows 就不行，超算又不方便，所以自己的还是好一些。于是一切又熟悉又舒适了，游戏也删掉了~ 至于性能损失，损失就损失了吧 ...
 

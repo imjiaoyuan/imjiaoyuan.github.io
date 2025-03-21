@@ -25,7 +25,7 @@ date: 2024-03-27
 
 恰逢这段时间 QQ 重构了 Linux 版本，Debian12 也加入了 non-free 源，闭源驱动 apt 直接装，于是装了 Debian12 来做下游分析，用了一段时间后，实在忍受不了 GNOME 了，太难用了，而 KDE 又比较繁琐，于是换上了 cinnamon 桌面，越用越觉得这桌面舒服~
 
-![](https://images.yuanj.top/blog/20240102132339.png)
+![](/images/20240102132339.png)
 
 后来试了 cinnamon 团队的 Linux Mint，怎么说呢，我可能有点强迫症，不喜欢这种“杂交”的 Linux 发行版，我喜欢“纯”的🤔
 
@@ -33,7 +33,7 @@ date: 2024-03-27
 
 如今也成为了一名 Arch 邪教徒🤣之前还一直不明白那些高呼“Arch 万岁”的人，现在终于理解，yay 一把梭很舒服，万物皆可 yay！
 
-![](https://images.yuanj.top/blog/20240320184148.png)
+![](/images/20240320184148.png)
 
 虽然迫于要打游戏还有一些专业软件的缘故，又装了一个 Windows10，但是 Arch 还是会一直用，而且 Arch 以后也将成为我使用 Linux 的唯一选择。
 
