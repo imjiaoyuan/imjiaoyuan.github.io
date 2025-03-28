@@ -3,13 +3,13 @@ title: ATAC-Seq 分析流程
 date: 2024-05-03
 ---
 
-ATAC-Seq 是“Assay for Transposase-Accessible Chromatin with high-throughput Sequencing”的缩写。 ATAC-Seq 方法依赖于使用高活性转座酶 Tn5 的下一代测序（NGS）文库的构建。将 NGS 接头连接到转座酶上，该转座酶可以使染色质断裂并同时将这些接头整合到开放的染色质区域中。构建的文库通过 NGS 测序，并使用生物信息学分析具有可及或可访问染色质的基因组区域。
+ATAC-Seq 技术是"Assay for Transposase-Accessible Chromatin with high-throughput Sequencing"的缩写。 ATAC-Seq 方法依赖于使用高活性转座酶 Tn5 的下一代测序（NGS）文库的构建。将 NGS 接头连接到转座酶上，该转座酶可以使染色质断裂并同时将这些接头整合到开放的染色质区域中。构建的文库通过 NGS 测序，并使用生物信息学分析具有可及或可访问染色质的基因组区域。
 
 <!--more-->
 
 ## ATAC-seq 概述
 
-尽管 ATAC-seq 实验方法相对简单且稳定，但是专门为 ATAC-seq 测序数据开发的生物信息学分析软件却非常少。由于 ATAC-seq 和 ChIP-seq 数据的相似性较高，ChIP-seq 分析使用的软件一般也可用于 ATAC-seq 的分析，但是使用 ChIP-seq 软件分析得到的 ATAC-seq 结果尚未得到系统性的评估。
+虽然 ATAC-seq 实验方法操作相对简单且结果稳定，但是专门为 ATAC-seq 测序数据开发的生物信息学分析软件却非常少。由于 ATAC-seq 和 ChIP-seq 数据的相似性较高，ChIP-seq 分析使用的软件一般也可用于 ATAC-seq 的分析，但是使用 ChIP-seq 软件分析得到的 ATAC-seq 结果尚未得到系统性的评估。
 
 ![](/images/20240503133961.png)
 
@@ -59,19 +59,7 @@ ATAC-Seq 是“Assay for Transposase-Accessible Chromatin with high-throughput S
 - macs2：进行 Peak Calling
 - deeptools：计算基因组区段 reads 覆盖度
 
-先创建 conda 虚拟环境，安装所需要的软件，可以自行手动安装，也可以直接导入我的 conda 环境：
-
-```bash
-git clone https://github.com/imjiaoyuan/NGS-analysis.git
-cd NGS-analysis/environment
-cp .condarc ~/
-conda env create --file atac-seq-env.yml   # ATAC-seq
-```
-
-创建完成后激活环境就可以使用了：
-
-```bash
-conda activate atac-seq
+先创建 conda 虚拟环境，安装所需要的软件。
 ```
 
 ## 数据获取与预处理
@@ -82,10 +70,18 @@ conda activate atac-seq
 
 后面的分析都可以基于这个文件进行批处理。
 
-使用 sratools 进行批量下载，下载比较慢，就用 nohup 挂在后台下载，自己可以做点别的事：
+使用 sra-tools 工具批量下载测序数据，下载比较慢，就用 nohup 挂在后台下载，自己可以做点别的事：
 
 ```bash
-nohup prefetch -O . $(<SRR_Acc_List.txt) &
+#!/bin/bash
+mkdir -p sra fastqgz
+cat ./SRR_Acc_List.txt | while read id; do
+    mv -f "${id}/${id}.sra" ./sra/
+    rm -rf "${id}"
+done
+
+cd sra
+nohup fastq-dump --gzip --split-3 ./*.sra --outdir ../fastqgz
 ```
 
 下载后的数据是放在一个个 SRRXXXXX 的文件夹里面的，我们用一个小脚本把它全部移动到一个 sra 文件夹便于处理：
@@ -212,7 +208,7 @@ bwa mem [options] ref.fa reads.fq [mates.fq]
 ```
 
 - -t INT：线程数，默认是 1
-- -M：将 shorter split hits 标记为次优，以兼容 Picard’s markDuplicates 软件
+- -M：将 shorter split hits 标记为次优，以兼容 Picard's markDuplicates 软件
 - -p：若无此参数：输入文件只有 1 个，则进行单端比对；若输入文件有 2 个，则作为 paired reads 进行比对。若加入此参数：则仅以第 1 个文件作为输入（输入的文件若有 2 个，则忽略之），该文件必须是 read1.fq 和 read2.fa 进行 reads 交叉的数据
 - -R STR：完整的 read group 的头部，可以用 '\t' 作为分隔符， 在输出的 SAM 文件中被解释为制表符 TAB. read group 的 ID，会被添加到输出文件的每一个 read 的头部
 - -T INT：当比对的分值比 INT 小时，不输出该比对结果，这个参数只影响输出的结果，不影响比对的过程
@@ -229,9 +225,14 @@ bwa index -a bwtsw Oryza_sativa.IRGSP-1.0.dna.toplevel.fa Oryza_sativa
 批量进行比对：
 
 ```bash
-cat ./SRR_Acc_List.txt | while read id;
-do
-    bwa mem -v 3 -t 4 ./Oryza_sativa/Oryza_sativa.IRGSP-1.0.dna.toplevel.fa ./clean/${id}_1.fastq.gz ./clean/${id}_2.fastq.gz -o ./compared/${id}.sam
+cat ./SRR_Acc_List.txt | while read id; do
+    bwa mem \
+        -v 3 \
+        -t 4 \
+        ./Oryza_sativa/Oryza_sativa.IRGSP-1.0.dna.toplevel.fa \
+        ./clean/${id}_1.fastq.gz \
+        ./clean/${id}_2.fastq.gz \
+        -o ./compared/${id}.sam
 done
 ```
 
@@ -368,7 +369,7 @@ computeMatrix [-h] [--version]  ...
 - --scoreFileName, -S：bigWig 文件包含要绘制的分数，多个文件应以空格分隔，BigWig 文件可以使用 bamCoverage 或 bamCompare 工具获取
 
 输出参数：
-- --outFileName, -out, -o：用于保存“plotHeatmap”和“plotProfile”工具所需的 gzip 压缩矩阵文件的文件名
+- --outFileName, -out, -o：用于保存"plotHeatmap"和"plotProfile"工具所需的 gzip 压缩矩阵文件的文件名
 - --outFileNameMatrix：指定热图矩阵的名称
 - --outFileSortedRegions：跳过零或最小/最大阈值后保存区域的文件名，文件中区域的顺序遵循所选的排序顺序
 

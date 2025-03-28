@@ -3,21 +3,21 @@ title: RNA-Seq 上游分析学习
 date: 2024-03-27
 ---
 
-转录组测序的研究对象为特定细胞在某一功能状态下所能转录出来的所有 RNA 的总和，包括 mRNA 和非编码 RNA，相对于传统的芯片杂交平台，转录组测序无需预先针对已知序列设计探针，即可对任意物种的整体转录活动进行检测，提供更准确的数字化信号，更高的检测通量以及更广泛的检测范围，是目前深入研究转录组复杂性的强大工具，基于高通量测序平台的转录组测序技术能够全面获得物种特定组织或器官的转录本信息，从而进行基因表达水平研究、新转录本发现研究、转录本结构变异研究等。
+转录组测序的研究对象为特定细胞在某一功能状态下所能转录出来的所有 RNA 的总和，包括 mRNA 和非编码 RNA。相对于传统的芯片杂交平台，转录组测序无需预先针对已知序列设计探针，即可对任意物种的整体转录活动进行检测，提供更准确的数字化信号、更高的检测通量以及更广泛的检测范围。基于高通量测序平台的转录组测序技术能够全面获得物种特定组织或器官的转录本信息，从而进行基因表达水平研究、新转录本发现研究、转录本结构变异研究等。
 
 <!--more-->
 
 ## RNA-seq 概述
 
-RNA-seq 是研究转录组应用最广泛，也是最重要的技术之一，RNA-seq 分析内容包括序列比对、转录本拼接、表达定量、差异分析、融合基因检测、可变剪接、RNA 编辑和突变检测等，具体流程和常用工具如下图所示，通常的分析不一定需要走完全部流程，按需进行，某些步骤可以跳过、简化等。
+RNA-seq 是研究转录组应用最广泛，也是最重要的技术之一。RNA-seq 分析主要包括序列比对、转录本拼接、表达定量、差异分析、融合基因检测、可变剪接、RNA 编辑和突变检测等。具体流程和常用工具如下图所示，通常的分析不一定需要走完全部流程，可按需进行，某些步骤可以跳过或简化。
 
 ![](/images/20230907019612.png)
 
-RNA-seq 中最常用的分析方法就是找出差异表达基因 (Differential gene expression, DEG)，在实验室中，标准流程就分为三步：
+RNA-seq 中最常用的分析方法就是找出差异表达基因 (Differential gene expression, DEG)。在实验室中，标准分析流程包含三个步骤：
 
-- step1: 构建测序文库，包括提取 RNA, 富集 mRNA 或清除核糖体 RNA, 合成 cDNA, 加上接头
-- step2: 在高通量测序平台（通常为 Illumina） 上对文库进行测序，每个样本的测序深度为 10-30M 读长
-- step3: 数据分析，具体而言：对测序得到的读长进行比对或组装到转录本上；对覆盖到每个基因区域的读长进行计数；根据统计模型鉴定不同样本间差异表达的基因，（这种分析过程是比较传统的方法）
+- **Step 1**: 构建测序文库，包括提取 RNA、富集 mRNA 或清除核糖体 RNA、合成 cDNA、加上接头。
+- **Step 2**: 在高通量测序平台（通常为 Illumina）上对文库进行测序，每个样本的测序深度通常为 10-30M 读长。
+- **Step 3**: 数据分析，具体而言：对测序得到的读长进行比对或组装到转录本上；对覆盖到每个基因区域的读长进行计数；根据统计模型鉴定不同样本间差异表达的基因（这种分析过程是比较传统的方法）。
 
 ## 版本信息
 
@@ -29,18 +29,18 @@ RNA-seq 中最常用的分析方法就是找出差异表达基因 (Differential 
 
 ## 一些名词解释
 
-- adapter：接头，为一段已知的短核苷酸序列，用于链接未知的目标测序片段
-- index：几个碱基组成的寡核苷酸链，用于在混合测序时，区分不同样本
-- insert：待测序的目标序列，位于两个 adapter 之间
-- reads：在测序过程中，从样本中识别出来的 DNA 或 RNA 序列
-- Transcriptome: 包含所有 RNA 分子的集合，可以用来量化每个基因的表达水平
-- Expression levels 或 Coverage: 表示特定基因的 RNA 数量，通常用来衡量基因的表达水平
-- Differential expression analysis：用来比较不同样本或不同处理组之间的基因表达差异
-- Gene annotation：一个包含有关每个基因的基本信息的数据库，如其位置，功能等
-- Splice variants：一个基因能够通过不同的剪接方式生成不同的 RNA，这些不同的 RNA 就叫做剪接异构体
-- FPKM (Fragments Per Kilobase of transcript per Million mapped reads) 和 TPM (Transcripts Per Kilobase Million)：用作基因表达水平的衡量标准
-- Quality control：确保数据质量，清理模糊不清或者质量低下的 reads
-- Genome：一个生物体的所有遗传信息
+- **adapter**：接头，为一段已知的短核苷酸序列，用于链接未知的目标测序片段。
+- **index**：几个碱基组成的寡核苷酸链，用于在混合测序时区分不同样本。
+- **insert**：待测序的目标序列，位于两个 adapter 之间。
+- **reads**：在测序过程中，从样本中识别出来的 DNA 或 RNA 序列。
+- **Transcriptome**: 包含所有 RNA 分子的集合，可用来量化每个基因的表达水平。
+- **Expression levels 或 Coverage**: 表示特定基因的 RNA 数量，通常用来衡量基因的表达水平。
+- **Differential expression analysis**：用来比较不同样本或不同处理组之间的基因表达差异。
+- **Gene annotation**：一个包含有关每个基因的基本信息的数据库，如其位置、功能等。
+- **Splice variants**：一个基因通过不同的剪接方式生成不同的 RNA，这些不同的 RNA 就叫做剪接异构体。
+- **FPKM (Fragments Per Kilobase of transcript per Million mapped reads)** 和 **TPM (Transcripts Per Kilobase Million)**：用作基因表达水平的衡量标准。
+- **Quality control**：确保数据质量，清理模糊不清或者质量低下的 reads。
+- **Genome**：一个生物体的所有遗传信息。
 
 ## 大致流程
 
@@ -48,15 +48,15 @@ RNA-seq 中最常用的分析方法就是找出差异表达基因 (Differential 
 
 ## 软件安装
 
-只需要使用 conda 就可以安装所有需要的软件，主要使用的软件有以下一些
+只需要使用 conda 就可以安装所有需要的软件，主要使用的软件有以下一些：
 
-- sra-tools：快速下载 NCBI SRA 数据
-- fastQc：测序数据质量检测与控制
-- multiqc：合并质量检测报告
-- trimmomatic： 过滤低质量序列
-- hisat2：转录组数据的比对
-- samtools：对 hisat2 比对的结果进行排序和压缩
-- featureCounts：对基因的信息进行计数统计
+- **sra-tools**：快速下载 NCBI SRA 数据。
+- **fastQc**：测序数据质量检测与控制。
+- **multiqc**：合并质量检测报告。
+- **trimmomatic**：过滤低质量序列。
+- **hisat2**：转录组数据的比对。
+- **samtools**：对 hisat2 比对的结果进行排序和压缩。
+- **featureCounts**：对基因的信息进行计数统计。
 
 先创建 conda 虚拟环境，安装所需要的软件，可以自行手动安装，也可以直接导入我的 conda 环境：
 
@@ -67,13 +67,13 @@ cp .condarc ~/
 conda env create --file rna-seq-env.yml   # RNA-seq
 ```
 
-创建完成后激活环境就可以使用了：
+创建完成后激活环境即可使用：
 
 ```bash
 conda activate rna-seq
 ```
 
-如果想自己安装也可以，用下列命令就可以：
+如果想自己安装也可以，用下列命令：
 
 ```bash
 conda install bioconda::sra-tools
@@ -89,19 +89,19 @@ conda install bioconda::multiqc
 
 ### 测序数据下载
 
-先在 NCBI 的 SRA 数据库搜索感兴趣的物种
+先在 NCBI 的 SRA 数据库搜索感兴趣的物种：
 
 ![](/images/20230907183434.png)
 
-选择符合自己要求的文章，找到下面 Runs 这里，点击 SRR 开头的编号
+选择符合自己要求的文章，找到下面 Runs 这里，点击 SRR 开头的编号：
 
 ![](/images/20230907183745.png)
 
-查看数据是否符合要求
+查看数据是否符合要求：
 
 ![](/images/20230907183830.png)
 
-文件是***_1.fq.gz、***_2.fq.gz 这种是双端测序数据，我们需要这种双端测序的数据来进行 RNA-seq 分析
+文件是 `***_1.fq.gz`、`***_2.fq.gz` 这种是双端测序数据，我们需要这种双端测序的数据来进行 RNA-seq 分析。
 
 如果数据是双端测序的，那么就复制 SRR 编号，使用 sratools 下载，例如：
 
@@ -119,43 +119,45 @@ SRR5830633
 SRR5830634
 ```
 
-然后使用下面的命令下载
+然后使用下面的命令下载：
 
 ```bash
 prefetch --option-file SRR_Acc_List.txt
 ```
 
-由于数据比较大，可以使用 nohup 命令挂在后台下载
+由于数据比较大，可以使用 nohup 命令挂在后台下载：
 
 ```bash
 nohup prefetch -O . $(<SRR_Acc_List.txt) &
 ```
 
-刚刚下载好的数据是 sra 格式的，使用 sratools 将其拆分
+刚刚下载好的数据是 sra 格式的，使用 sratools 将其拆分：
 
 ```bash
 fastq-dump --gzip --split-3 SRR25909836.sra 
 ```
 
-- --gzip 是将拆分的 fastq 文件压缩归档为 gz 格式
-- --split-3 是将文件拆分为正向序列和逆向序列
+- `--gzip` 是将拆分的 fastq 文件压缩归档为 gz 格式。
+- `--split-3` 是将文件拆分为正向序列和逆向序列。
 
-如果数据比较多，就写一个 bash 脚本
+如果数据比较多，就写一个 bash 脚本：
 
 ```bash
 #!/bin/bash
-mkdir SRR
-cat SRR_Acc_List.txt | while read id; do mv -f ${id}/${id}.sra ./SRR; done
-cd SRR
-for i in *sra
-do
-	fastq-dump --gzip --split-3 ${i} -f ../fastqgz
+mkdir -p SRR fastqgz
+cat SRR_Acc_List.txt | while read id; do
+    mv -f "${id}/${id}.sra" ./SRR/
+done
+
+cd SRR || exit
+for i in *.sra; do
+    fastq-dump --gzip --split-3 "$i" -O ../fastqgz
 done
 ```
 
 ### 参考基因组及注释文件
 
-植物的我一般在 [Ensembl Plants](http://plants.ensembl.org/index.html) 下载，用 wget 或 curl 都可以，内存不大
+植物的基因组和注释文件一般在 [Ensembl Plants](http://plants.ensembl.org/index.html) 下载，用 wget 或 curl 都可以，文件体积不大：
 
 ```bash
 wget https://ftp.ensemblgenomes.ebi.ac.uk/pub/plants/release-57/fasta/oryza_sativa/dna/Oryza_sativa.IRGSP-1.0.dna.toplevel.fa.gz
@@ -163,14 +165,14 @@ wget https://ftp.ensemblgenomes.ebi.ac.uk/pub/plants/release-57/fasta/oryza_sati
 wget https://ftp.ensemblgenomes.ebi.ac.uk/pub/plants/release-57/gff3/oryza_sativa/Oryza_sativa.IRGSP-1.0.57.gff3.gz
 ```
 
-然后解压
+然后解压：
 
 ```bash
 gzip -d Oryza_sativa.IRGSP-1.0.57.gff3.gz
 gzip -d Oryza_sativa.IRGSP-1.0.dna.toplevel.fa.gz
 ```
 
-为了方便，我把两个文件分别重命名为 oryza_sativa.fa 和 oryza_sativa.gff3
+为了方便，我把两个文件分别重命名为 `oryza_sativa.fa` 和 `oryza_sativa.gff3`：
 
 ```bash
 mv Oryza_sativa.IRGSP-1.0.dna.toplevel.fa oryza_sativa.fa
@@ -270,7 +272,7 @@ multiqc ./fastqc_report # 将多个质量检测报告合并
 每条序列质量得分的分布情况
 
 - 横轴是平均质量得分
-- 纵轴收到该平均质量得分的 reads 数目
+- 纵轴是每条序列 GC 含量对应的数量
 - 当测序质量峰值小于 27（错误率 0.2%）时报"WARN"
 - 当峰值小于 20（错误率 1%）时报"FAIL"
 
@@ -308,7 +310,7 @@ multiqc ./fastqc_report # 将多个质量检测报告合并
 - 当任意位置的 N 的比例超过 5%，报"WARN"
 - 当任意位置的 N 的比例超过 20%，报"FAIL"
 
-正常情况下，N 的比例是很小的，所以图上常常看到一条直线，但放大 Y 轴之后会发现还是有 N 的存在，这不算问题，当 Y 轴在 0%-100%的范围内也能看到“鼓包”时，说明测序系统出了问题
+这种情况是正常的。但当 Y 轴在 0%-100%的范围内也能看到"鼓包"时，说明测序系统出了问题
 
 **Sequence Length Distribution**
 
@@ -477,8 +479,8 @@ z -S oryza_sativa.sam
 - 87.32%的序列只比对到了基因组上的一个位置
 - 2.15%的序列比对到了基因组上的多个位置
 - 对于没有成功比对的成对端序列，有 10.88%者的序列不一致地（非正确配对的）比对到了基因组上一个位置
-- 有的序列无法一致地或不一致地比对，这些序列占所有没有成功比对的成对端序列的 2033427 对，它们一共包含 4066854 个“pairs”序列
-    - 在这些“pairs”序列中，
+- 有的序列无法一致地或不一致地比对，这些序列占所有没有成功比对的成对端序列的 2033427 对，它们一共包含 4066854 个"pairs"序列
+    - 在这些"pairs"序列中，
     - 58.71%的序列没有比对到任何地方
     - 39.83%的序列比对到了基因组上的一个位置
     - 1.46%的序列比对到了基因组上的多个位置
