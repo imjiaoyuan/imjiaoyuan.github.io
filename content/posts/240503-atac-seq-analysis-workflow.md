@@ -60,7 +60,6 @@ ATAC-Seq 技术是"Assay for Transposase-Accessible Chromatin with high-throughp
 - deeptools：计算基因组区段 reads 覆盖度
 
 先创建 conda 虚拟环境，安装所需要的软件。
-```
 
 ## 数据获取与预处理
 

@@ -58,13 +58,7 @@ RNA-seq 中最常用的分析方法就是找出差异表达基因 (Differential 
 - **samtools**：对 hisat2 比对的结果进行排序和压缩。
 - **featureCounts**：对基因的信息进行计数统计。
 
-先创建 conda 虚拟环境，安装所需要的软件，可以自行手动安装，也可以直接导入我的 conda 环境：
-
-```bash
-git clone https://github.com/imjiaoyuan/NGS-analysis.git
-cd NGS-analysis/environment
-cp .condarc ~/
-conda env create --file rna-seq-env.yml   # RNA-seq
+先创建 conda 虚拟环境，安装所需要的软件。
 ```
 
 创建完成后激活环境即可使用：
