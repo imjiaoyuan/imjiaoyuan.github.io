@@ -8,7 +8,7 @@ Here are some high-quality blogs that I subscribed to through RSS
 - [雅余](https://yayu.net/)：一位爱喝咖啡的产品经理曾经是位设计师
 - [Ameow](https://ameow.xyz)：Backend engineer，《猫鱼周刊》作者
 - [太隐](https://wangyurui.com)：一名终生学习者，写的文章非常有深度
-- [Tony Ding's Blog](https://blog.tonyding.net/)：一个 17 岁的高二生，在公立高中国际部就读
+- [Tony Ding's Blog](https://blog.tonyding.net/)：一个 17 岁的高二学生，在公立高中国际部就读
 - [Pseudoyu](https://pseudoyu.com/)：区块链开发工程师，香港大学计算机系硕士
 - [Airing 的博客](https://blog.ursb.me/)：中山大学哲学硕士，原腾讯音乐高级前端工程师，毕业 4 年 T11
 - [polebug's blog](https://polebug.github.io/)：保持思考｜等待｜斋戒
