@@ -41,7 +41,7 @@ html {
 }
 
 body {
-	font-family: 'trebuchet ms', verdana, helvetica, arial, sans-serif;
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 	margin: 0;
 	font-size: 14px;
 	font-size: .875rem;
@@ -141,9 +141,10 @@ h3,
 h4,
 h5,
 h6 {
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 	margin: 0 0 15px;
 	margin: 0 0 0.9rem;
-	font-weight: 700;
+	font-weight: 600;
 	line-height: 1.3;
 	color: #000;
 }
@@ -254,39 +255,63 @@ pre,
 code,
 kbd,
 samp {
-	font-size: inherit;
-	font-family: Menlo,Monaco,Consolas,"Andale Mono","lucida console","Courier New",monospace;
+	font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+	font-size: 0.85rem;
 }
 
 pre,
 code {
-	font-family: Menlo,Monaco,Consolas,"Andale Mono","lucida console","Courier New",monospace;
-	border-radius: 10px;
+	font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+	border-radius: 3px;
 }
 
 code {
 	padding: 0 5px;
 	color: #c33;
-	font-family: Menlo,Monaco,Consolas,"Andale Mono","lucida console","Courier New",monospace;
+	font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+	font-size: 0.85rem;
 }
 
 pre {
     display: block;
-    padding: 1.25rem;
+    padding: 0.85rem;
     margin-bottom: 1.25rem;
-    overflow: auto;
+    overflow-x: auto;
     color: #ffffff !important;
     background-color: #232936 !important;
-    border-radius: 5px;
+    border-radius: 3px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    box-sizing: border-box;
+    width: 100%;
 }
 
 pre code {
-	padding: 0;
-	color: inherit;
-	white-space: inherit;
-	background: inherit;
-	border: 0;
-	font-family: Menlo,Monaco,Consolas,"Andale Mono","lucida console","Courier New",monospace;
+    padding: 0 0.85rem 0 0;
+    margin: 0;
+    color: inherit;
+    white-space: pre;
+    background: none;
+    border: 0;
+    font-size: 0.85rem;
+    display: inline-block;
+    min-width: 100%;
+}
+
+pre::-webkit-scrollbar {
+    height: 8px;
+    background-color: #232936;
+    border-radius: 3px;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background-color: #4a5568;
+    border-radius: 3px;
+}
+
+pre::-webkit-scrollbar-track {
+    border-radius: 3px;
+    background-color: #232936;
 }
 
 kbd {
@@ -412,7 +437,7 @@ select {
 }
 
 .topbar__title {
-	font-family: 'trebuchet ms', verdana, helvetica, arial, sans-serif;
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 	font-size: 32px;
 	font-size: 2rem;
 	font-weight: 700;
@@ -866,15 +891,14 @@ textarea {
 }
 
 .widget__title {
-	font-family: 'trebuchet ms', verdana, helvetica, arial, sans-serif;
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 	border-left: 5px solid #000000;
 	background: #3f72af;
 	margin: 0;
-	position: relative;
+	color: #ffffff;
 	padding: 3px 10px;
 	font-size: .8rem;
-	font-weight: bold;
-	color: #ffffff;
+	font-weight: 600;
 	text-transform: uppercase;
 }
 
@@ -1109,7 +1133,7 @@ textarea {
 }
 
 .content {
-	font-family: 'trebuchet ms', verdana, helvetica, arial, sans-serif;
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .widget-search__form {
