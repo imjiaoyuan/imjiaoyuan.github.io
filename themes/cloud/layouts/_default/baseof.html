@@ -10,12 +10,15 @@
 	{{- if .Site.Params.opengraph }}{{ template "_internal/opengraph.html" . }}{{- end }}
 	{{- if .Site.Params.schema }}{{ template "_internal/schema.html" . }}{{- end }}
 
-	{{- if $style := resources.Get "css/style.css" }}
-		{{ $style := $style | resources.ExecuteAsTemplate "css/style.css" . -}}
-		<link rel="stylesheet" href="{{ $style.RelPermalink }}">
-	{{- else }}
-		<link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
-	{{- end }}
+	<!-- Open Graph 和 Schema.org 数据 -->
+	{{- if .Site.Params.opengraph }}{{ template "_internal/opengraph.html" . }}{{- end }}
+	{{- if .Site.Params.schema }}{{ template "_internal/schema.html" . }}{{- end }}
+
+	<!-- 提前加载关键资源 -->
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	
+	<!-- 样式表加载 -->
+	<link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
 	{{ range .Site.Params.customCSS -}}
 	<link rel="stylesheet" href="{{ . | relURL }}">
 	{{- end }}
@@ -24,10 +27,13 @@
 	<link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .RelPermalink }}" title="{{ $.Site.Title }}">
 	{{- end }}
 
+	<!-- 预取常用页面 -->
+	<link rel="dns-prefetch" href="https://api.github.com">
+
 </head>
 <body class="body">
 	<div class="container container--outer">
-		{{ block "header" . }}{{ partial "header.html" . }}{{ end }}
+		{{ block "topbar" . }}{{ partial "topbar.html" . }}{{ end }}
 		<div class="wrapper flex">
 			<div class="primary">
 			{{ block "main" . }}
@@ -40,10 +46,15 @@
 			</div>
 			{{ block "sidebar" . }}{{ partial "sidebar.html" . }}{{ end }}
 		</div>
-		{{ block "footer" . }}{{ partial "footer.html" . }}{{ end }}
 	</div>
-{{ range .Site.Params.customJS -}}
-<script src="{{ . | relURL }}"></script>
-{{- end }}
+	
+	<script src="{{ "js/search.js" | relURL }}" defer></script>
+	<script src="{{ "js/archives.js" | relURL }}" defer></script>
+	<script src="{{ "js/comments.js" | relURL }}" defer></script>
+	<script src="{{ "js/lazyload.js" | relURL }}" defer></script>
+	
+	{{ range .Site.Params.customJS -}}
+	<script src="{{ . | relURL }}" defer></script>
+	{{- end }}
 </body>
 </html>

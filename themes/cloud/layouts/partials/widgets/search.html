@@ -7,104 +7,13 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  // 预处理文章数据
-  var posts = [
-    {{ range where .Site.RegularPages "Section" "posts" }}
-    {
-      "title": {{ .Title | jsonify }},
-      "url": "{{ .Permalink }}",
-      "content": {{ .Plain | jsonify }}
-    },
-    {{ end }}
-  ];
-
-  var searchInput = document.getElementById('search-input');
-  var searchResults = document.getElementById('search-results');
-
-  // 确保元素存在再添加事件监听器
-  if (searchInput && searchResults) {
-    searchInput.addEventListener('input', function(e) {
-      e.preventDefault();
-      var query = this.value.toLowerCase();
-      if (!query) {
-        searchResults.innerHTML = '';
-        return;
-      }
-
-      var results = posts.filter(function(post) {
-        return post.title.toLowerCase().includes(query) || 
-               post.content.toLowerCase().includes(query);
-      });
-
-      var html = '<ul class="widget__list">';
-      if (results.length) {
-        results.forEach(function(post) {
-          html += `<li class="widget__item"><a class="widget__link" href="${post.url}">${post.title}</a></li>`;
-        });
-      } else {
-        html += '<li class="widget__item"><span class="widget__link">未找到相关文章</span></li>';
-      }
-      html += '</ul>';
-      searchResults.innerHTML = html;
-    });
-  }
-
-  // 删除不存在的 form 元素的事件监听器
-  // 如果确实需要阻止表单提交，应该将 input 包装在 form 标签中
-});
-</script>
-
-<style>
-/* 只针对搜索模块的样式 */
-.search-widget-content {
-  margin-left: -17px;
-  padding-right: 20px;
-  margin-bottom: -5px;
-}
-
-#search-input {
-  width: 100%;
-  padding: 2px 5px;
-  font-size: .85rem;
-  border: 1px solid #ddd;
-  border-radius: 2px;
-  outline: none;
-  box-sizing: border-box;
-  margin: 5px 0 0 10px;
-  height: 20px;
-}
-
-#search-input:focus {
-  border-color: #666;
-}
-
-#search-results {
-  margin-top: 6px;
-  font-size: 14px;
-  margin-left: 17px;  /* 修改为17px以与其他widget对齐 */
-}
-
-/* 搜索结果样式 */
-#search-results .widget__list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-#search-results .widget__item {
-  padding: 0;
-  border: 0;
-}
-
-#search-results .widget__link {
-  display: block;
-  padding: 2px 0;
-  color: #333;
-  text-decoration: none;
-}
-
-#search-results .widget__link:hover {
-  color: #666;
-}
-</style> 
+window.siteSearchData = [
+  {{ range where .Site.RegularPages "Section" "posts" }}
+  {
+    "title": {{ .Title | jsonify }},
+    "url": "{{ .Permalink }}",
+    "content": {{ .Plain | jsonify }}
+  },
+  {{ end }}
+];
+</script> 
