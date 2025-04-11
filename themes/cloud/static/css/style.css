@@ -43,7 +43,7 @@ html {
 body {
 	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 	margin: 0;
-	font-size: 14px;
+	font-size: 13px;
 	font-size: .875rem;
 	line-height: 1.5;
 	word-wrap: break-word;
@@ -150,33 +150,27 @@ h6 {
 }
 
 h1 {
-	font-size: 32px;
-	font-size: 1.3rem;
-}
-
-h2 {
-	font-size: 24px;
 	font-size: 1.2rem;
 }
 
+h2 {
+	font-size: 1.1rem;
+}
+
 h3 {
-	font-size: 20px;
-	font-size: 1.15rem;
+	font-size: 1rem;
 }
 
 h4 {
-	font-size: 18px;
-	font-size: 1rem;
+	font-size: 0.9rem;
 }
 
 h5 {
-	font-size: 16px;
-	font-size: .9rem;
+	font-size: 0.85rem;
 }
 
 h6 {
-	font-size: 16px;
-	font-size: 1rem;
+	font-size: 0.85rem;
 }
 
 a {
@@ -712,7 +706,7 @@ button:not(:-moz-focusring):focus > .menu__btn-title {
 
 .list__title {
 	margin: 0 0 5px;
-	font-size: 20px;
+	font-size: 16.5px;
 	color: #818284;
 	border-left: 5px solid #000000 !important;
 	padding-left: 7px !important;
@@ -1094,7 +1088,7 @@ textarea {
 	}
 
 	.list__title {
-		font-size: 20px;
+		font-size: 16.5px;
 	}
 }
 
