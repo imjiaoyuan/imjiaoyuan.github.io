@@ -71,27 +71,5 @@ description: 思绪来得快去得也快，偶尔会在这里停留
   color: #666;
 }
 </style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const owner = 'imjiaoyuan';
-  const repo = 'imjiaoyuan.github.io';
-  const issueTitle = 'Friend Link Request';
-  const btn = document.querySelector('.comment-link');
-
-  async function checkIssue() {
-    try {
-      const response = await fetch(`https://api.github.com/search/issues?q=repo:${owner}/${repo}+"${issueTitle}"+in:title`);
-      const data = await response.json();
-      
-      if (data.items && data.items.length > 0) {
-        btn.href = data.items[0].html_url;
-      }
-    } catch (error) {
-      console.error('Error checking issue:', error);
-    }
-  }
-
-  checkIssue();
-});
-</script>
+<!-- Ensure the external JavaScript file is loaded -->
+<script src="/themes/cloud/static/js/comments.js"></script>

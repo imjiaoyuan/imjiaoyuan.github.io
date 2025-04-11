@@ -7,10 +7,12 @@
          target="_blank"
          class="comment-link">
          <span id="comment-text">Go to Issues to View or Add Comments</span>
-         <span id="comment-loading" class="comment-loading" style="display:none;">检查评论中...</span>
+         <span id="comment-loading" class="comment-loading" style="display:none;">Checking comments...</span>
       </a>
     </div>
   </div>
 </div>
 <span id="comment-issue-title" data-title="Comment: {{ .Title }}" hidden></span>
+<!-- Ensure the external JavaScript file is loaded -->
+<script src="/themes/cloud/static/js/comments.js"></script>
 {{ end }}
