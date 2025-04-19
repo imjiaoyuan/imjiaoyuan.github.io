@@ -1,7 +1,7 @@
 <div class="widget-archives widget">
 	<h4 class="widget__title">ARCHIVES</h4>
 	<div class="widget__content" id="archives-container">
-		{{ range (where .Site.RegularPages "Section" "posts").GroupByDate "2006" }}
+		{{ range (where .Site.RegularPages "Section" "p").GroupByDate "2006" }}
 		<div class="widget__item archive-year">
 			<span class="archive-year-text">{{ .Key }} ({{ len .Pages }})</span>
 			<div class="archive-months">

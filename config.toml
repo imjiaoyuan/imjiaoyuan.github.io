@@ -6,7 +6,7 @@ theme = ["cloud"]
 
 [Params]
   post_meta = ["date"]
-  mainSections = ["posts"]
+  mainSections = ["p"]
 
 [Params.topbar]
   subtitle = "思绪来得快去得也快，偶尔会在这里停留"
