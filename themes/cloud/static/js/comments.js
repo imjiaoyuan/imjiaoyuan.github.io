@@ -1,11 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
+  const commentsWidget = document.querySelector('.comments-widget');
   const titleElement = document.getElementById('comment-issue-title');
-  if (!titleElement) return;
+  if (!titleElement || !commentsWidget) return;
 
   const owner = 'imjiaoyuan';
   const repo = 'imjiaoyuan.github.io';
   const issueTitle = titleElement.dataset.title;
-  const articleUrl = window.location.href; // Use the current page URL
+  const articleUrl = window.location.href;
   const btn = document.querySelector('.comment-link');
   const loadingEl = document.getElementById('comment-loading');
   const textEl = document.getElementById('comment-text');
@@ -22,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.href = data.items[0].html_url;
         textEl.textContent = 'View or Add issue';
       } else {
-        const body = `Article URL: ${articleUrl}\n\n`; // Include article URL in the issue body
+        const body = `Article URL: ${articleUrl}\n\n`;
         btn.href = `https://github.com/${owner}/${repo}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(body)}`;
         textEl.textContent = 'Create New Issue';
       }
@@ -31,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
       textEl.textContent = 'View or Add issue (API call failed)';
     } finally {
       loadingEl.style.display = 'none';
+      commentsWidget.classList.remove('hidden');
     }
   }
 

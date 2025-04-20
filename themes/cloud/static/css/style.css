@@ -985,6 +985,10 @@ textarea {
   outline: none;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 @media screen and (max-width: 1475px) {
 	.container--outer {
 		width: 95%;
