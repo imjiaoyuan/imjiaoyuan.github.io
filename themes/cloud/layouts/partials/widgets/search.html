@@ -8,7 +8,7 @@
 
 <script>
 window.siteSearchData = [
-  {{ range where .Site.RegularPages "Section" "posts" }}
+  {{ range where .Site.RegularPages "Section" "p" }}
   {
     "title": {{ .Title | jsonify }},
     "url": "{{ .Permalink }}",

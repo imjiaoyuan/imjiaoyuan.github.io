@@ -22,7 +22,7 @@ date: 2024-04-27
 - 顺式作用元件分析
 - 表达热图
 
-以上的分析基本都可以用 TBtools 来完成并做成好看的图片，这也是一个常规基因家族分析的流程。此处不涉及过于详细的步骤，更详细的步骤请参阅我的博客文章：https://yuanj.top/posts/gene-family-identification/
+以上的分析基本都可以用 TBtools 来完成并做成好看的图片，这也是一个常规基因家族分析的流程。此处不涉及过于详细的步骤，更详细的步骤请参阅我的博客文章：https://yuanj.top/p/gene-family-identification/
 
 作者在补充材料里提供了基因 ID、基因名和蛋白序列：
 

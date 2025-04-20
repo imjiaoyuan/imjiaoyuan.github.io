@@ -1,9 +1,9 @@
-{{ if eq .Section "posts" }}
+{{ if eq .Section "p" }}
 <div class="widget comments-widget">
   <h4 class="widget__title">Post Comments</h4>
   <div id="comments" class="widget__content">
     <div id="comment-form">
-      <a href="https://github.com/imjiaoyuan/imjiaoyuan.github.io/issues/new?title=Comment: {{ .Title }}" 
+      <a href="#" 
          target="_blank"
          class="comment-link">
          <span id="comment-text">Go to Issues to View or Add Comments</span>
@@ -13,6 +13,5 @@
   </div>
 </div>
 <span id="comment-issue-title" data-title="Comment: {{ .Title }}" hidden></span>
-<!-- Ensure the external JavaScript file is loaded -->
-<script src="/themes/cloud/static/js/comments.js"></script>
+<script src="/js/comments.js"></script>
 {{ end }}
