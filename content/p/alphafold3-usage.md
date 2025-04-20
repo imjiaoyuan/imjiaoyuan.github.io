@@ -512,7 +512,7 @@ def create_input_json(task_id, data):
                 input_data['sequences'].append(sequence_data)
             
             elif entity['type'] == 'ligand':
-                # 处理配体。..
+                # 处理配体 ... 
                 pass
         
         # 保存到文件
@@ -735,7 +735,7 @@ def run_alphafold3(job_name_unique):
                 <select v-model="entity.selectedOption" 
                   class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary"
                   @change="updateCcdCodes(entity)">
-                  <option value="">选择 CCD 代码。..</option>
+                  <option value="">选择 CCD 代码 ... </option>
                   <optgroup v-for="(group, groupName) in ccdOptions" :key="groupName" :label="groupName">
                     <option v-for="option in group" :key="option.id" :value="option.id">
                       {{ option.name }}
@@ -1012,7 +1012,7 @@ KLNPQRSTWVMHYHVKLSQN</pre>
           :disabled="isSubmitting">
           <span v-if="!isSubmitting">Submit</span>
           <span v-else class="flex items-center justify-center">
-            <span class="mr-2">提交中。..</span>
+            <span class="mr-2">提交中 ... </span>
             <span class="animate-spin">⌛</span>
           </span>
         </button>
