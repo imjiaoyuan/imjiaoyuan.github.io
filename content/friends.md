@@ -39,37 +39,19 @@ logo: https://yuanj.top/favicon.ico
 description: 思绪来得快去得也快，偶尔会在这里停留
 ```
 
-<div class="widget comments-widget">
-  <h4 class="widget__title">Add Friend Link Request</h4>
-  <div id="comments" class="widget__content">
-    <div id="comment-form">
-      <a href="https://github.com/imjiaoyuan/imjiaoyuan.github.io/issues/new?title=Friend Link Request" 
-         target="_blank"
-         class="comment-link">
-         Go to Issues to View or Add Friend Link Request
-      </a>
-    </div>
-  </div>
-</div>
-
-<style>
-.comments-widget {
-  margin-top: 2rem;
-}
-
-#comment-form {
-  text-align: center;
-  padding: 10px 17px 10px 2px;
-}
-
-.comment-link {
-  color: #333;
-  text-decoration: underline;
-}
-
-.comment-link:hover {
-  color: #666;
-}
-</style>
-<!-- Ensure the external JavaScript file is loaded -->
-<script src="/themes/cloud/static/js/comments.js"></script>
+<script src="https://giscus.app/client.js"
+        data-repo="imjiaoyuan/imjiaoyuan.github.io"
+        data-repo-id="R_kgDONrKDQg"
+        data-category="Announcements"
+        data-category-id="DIC_kwDONrKDQs4CmDl9"
+        data-mapping="specific"
+        data-term="Friend Link"
+        data-strict="0"
+        data-reactions-enabled="0"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>

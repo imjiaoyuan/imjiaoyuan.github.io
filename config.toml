@@ -18,8 +18,8 @@ theme = ["cloud"]
 [Params.widgets]
   recent_num = 15
   [[Params.widgets.misc.custom]]
-  title = "E-Mail"
-  url = "/email"
+  title = "email"
+  url = "/email.txt"
   [[Params.widgets.misc.custom]]
   title = "GitHub"
   url = "https://github.com/imjiaoyuan"

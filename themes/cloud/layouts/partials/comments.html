@@ -1,17 +1,17 @@
 {{ if eq .Section "p" }}
-<div class="widget comments-widget hidden">
-  <h4 class="widget__title">Post Comments</h4>
-  <div id="comments" class="widget__content">
-    <div id="comment-form">
-      <a href="#" 
-         target="_blank"
-         class="comment-link">
-         <span id="comment-text">Go to Issues to View or Add Comments</span>
-         <span id="comment-loading" class="comment-loading" style="display:none;">Checking comments...</span>
-      </a>
-    </div>
-  </div>
-</div>
-<span id="comment-issue-title" data-title="Comment: {{ .Title }}" hidden></span>
-<script src="/js/comments.js"></script>
+<script src="https://giscus.app/client.js"
+        data-repo="imjiaoyuan/imjiaoyuan.github.io"
+        data-repo-id="R_kgDONrKDQg"
+        data-category="Announcements"
+        data-category-id="DIC_kwDONrKDQs4CmDl9"
+        data-mapping="title"
+        data-strict="0"
+        data-reactions-enabled="0"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
 {{ end }}
