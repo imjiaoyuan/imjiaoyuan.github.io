@@ -1,5 +1,5 @@
 ---
-title: Lumen​​ – a glow of ideas
+title: martix​​ – a glow of ideas
 ---
 
 <script src="https://giscus.app/client.js"
@@ -12,7 +12,7 @@ title: Lumen​​ – a glow of ideas
         data-strict="0"
         data-reactions-enabled="0"
         data-emit-metadata="0"
-        data-input-position="bottom"
+        data-input-position="top"
         data-theme="light"
         data-lang="en"
         crossorigin="anonymous"

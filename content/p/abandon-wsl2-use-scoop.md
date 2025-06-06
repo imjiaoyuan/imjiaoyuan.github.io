@@ -11,11 +11,11 @@ date: 2024-04-25
 
 下图是开虚拟化平台之前的跑分：
 
-![](/images/20240425123940.jpg)
+![](/i/20240425123940.jpg)
 
 下图是开虚拟化平台之后的跑分：
 
-![](/images/20240425123919.jpg)
+![](/i/20240425123919.jpg)
 
 为了保证跑分结果准确，我特意在两种情况下多跑了几次，分值都差不多。主要的损失来自于 CPU，而 CPU12%的性能损失还是挺严重的。
 
@@ -56,7 +56,7 @@ scoop bucket add extras
 scoop install windows-terminal
 ```
 
-![](/images/20240425124824.jpg)
+![](/i/20240425124824.jpg)
 
 官方的 buckets 里面只有少数的软件，而我们要想安装其它国人日常使用的软件就需要添加几个 buckets：
 
@@ -85,7 +85,7 @@ if (interactive() && Sys.getenv("TERM_PROGRAM") == "vscode") {
 
 安装 languageserver 和 httpgd 包之后就可以很方便的出图了，与 VScode 集成在一起。
 
-![](/images/20240425130644.jpg)
+![](/i/20240425130644.jpg)
 
 再给 CRAN 和 Bioconductor 换源：
 
@@ -252,6 +252,6 @@ scoop update            # 更新 scoop 和 buckets
 
 不需要再一个个下载安装包一直点下一步了。总之感觉是挺舒服的~
 
-![](/images/20240425130723.jpg)
+![](/i/20240425130723.jpg)
 
-![](/images/20240425130881.jpg)
+![](/i/20240425130881.jpg)

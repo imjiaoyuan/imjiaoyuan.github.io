@@ -49,8 +49,8 @@ yay -S xfce4-pulseaudio-plugin
 
 VScode+httpgd 出图还是很丝滑。
 
-![](/images/20240619095847.jpg)
+![](/i/20240619095847.jpg)
 
 整体感觉还算可以。
 
-![](/images/20240619095865.jpg)
+![](/i/20240619095865.jpg)

@@ -57,15 +57,15 @@ MDRAALTVGPGMDMPIMHDGDRYELVRDIGSGNFGVARLMRSRADGQLVAVKYIERGDKIDENVQREIINHRSLRHPNII
 
 原文中基因家族是指水稻中一系列具有 S_TKc 结构域的基因，是磷酸转移酶，丝氨酸或苏氨酸特异性激酶亚家族。我们可以在 SMART 网站查看该结构域的信息：[S_TKc](http://smart.embl.de/smart/do_annotation.pl?DOMAIN=SM00220)。补充材料里面也提供了基因的蛋白序列，我们直接拿过来用。将蛋白序列粘贴到 [SMART 网站](http://smart.embl.de/) 查看结构域：
 
-![](/images/20240427092258.jpg)
+![](/i/20240427092258.jpg)
 
 结果显示所有的基因都是具有 S_TKc 结构域的。但是个人感觉 SMART 网站的结果可能看上去不是很友好，我喜欢用 [NCBI CD-search](https://www.ncbi.nlm.nih.gov/Structure/bwrpsb/bwrpsb.cgi)，也是上传序列开始分析即可，显示效果更加直观：
 
-![](/images/20240427092304.jpg)
+![](/i/20240427092304.jpg)
 
 并且也可以用 TBtools 做成图：
 
-![](/images/20240427092386.jpg)
+![](/i/20240427092386.jpg)
 
 ## 染色体定位
 
@@ -103,27 +103,27 @@ transcript:Os03t0610900-01	OsSAPK10
 
 导入到 TBtools：
 
-![](/images/20240427092353.jpg)
+![](/i/20240427092353.jpg)
 
 出图后美化一下：
 
-![](/images/20240427092338.jpg)
+![](/i/20240427092338.jpg)
 
 ## 基因结构分析&motif 分析
 
 将蛋白序列上传到 [meme 网站](https://meme-suite.org/meme/tools/meme) 后下载输出的 xml 文件即可，但是网页版 MEME Suite 经常要排队，所以可以用 TBtools 进行本地分析：
 
-![](/images/20240427092331.jpg)
+![](/i/20240427092331.jpg)
 
 再将输出的 xml 文件可视化：
 
-![](/images/20240427092365.jpg)
+![](/i/20240427092365.jpg)
 
 通常我们将基因结构、domain、motif 展示在一张图上：
 
-![](/images/20240427092443.jpg)
+![](/i/20240427092443.jpg)
 
-![](/images/20240427092488.jpg)
+![](/i/20240427092488.jpg)
 
 ## 系统发育树
 
@@ -165,27 +165,27 @@ transcript:Os03t0610900-01	OsSAPK10
 
 使用 Mega7 分析完之后使用 [iTOL 网站](https://itol.embl.de/) 进行美化：
 
-![](/images/20240427092499.jpg)
+![](/i/20240427092499.jpg)
 
 ## 共线性分析
 
 共线性分析的步骤比较多，这里不展开赘述：
 
-![](/images/20240427092542.jpg)
+![](/i/20240427092542.jpg)
 
-![](/images/20240427092569.jpg)
+![](/i/20240427092569.jpg)
 
 ## 多序列比对
 
 多序列比对我一般用 [CLUSTALW](https://www.genome.jp/tools-bin/clustalw) 和 [ESPript](https://espript.ibcp.fr/ESPript/cgi-bin/ESPript.cgi) 来做，将蛋白序列上传到 CLUSTALW 进行多序列比对，下载 aln 的结果后用 ESPript 进行可视化：
 
-![](/images/20240427093322.jpg)
+![](/i/20240427093322.jpg)
 
 ## 蛋白质理化性质分析
 
 用 TBtools 即可一键分析，导入蛋白质序列即可：
 
-![](/images/20240427092592.jpg)
+![](/i/20240427092592.jpg)
 
 |Sequence ID|Number of Amino Acid|Molecular Weight|Theoretical pI|Instability Index|Aliphatic Index|Grand Average of Hydropathicity|
 |:----|:----|:----|:----|:----|:----|:----|
@@ -218,13 +218,13 @@ SOPMA :
    Other states         :     0 is   0.00%
 ```
 
-![](/images/20240427092543.jpg)
+![](/i/20240427092543.jpg)
 
 我这里仅仅分析了 OsSAPK2 的二级结构。
 
 三级结构用 [UniProt 网站](https://www.uniprot.org/)，直接搜索蛋白的 ID 即可：
 
-![](/images/20240427092565.jpg)
+![](/i/20240427092565.jpg)
 
 这里我也同样只分析了 OsSAPK2 的三级结构。
 
@@ -232,7 +232,7 @@ SOPMA :
 
 互作蛋白网络使用 STRING 数据库完成，直接输入基因 ID 和物种即可：
 
-![](/images/20240427092509.jpg)
+![](/i/20240427092509.jpg)
 
 将数据导出为 tsv 文件后，可以使用 Cytoscape 进行美化。现在已经更新，默认的图已经很漂亮了，此处就不进行美化了。
 
@@ -240,15 +240,15 @@ SOPMA :
 
 将上游 2000 的 cds 序列上传到 [plantcare 网站](http://bioinformatics.psb.ugent.be/webtools/plantcare/html/)，拿到结果后处理一下数据然后导入 TBtools 就可以进行绘图。
 
-![](/images/20240427092675.jpg)
+![](/i/20240427092675.jpg)
 
-![](/images/20240427092627.jpg)
+![](/i/20240427092627.jpg)
 
 ##  表达热图
 
 原文的表达谱数据是从 [CREP 数据库](https://ricexpro.dna.affrc.go.jp/data-set.html) 下载的，同样从 CREP 数据库下载表达量数据后用 TBtools 绘制热图即可：
 
-![](/images/20240427092647.jpg)
+![](/i/20240427092647.jpg)
 
 ## 数据可用性
 

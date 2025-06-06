@@ -21,14 +21,8 @@ theme = ["cloud"]
   title = "README"
   url = "/readme"
   [[Params.widgets.misc.custom]]
-  title = "Friends"
-  url = "/friends"
-  [[Params.widgets.misc.custom]]
-  title = "Lumen"
-  url = "/lumen"
-  [[Params.widgets.misc.custom]]
-  title = "feed"
-  url = "/index.xml"
+  title = "martix"
+  url = "/martix"
 
 [Params.widgets.search]
   title = "search"
