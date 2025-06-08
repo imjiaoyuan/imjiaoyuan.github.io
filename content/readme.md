@@ -12,8 +12,8 @@ title: README
 - Subscribe：`https://jiaoyuan.org/index.xml`
 
 ### 研究方向
-- AI+组学
-- 进化基因组学
+- 基因组学大模型
+- 林木进化基因组学
 
 ### 我的订阅
 
