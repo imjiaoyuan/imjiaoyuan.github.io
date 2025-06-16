@@ -1,5 +1,5 @@
 ---
-title: Matrix – a glow of ideas
+title: matrix – a glow of ideas
 ---
 
 <script src="https://giscus.app/client.js"
@@ -8,7 +8,7 @@ title: Matrix – a glow of ideas
         data-category="Announcements"
         data-category-id="DIC_kwDONrKDQs4CmDl9"
         data-mapping="specific"
-        data-term="Matrix"
+        data-term="matrix"
         data-strict="0"
         data-reactions-enabled="0"
         data-emit-metadata="0"
