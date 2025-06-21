@@ -21,8 +21,8 @@ theme = ["cloud"]
   title = "README"
   url = "/readme"
   [[Params.widgets.misc.custom]]
-  title = "martix"
-  url = "/martix"
+  title = "matrix"
+  url = "/matrix"
 
 [Params.widgets.search]
   title = "search"
