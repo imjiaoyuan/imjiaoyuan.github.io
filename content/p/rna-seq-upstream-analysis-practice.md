@@ -7,7 +7,7 @@ date: 2024-03-30
 
 <!--more-->
 
-首先从NCBI SRA数据库搜索合适的数据，查看数据是双端测序的数据之后，多选条目，直接生成 Accession list。
+首先从 NCBI SRA 数据库搜索合适的数据，查看数据是双端测序的数据之后，多选条目，直接生成 Accession list。
 
 ![](/i/20230908203392.jpg)
 
@@ -22,25 +22,32 @@ SRR25907787
 SRR25907788
 ```
 
-使用sra-tools工具批量下载测序数据，并且使用 nohup 把程序挂在后台下载：
+使用 sra-tools 工具批量下载测序数据，并且使用 nohup 把程序挂在后台下载：
 
 ```bash
-nohup prefetch --option-file acc_list.txt 
+nohup prefetch --option-file acc_list.txt &
 ```
 
-再使用脚本进行拆分：
+再使用脚本进行拆分。注意，必须等待上一步的`prefetch`下载任务完成后再执行。
 
 ```bash
 #!/bin/bash
-mkdir -p SRR fastqc_report
-nohup prefetch --option-file acc_list.txt
+# 创建输出目录
+mkdir -p sra_files fastq_files
 
-find . -name "*.sra" -exec mv {} ./SRR/ \;
-cd SRR
-nohup fastq-dump --gzip --split-3 ./*.sra -O ../fastqgz
+# 将下载好的 sra 文件（位于以各自 ACC ID 命名的子目录中）移动到统一的 sra_files 目录
+cat acc_list.txt | while read id; do
+    mv ./${id}/${id}.sra ./sra_files/
+done
+
+# 批量转换 sra 为 fastq.gz
+cd sra_files || exit
+for sra_file in *.sra; do
+    fastq-dump --gzip --split-files "$sra_file" -O ../fastq_files
+done
 ```
 
-这里千万不要在程序没有运行完成的时候就进行下一步操作。使用 `top` 可以查看后台进程：
+这里千万不要在程序没有运行完成的时候就进行下一步操作。使用 `top` 或 `ps -u $USER` 可以查看后台进程：
 
 ![](/i/20230908204934.jpg)
 
@@ -50,11 +57,11 @@ nohup fastq-dump --gzip --split-3 ./*.sra -O ../fastqgz
 
 同一目录下的 `nohup.out` 文件中是后台进程的运行记录。
 
-拆分完成后就需要进行质量检测，使用通配符批量检测，并且将检测报告放在单独一个文件夹以便后面进行压缩：
+拆分完成后就需要进行质量检测，使用通配符批量检测，并且将检测报告放在单独一个文件夹以便后面进行合并：
 
 ```bash
 mkdir fastqc_report
-fastqc SRR2590778*.fastq.gz -o ./fastqc_report
+fastqc ./fastq_files/*.fastq.gz -o ./fastqc_report
 ```
 
 完成之后，将检测报告进行合并，以便查看：
@@ -67,17 +74,19 @@ multiqc ./fastqc_report
 
 ```bash
 #!/bin/bash
+# 切换到包含原始 fastq 文件的目录
+cd fastq_files || exit
+
+# 循环处理每一对文件
 for i in {3..8}; do
     trimmomatic PE \
-        -threads 1 \
+        -threads 4 \
         -phred33 \
-        SRR2590778${i}_1.fastq.gz \
-        SRR2590778${i}_2.fastq.gz \
-        -summary oryza_sativa_${i}.summary \
-        -baseout SRR2590778${i}.fastq.gz \
-        LEADING:3 TRAILING:3 \
-        SLIDINGWINDOW:5:20 \
-        HEADCROP:15 MINLEN:36
+        SRR2590778${i}_1.fastq.gz SRR2590778${i}_2.fastq.gz \
+        SRR2590778${i}_1P.fastq.gz SRR2590778${i}_1U.fastq.gz \
+        SRR2590778${i}_2P.fastq.gz SRR2590778${i}_2U.fastq.gz \
+        -summary ../SRR2590778${i}.summary \
+        LEADING:3 TRAILING:3 SLIDINGWINDOW:5:20 HEADCROP:15 MINLEN:36
 done
 ```
 
@@ -97,8 +106,7 @@ gzip -d Oryza_sativa.IRGSP-1.0.dna.toplevel.fa.gz
 mv Oryza_sativa.IRGSP-1.0.dna.toplevel.fa oryza_sativa.fa
 
 gzip -d Oryza_sativa.IRGSP-1.0.57.gff3.gz
-mv Oryza_sativa.IRGSP-1.0.57.gff3 oryza_sativa.gff3
-```
+mv Oryza_sativa.IRGSP-1.0.57.gff3 oryza_sativa.gff3```
 
 先构建 hisat2 索引：
 
@@ -110,9 +118,12 @@ hisat2-build oryza_sativa.fa oryza_sativa
 
 ```bash
 #!/bin/bash
+# 假设质控后的文件在 fastq_files/ 目录下
+cd fastq_files || exit
+
 for i in {3..8}
 do
-    hisat2 -x hisat2_index/oryza_sativa -p 5 -1 SRR2590778${i}_1P.fastq.gz -2 SRR2590778${i}_2P.fastq.gz -S SRR2590778_${i}.sam
+    hisat2 -x ../oryza_sativa -p 5 -1 SRR2590778${i}_1P.fastq.gz -2 SRR2590778${i}_2P.fastq.gz -S ../SRR2590778${i}.sam
 done
 ```
 
@@ -122,7 +133,7 @@ done
 #!/bin/bash
 for i in {3..8}
 do
-    samtools sort -n -@ 5 SRR2590778_${i}.sam -o SRR2590778_${i}.bam
+    samtools sort -@ 5 SRR2590778${i}.sam -o SRR2590778${i}.sorted.bam
 done
 ```
 
@@ -130,12 +141,13 @@ done
 
 ```bash
 #!/bin/bash
-bam_files=(*.bam)  # 将所有的 bam 文件作为变量，输入给 featureCounts
+# 确保在包含 BAM 文件的目录中运行
+bam_files=(*.sorted.bam)  # 将所有的 sorted bam 文件作为变量，输入给 featureCounts
 
 if [ ${#bam_files[@]} -gt 0 ]; then
-    featureCounts -T 5 -t exon -g Name -a oryza_sativa.gff3 -o gene.counts -p "${bam_files[@]}"
+    featureCounts -T 5 -p -t exon -g gene_id -a oryza_sativa.gff3 -o gene.counts.txt "${bam_files[@]}"
 else
-    echo "No BAM files found in the current directory."
+    echo "No sorted BAM files found in the current directory."
 fi
 ```
 
