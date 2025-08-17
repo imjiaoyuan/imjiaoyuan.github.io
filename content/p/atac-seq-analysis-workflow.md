@@ -24,7 +24,7 @@ ATAC-Seq 技术是"Assay for Transposase-Accessible Chromatin with high-throughp
 
 ## 版本信息
 
-- 成都理工大学超算平台 Red Hat 4.8.5-36
+- Red Hat 4.8.5-36
 - conda 4.10.3
 - R 4.4.0
 - 测序数据来自 NCBI：[PRJNA1080287](https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJNA1080287)
