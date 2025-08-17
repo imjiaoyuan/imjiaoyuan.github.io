@@ -21,7 +21,7 @@ RNA-seq 中最常用的分析方法就是找出差异表达基因 (Differential 
 
 ## 版本信息
 
-- 成都理工大学超算平台 Red Hat 4.8.5-36
+- Red Hat 4.8.5-36
 - conda 4.10.3
 - 测序数据来自 [NCBI ACC=SRR25909836](https://trace.ncbi.nlm.nih.gov/Traces/?view=run_browser&acc=SRR25909836&display=metadata)
 - 参考基因组和注释文件来自 [Ensembl Plants](http://plants.ensembl.org/index.html)
