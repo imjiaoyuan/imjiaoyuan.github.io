@@ -2,18 +2,15 @@
 title: README
 ---
 
-### 关于我
-- 2021-2025 | 成都理工大学-环境科学与工程学士
-- 2025-2028 | 四川大学-生物信息学硕士
-- GitHub: [imjiaoyuan](https://github.com/imjiaoyuan)
-- Email: `imjiaoyuan@gmail.com`
-- feed：`https://jiaoyuan.org/index.xml`
+### About Me
 
-### 研究方向
-- 基因组学大模型
-- 林木进化基因组学
+My name is JiaoYuan. I earned my Bachelor of Engineering degree in Environmental Science and Engineering from Chengdu University of Technology in 2025. Currently, I am pursuing a Master's degree at Sichuan University, specializing in Bioinformatics under the guidance of Professor Tao Ma.My current research interests lie in evolutionary genomics, machine learning, and foundation models for biology.
 
-### 你可以在这里留言
+As a proponent of free software, I have been a dedicated user of [Arch Linux](https://www.archlinux.org/) since 2021. However, due to the demands of my field, I also utilize the Windows operating system. My work primarily involves data analysis using Python and shell scripting.
+
+This blog serves as a repository for my essays, tutorials, and monthly records. You can subscribe to my blog [via RSS](https://jiaoyuan.org/index.xml) or follow the WeChat public account "猫四叔" (Uncle Cat) for the latest updates. You can find me on GitHub at [imjiaoyuan](https://github.com/imjiaoyuan) or reach me via email at imjiaoyuan@gmail.com.
+
+### You can leave a message here
 
 <script src="https://giscus.app/client.js"
         data-repo="imjiaoyuan/imjiaoyuan.github.io"
