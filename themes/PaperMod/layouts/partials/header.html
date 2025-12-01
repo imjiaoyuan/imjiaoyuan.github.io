@@ -1,0 +1,106 @@
+{{- $prod := true -}}
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            {{- if .Site.Params.label.icon }}
+            <a href="{{ "" | absLangURL }}" accesskey="h" title="{{ .Site.Params.label.text | default .Site.Title }} (Alt + H)">
+                {{- $icon := resources.Get .Site.Params.label.icon }}
+                {{- if $icon }}
+                    {{- $icon = $icon.Resize (printf "x%d" .Site.Params.label.iconHeight) }}
+                    <img src="{{ $icon.Permalink }}" alt="" aria-label="logo"
+                        height="{{ .Site.Params.label.iconHeight }}">
+                {{ else }}
+                <span class="logo-text">{{- .Site.Params.label.text | default .Site.Title -}}</span>
+                {{- end }}
+            </a>
+            {{- else }}
+            <a href="{{ "" | absLangURL }}" accesskey="h" title="{{ .Site.Params.label.text | default .Site.Title }} (Alt + H)">
+                <span class="logo-text">{{- .Site.Params.label.text | default .Site.Title -}}</span>
+            </a>
+            {{- end }}
+            <div class="logo-switches">
+                {{- if (not .Site.Params.disableThemeToggle) }}
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                {{- end }}
+
+                {{- $lang := .Lang}}
+                {{- $separator := or .Site.Params.label.text .Site.Params.label.icon }}
+                {{- if .IsTranslated }}
+                <ul class="lang-switch">
+                    {{- if $separator }}<li>|</li>{{ end }}
+                    {{- range .AllTranslations }}
+                    {{- if ne $lang .Lang }}
+                    <li>
+                        <a href="{{ .Permalink }}" title="{{ .Language.Params.languageAltTitle | default (.Language.LanguageName | emojify) }}"
+                            aria-label="{{ .Language.Params.languageAltTitle | default (.Language.LanguageName | emojify) }}">
+                            {{- if (and .Language.Params.languageCode (.Site.Params.displayFullLangName)) }}
+                            {{- .Language.LanguageName | emojify -}}
+                            {{- else }}
+                            {{- .Language.Params.languageCode | default .Lang -}}
+                            {{- end -}}
+                        </a>
+                    </li>
+                    {{- end -}}
+                    {{- end}}
+                </ul>
+                {{- end }}
+            </div>
+        </div>
+        {{- $currentPage := . }}
+        <ul id="menu">
+            {{- range .Site.Menus.main }}
+            {{- $menu_item_url := (cond (strings.HasSuffix .URL "/") .URL (printf "%s/" .URL) ) | absLangURL }}
+            {{- $page_url:= $currentPage.Permalink | absLangURL }}
+            {{- $is_search := eq (lower .Name) (lower (i18n "search")) | or (eq (lower .Identifier) "search") }}
+            <li>
+                <a href="{{ .URL | absLangURL }}" title="{{ .Title | default .Name }}" {{- if $is_search }} accesskey=s
+                    aria-label="{{ .Name }} (Alt + S)" {{- end }}>
+                    <span {{- if eq $menu_item_url $page_url }} class="active" {{- end }}>
+                        {{- .Pre }}
+                        {{- .Name -}}
+                        {{ .Post -}}
+                    </span>
+                    {{- if $is_search }}<span class="search-button hidden">{{- i18n "search" -}}</span>{{- end }}
+                </a>
+            </li>
+            {{- end }}
+        </ul>
+    </nav>
+</header>
+{{- if $prod }}
+    {{- if .Site.Params.analytics.google.SiteVerificationTag }}
+    <meta name="google-site-verification" content="{{ .Site.Params.analytics.google.SiteVerificationTag }}" />
+    {{ end }}
+    {{- if .Site.Params.analytics.yandex.VerificationTag }}
+    <meta name="yandex-verification" content="{{ .Site.Params.analytics.yandex.VerificationTag }}" />
+    {{ end }}
+    {{- if .Site.Params.analytics.bing.VerificationTag }}
+    <meta name="msvalidate.01" content="{{ .Site.Params.analytics.bing.VerificationTag }}" />
+    {{ end }}
+
+    {{- if .Site.Params.analytics.google.GTM.id }}
+        {{- partial "analytics/google_gtm.html" . }}
+    {{- end }}
+    {{- if .Site.Params.analytics.google.GA4.id }}
+        {{- partial "analytics/google_ga4.html" . }}
+    {{- end }}
+{{- end }}

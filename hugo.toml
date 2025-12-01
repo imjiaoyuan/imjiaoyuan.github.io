@@ -1,0 +1,83 @@
+baseURL = "https://jiaoyuan.org/"
+title = "JiaoYuan's blog"
+theme = "PaperMod"
+enableRobotsTXT = true
+buildDrafts = false
+buildFuture = false
+buildExpired = false
+pygmentsUseClasses = true
+
+[pagination]
+  pagerSize = 10
+
+[minify]
+  disableXML = true
+  minifyOutput = true
+
+[markup]
+  [markup.goldmark.renderer]
+    unsafe = true
+  [markup.highlight]
+    noClasses = false
+    lineNos = true
+
+[params]
+  title = "JiaoYuan's blog"
+  description = "JiaoYuan's blog description"
+  keywords = ["Blog", "Portfolio", "PaperMod"]
+  DateFormat = "2006年1月2日"
+  defaultTheme = "auto"
+  disableThemeToggle = false
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = false
+  ShowRssButtonInSectionTermList = true
+  UseHugoToc = true
+  disableSpecial1stPost = false
+  disableScrollToTop = false
+  hideSummary = false
+  math = true
+  comments = true
+
+  [params.assets]
+    favicon = "/favicon.ico"
+    favicon16x16 = "/favicon.ico"
+    favicon32x32 = "/favicon.ico"
+    apple_touch_icon = "/favicon.ico"
+    safari_pinned_tab = "/favicon.ico"
+
+  [params.label]
+    text = "JiaoYuan's blog"
+    icon = ""
+    iconHeight = 35
+
+  [params.homeInfoParams]
+    Title = "Hi there, welcome"
+    Content = "Fleeting thoughts come and go, but sometimes, they pause and stay here."
+
+  [params.fuseOpts]
+    isCaseSensitive = false
+    shouldSort = true
+    location = 0
+    distance = 1000
+    threshold = 0.4
+    minMatchCharLength = 0
+    limit = 10
+    keys = ["title", "permalink", "summary", "content"]
+
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/imjiaoyuan"
+
+  [[params.socialIcons]]
+    name = "rss"
+    url = "/index.xml"
+
+[menu]
+  [[menu.main]]
+    name = "ARCHIVES"
+    url = "/archives"
+    weight = 1
+  [[menu.main]]
+    name = "README"
+    url = "/readme"
+    weight = 2

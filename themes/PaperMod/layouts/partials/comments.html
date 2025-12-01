@@ -1,0 +1,50 @@
+{{- if and (eq .Section "p") (eq .Kind "page") (.Params.comments | default .Site.Params.comments) -}}
+<div id="giscus-comment-container"></div>
+
+<script src="https://giscus.app/client.js"
+        id="giscus-script"
+        data-repo="imjiaoyuan/imjiaoyuan.github.io"
+        data-repo-id="R_kgDOQgaTJQ"
+        data-category="General"
+        data-category-id="DIC_kwDOQgaTJc4CzQPO"
+        data-mapping="title"
+        data-strict="0"
+        data-reactions-enabled="0"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
+
+<script>
+    function setGiscusTheme(theme) {
+        const giscusIframe = document.querySelector('iframe.giscus-frame');
+        if (giscusIframe) {
+            giscusIframe.contentWindow.postMessage({ giscus: { setConfig: { theme: theme } } }, 'https://giscus.app');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const currentTheme = localStorage.getItem('pref-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        const giscusTheme = currentTheme === 'dark' ? 'dark' : 'light';
+        const giscusScript = document.getElementById('giscus-script');
+        giscusScript.addEventListener('load', () => {
+            setGiscusTheme(giscusTheme);
+        });
+    });
+
+    const observer = new MutationObserver((mutationsList) => {
+        for (const mutation of mutationsList) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                const newTheme = document.body.classList.contains('dark') ? 'dark' : 'light';
+                setGiscusTheme(newTheme);
+                break;
+            }
+        }
+    });
+
+    observer.observe(document.body, { attributes: true });
+</script>
+{{- end }}
