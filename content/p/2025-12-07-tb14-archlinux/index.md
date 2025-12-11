@@ -150,6 +150,32 @@ domain(geosite:category-ai-!cn) -> aistudio
 sudo pacman -S sof-firmware
 ```
 
+有可能左右声道声音大小不同，可以用 alsamixer 或者 Volume Control 来调整，通过下面的命令安装：
+
+```bash
+sudo pacman -S alsa-utils pavucontrol
+```
+
+然后重置一下配置：
+
+```bash
+systemctl --user stop wireplumber pipewire pipewire-pulse
+rm -rf ~/.local/state/wireplumber/
+systemctl --user start wireplumber pipewire pipewire-pulse
+```
+
+蓝牙相关包：
+
+```bash
+sudo pacman -S bluez bluez-utils bluedevil
+```
+
+启动蓝牙服务：
+
+```bash
+sudo systemctl enable --now bluetooth
+```
+
 intel 核显相关驱动和工具：
 
 ```bash
