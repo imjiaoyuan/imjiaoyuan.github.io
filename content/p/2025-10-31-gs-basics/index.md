@@ -70,9 +70,11 @@ GEBV (Genomic Estimated Breeding Value) 是指基于个体全基因组的分子�
 
 GEBV 的计算原理是：将全基因组所有分子标记的效应值累加起来，从而得到个体的总遗传价值。
 
+<div class="math-overflow">
 $$
 \text{GEBV}_j = \sum_{i=1}^{M} (Z_{ij} \times \hat{\alpha}_i)
 $$
+</div>
 
 - $\text{GEBV}_j$： 个体 $j$ 的基因组估计育种值。
 - $M$：全基因组中使用的 SNP 标记总数。
@@ -323,6 +325,7 @@ $$
 
 使用前面杨树的例子进行计算，已知的值有：
 
+<div class="math-overflow">
 $$
 \mathbf{y} =
 \begin{bmatrix}
@@ -338,7 +341,9 @@ $$
 16.0
 \end{bmatrix}
 $$
+</div>
 
+<div class="math-overflow">
 $$
 \mathbf{G} =
 \begin{bmatrix}
@@ -354,9 +359,11 @@ $$
 -0.6869 & 0.3232 & 0.6263 & -0.5253 & -0.2626 & 0.3434 & -0.1414 & -0.1616 & -0.5051 & 0.9899
 \end{bmatrix}
 $$
+</div>
 
 假设在杨树种植地，前五棵树在 A 地点，后五棵树在 B 地点，得到固定效应设计矩阵$\mathbf{X}$：
 
+<div class="math-overflow">
 $$
 \mathbf{X} = \begin{bmatrix}
 1 & 0 \\
@@ -371,6 +378,7 @@ $$
 1 & 1
 \end{bmatrix}
 $$
+</div>
 
 这里需要使用混合模型方程 (Mixed Model Equations, MME)来进行计算：
 
