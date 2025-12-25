@@ -159,8 +159,6 @@ categories:
 
 ### HMMER 查找
 
->可以直接使用我的项目进行自动化鉴定，可以自动化 hmmsearch 并且提取符合阈值的基因 ID，并且提取蛋白质，[项目地址](https://github.com/imjiaoyuan/auto-hmmer)
-
 点击此链接下载 HMMER Windows 版本 [hmmer-3.0-windows.zip](http://eddylab.org/software/hmmer3/3.0/hmmer-3.0-windows.zip)
 将压缩包解压在任意位置，进入 HMMER 文件夹，确保当前可以看到。exe 的可执行程序
 
