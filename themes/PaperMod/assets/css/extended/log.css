@@ -1,0 +1,30 @@
+.log-container {
+    max-width: 100%;
+}
+
+.log-entry {
+    margin-bottom: 2rem;
+}
+
+.log-date {
+    font-size: 0.85rem;
+    color: var(--secondary);
+    margin-bottom: 0.5rem;
+    margin-left: 2px;
+    font-family: monospace;
+}
+
+.log-card {
+    background: var(--entry);
+    border-radius: var(--radius);
+    padding: 1.5rem 2rem;
+    border: 1px solid var(--border);
+}
+
+.log-card.post-content {
+    color: var(--primary);
+}
+
+.log-card.post-content p {
+    margin-bottom: 1em;
+}

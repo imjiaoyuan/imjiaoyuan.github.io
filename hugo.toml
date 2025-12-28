@@ -74,10 +74,14 @@ pygmentsUseClasses = true
 
 [menu]
   [[menu.main]]
+    name = "LOG"
+    url = "/log"
+    weight = 1
+  [[menu.main]]
     name = "ARCHIVES"
     url = "/archives"
-    weight = 1
+    weight = 2
   [[menu.main]]
     name = "README"
     url = "/readme"
-    weight = 2
+    weight = 3
