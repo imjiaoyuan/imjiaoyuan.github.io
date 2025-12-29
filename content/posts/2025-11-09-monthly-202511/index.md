@@ -139,7 +139,7 @@ PS D:\Projects>
 
 前几天和朋友聊天，正好聊起这个问题，不免又想回顾一下这么多年用 Linux 的经历😂，之前其实写过，但是这里想再写一些新的感受：
 
-- [使用 Linux 三年以来的感受](https://jiaoyuan.org/p/2024-03-27-my-experience-of-linux/)
+- [使用 Linux 三年以来的感受](https://jiaoyuan.org/posts/2024-03-27-my-experience-of-linux/)
 
 记得大一那年，想自己决定系统的模样，于是盯上了 Linux。当时去加入计算机社团，还想着学下 Linux，后来慢慢发现，学长们懂得是如何用 Linux 编程，而非了解 Linux 发行版，他自己可能都不知道 Ubuntu 上可以安装原生的腾讯会议，还是我后来告诉他的 ... 最开始装的发行版我记得是 Ubuntu，傻瓜式安装，点点点就行，甚至双系统也能由安装介质自动划分，但是当时没搞明白包管理器这些东西，对 Linux 还没有个系统的认识，只是有什么问题就打开百度搜，深受 CSDN 上垃圾内容的影响，输入法都装的很困难。后面又试了 deepin，但是我在应用商店安装应用总是会出现问题，当时并不清楚是源的问题，我只能四处搜索，搜不到就重装系统。deepin 之后就是优麒麟，这个纯垃圾，我都不想多说，deepin 是国内开源之光。最初用 Ubuntu 和 deepin 纯纯是因为网络上到处都推荐这俩，而且简中互联网能搜到的文档资料（shit）也最多，可以说是深受荼毒了。
 
@@ -149,13 +149,13 @@ PS D:\Projects>
 
 WSL 用的久了，慢慢的对 Linux 的各种知识也就多了起来，逐渐就知道该怎么用了，所以当大三我组了台式机之后，立马先装了 Debian，出乎意料，很成功，各种软件都搞起来了，用了蛮久一段时间，之前的博客和 B 站也发过：
 
-- [当我换上了 Debian12 Linux](https://jiaoyuan.org/p/2024-01-02-switch-to-debian/)
+- [当我换上了 Debian12 Linux](https://jiaoyuan.org/posts/2024-01-02-switch-to-debian/)
 - [Debian+cinnamon 真香](https://www.bilibili.com/video/BV1n5411B7Lz/?spm_id_from=333.1387.homepage.video_card.click&vd_source=f785a7035a51b96b9abcf6b14d1036ea)
 
 Debian 用了一段时间，我又不满足了，尝试装了 Arch，也很成功，而且有一说一，Arch 虽然安装麻烦，但是安装的过程中确实对系统有了很深的了解，装好之后，出现什么问题自己都能解决，哪怕进不了系统，插上 live CD 一样可以修好。并且用了 Arch 之后我就不再会去网络上乱搜东西了，全部查 Wiki，英文 Wiki 其实很全，基本上什么都有。当时也将这些过程写了下来：
 
-- [Arch 下的应用方案](https://jiaoyuan.org/p/2024-08-22-arch-application/)
-- [Arch 安装记录](https://jiaoyuan.org/p/2024-03-20-arch-installation-notes/)
+- [Arch 下的应用方案](https://jiaoyuan.org/posts/2024-08-22-arch-application/)
+- [Arch 安装记录](https://jiaoyuan.org/posts/2024-03-20-arch-installation-notes/)
 
 后面我在原先的笔记本上又试了 Arch、linux mint 和 lmde6，我很倾向于使用 lmde，结合了 Debian 和 linux mint 的优点，但是无奈后面办公需要 Windows，只能格盘换回了 LTSC 2021。
 
