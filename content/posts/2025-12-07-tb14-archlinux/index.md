@@ -7,7 +7,7 @@ date: 2025-12-07
 
 ![](./20251207181401.webp)
 
-安装的总体过程和之前写的 [Arch 安装记录](https://jiaoyuan.org/p/2024-03-20-arch-installation-notes/) 基本上一致，不过我作了一些调整。
+安装的总体过程和之前写的 [Arch 安装记录](https://jiaoyuan.org/posts/2024-03-20-arch-installation-notes/) 基本上一致，不过我作了一些调整。
 
 ## systemd-boot
 
