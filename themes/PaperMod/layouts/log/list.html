@@ -16,11 +16,11 @@
 
 <div class="log-container">
     {{ range sort .Pages "File.TranslationBaseName" "desc" }}
-    <div class="log-entry">
+    <div class="log-entry" style="margin-bottom: 10px;">
         <div class="log-date">
             {{ .File.TranslationBaseName }}
         </div>
-        <div class="log-card post-content" style="white-space: pre-line; font-size: 0.85em; padding: 15px;">
+        <div class="log-card post-content" style="white-space: pre-line; font-size: 0.85em; padding: 10px;">
             {{ .Content }}
         </div>
     </div>

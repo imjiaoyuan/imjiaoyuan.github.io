@@ -1,4 +1,4 @@
-{{- if and (eq .Section "p") (eq .Kind "page") (.Params.comments | default .Site.Params.comments) -}}
+{{- if and (eq .Section "posts") (eq .Kind "page") (.Params.comments | default .Site.Params.comments) -}}
 <div id="giscus-comment-container"></div>
 
 <script src="https://giscus.app/client.js"
