@@ -51,7 +51,7 @@ pygmentsUseClasses = true
     iconHeight = 35
 
   [params.homeInfoParams]
-    Title = "Hi there, welcome"
+    Title = "Hi there, Welcome"
     Content = "Fleeting thoughts come and go, but sometimes, they pause and stay here."
 
   [params.fuseOpts]
@@ -71,6 +71,10 @@ pygmentsUseClasses = true
   [[params.socialIcons]]
     name = "rss"
     url = "/index.xml"
+
+  [[params.socialIcons]]
+    name = "steam"
+    url = "https://steamcommunity.com/id/imjiaoyuan/"
 
 [menu]
   [[menu.main]]
