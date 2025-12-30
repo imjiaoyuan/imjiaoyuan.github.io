@@ -3,7 +3,7 @@
 }
 
 .log-entry {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .log-date {
@@ -26,5 +26,5 @@
 }
 
 .log-card.post-content p {
-    margin-bottom: 1em;
+    margin-bottom: 0em;
 }
