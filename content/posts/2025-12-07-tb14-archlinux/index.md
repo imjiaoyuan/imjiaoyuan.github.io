@@ -164,6 +164,12 @@ rm -rf ~/.local/state/wireplumber/
 systemctl --user start wireplumber pipewire pipewire-pulse
 ```
 
+关闭声卡的节能模式，新建`/etc/modprobe.d/alsa-base.conf`:
+
+```bash
+options snd_hda_intel power_save=0 power_save_controller=N
+```
+
 蓝牙相关包：
 
 ```bash
