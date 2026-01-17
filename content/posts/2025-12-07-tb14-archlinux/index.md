@@ -239,6 +239,35 @@ gtk-im-module=fcitx
 
 重新注销登录应该就可以了。
 
+## 其他配置
+
+开启 timeshift 的自动备份：
+
+```bash
+sudo pacman -S cronie
+sudo systemctl enable --now cronie
+```
+
+使用 timeshift-autosnap，即执行 Syyu 时设置系统快照：
+
+```bash
+yay -S timeshift-autosnap
+```
+
+pacman 保留 3 个旧版本缓存：
+
+```bash
+sudo pacman -S pacman-contrib
+sudo systemctl enable --now paccache.timer
+```
+
+设置系统日志上限为 100MB：
+
+```bash
+sudo sed -i 's/^#SystemMaxUse=/SystemMaxUse=100M/' /etc/systemd/journald.conf
+sudo systemctl restart systemd-journald
+```
+
 ## 部分应用窗口没有阴影
 
 比如微信、WPS 和 QQ 都有这个问题，这里参考`wechat`aur 页面的 [解决办法](https://aur.archlinux.org/packages/wechat)，给窗口强制添加 plasma 阴影，然后去掉标题栏就行了。
