@@ -78,8 +78,8 @@ pygmentsUseClasses = true
 
 [menu]
   [[menu.main]]
-    name = "LOG"
-    url = "/log"
+    name = "LOGS"
+    url = "/logs"
     weight = 1
   [[menu.main]]
     name = "ARCHIVES"
