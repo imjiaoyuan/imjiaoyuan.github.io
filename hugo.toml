@@ -1,4 +1,4 @@
-baseURL = "https://jiaoyuan.org/"
+baseURL = "https://jiaoyuan.org"
 title = "JiaoYuan's blog"
 theme = "PaperMod"
 enableRobotsTXT = true
@@ -71,10 +71,6 @@ pygmentsUseClasses = true
   [[params.socialIcons]]
     name = "rss"
     url = "/index.xml"
-
-  [[params.socialIcons]]
-    name = "steam"
-    url = "https://steamcommunity.com/id/imjiaoyuan/"
 
 [menu]
   [[menu.main]]
