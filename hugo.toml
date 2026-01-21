@@ -8,7 +8,7 @@ buildExpired = false
 pygmentsUseClasses = true
 
 [pagination]
-  pagerSize = 10
+  pagerSize = 20
 
 [minify]
   disableXML = true

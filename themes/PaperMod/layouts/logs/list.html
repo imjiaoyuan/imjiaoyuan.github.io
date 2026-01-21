@@ -15,7 +15,8 @@
 </header>
 
 <div class="log-container">
-    {{ range sort .Pages "File.TranslationBaseName" "desc" }}
+    {{ $pages := sort .Pages "File.TranslationBaseName" "desc" }}
+    {{ range (.Paginate $pages).Pages }}
     <div class="log-entry" style="margin-bottom: 10px;">
         <div class="log-date">
             {{ .File.TranslationBaseName }}

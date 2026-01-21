@@ -88,7 +88,6 @@ date: 2025-07-31
 - [【初代 NeXT】这绝对是乔布斯最离谱的产品。..](https://www.youtube.com/watch?v=whPY5ilI2xg)
 - [零下 39 度，我在中国边疆，邂逅了神的自留地](https://www.youtube.com/watch?v=xdQZdRosthE)
 - [百看不厌的传世经典，别因一个人的言辞，而忽略了 ta 的内心](https://www.youtube.com/watch?v=lBFMJM60Mv4)
-- [00 后：小时候的事怕是瞒不住了！！！](https://www.bilibili.com/video/BV19s5Lz
 - [上车时期待，同行时投入，下车时释怀](https://www.youtube.com/watch?v=1QN_fUHh15Y)
 - [十年过去，Win10 都有什么变化？万字解析 Win10 发展史](https://www.youtube.com/watch?v=TpYLWPqwdnE)
 
