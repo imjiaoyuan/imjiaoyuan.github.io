@@ -29,7 +29,26 @@
 {{- $reset := (resources.Get "css/core/reset.css") }}
 {{- $media := (resources.Get "css/core/zmedia.css") }}
 {{- $license_css := (resources.Get "css/core/license.css") }}
-{{- $common := (resources.Match "css/common/*.css") | resources.Concat "assets/css/common.css" }}
+{{- $commonParts := slice
+    (resources.Get "css/common/main.css")
+    (resources.Get "css/common/header.css")
+    (resources.Get "css/common/footer.css")
+}}
+{{- if and .IsPage (ne .Layout "archives") }}
+{{- $commonParts = $commonParts | append (resources.Get "css/common/post-single.css") }}
+{{- end }}
+{{- if or .IsHome (eq .Kind "section") (eq .Kind "taxonomy") (eq .Kind "term") }}
+{{- $commonParts = $commonParts | append (resources.Get "css/common/post-entry.css") }}
+{{- end }}
+{{- if eq .Layout "archives" }}
+{{- $commonParts = $commonParts | append (resources.Get "css/common/archive.css") }}
+{{- end }}
+{{- if or (eq .Kind "taxonomy") (eq .Kind "term") }}
+{{- $commonParts = $commonParts | append (resources.Get "css/common/terms.css") }}
+{{- end }}
+{{- if eq .Layout "404" }}
+{{- $commonParts = $commonParts | append (resources.Get "css/common/404.css") }}
+{{- end }}
 {{- $fingerprint := not site.Params.assets.disableFingerprinting }}
 
 {{- $isHLJSdisabled := (site.Params.assets.disableHLJS | default false) }}
@@ -37,11 +56,18 @@
 {{- if and (not $isHLJSdisabled) (eq .Kind "page") (ne .Layout "archives") (in .Content "<pre") }}
     {{- $needsHLJS = true }}
 {{- end }}
+{{- $isSingle := and .IsPage (ne .Layout "archives") }}
+{{- $isList := or .IsHome (eq .Kind "section") (eq .Kind "taxonomy") (eq .Kind "term") }}
+{{- $isTerms := or (eq .Kind "taxonomy") (eq .Kind "term") }}
+{{- $isArchives := eq .Layout "archives" }}
+{{- $is404 := eq .Layout "404" }}
+{{- $cssVariant := printf "s%t-l%t-t%t-a%t-4%t-h%t" $isSingle $isList $isTerms $isArchives $is404 $needsHLJS }}
+{{- $common := $commonParts | resources.Concat (printf "assets/css/common-%s.css" $cssVariant) }}
 {{- $hljs := (cond ($needsHLJS) (resources.Get "css/hljs/an-old-hope.min.css") (".chroma { background-color: unset !important;}" | resources.FromString "assets/css/hljs-blank.css")) }}
 
-{{- $core := (slice $theme_vars $reset $common $hljs $includes_all $media) | resources.Concat "assets/css/core.css" | resources.Minify }}
+{{- $core := (slice $theme_vars $reset $common $hljs $includes_all $media) | resources.Concat (printf "assets/css/core-%s.css" $cssVariant) | resources.Minify }}
 
-{{- $stylesheet := (slice $license_css $core) | resources.Concat "assets/css/stylesheet.css"  }}
+{{- $stylesheet := (slice $license_css $core) | resources.Concat (printf "assets/css/stylesheet-%s.css" $cssVariant)  }}
 
 {{- if $fingerprint }}
 {{- $stylesheet := $stylesheet | fingerprint }}
@@ -61,7 +87,7 @@
 {{- end }}
 {{- end }}
 
-{{- if eq .Layout "logs" }}
+{{- if or (eq .Layout "logs") (eq .Section "logs") }}
 {{- if $fingerprint }}
 {{- $logStyle := (resources.Get "css/extended/log.css") | resources.Minify | fingerprint }}
 <link crossorigin="anonymous" href="{{ $logStyle.RelPermalink }}" integrity="{{ $logStyle.Data.Integrity }}" rel="preload stylesheet" as="style">
