@@ -22,7 +22,6 @@ pygmentsUseClasses = true
     lineNos = true
 
 [params]
-  title = "JiaoYuan's blog"
   description = "JiaoYuan's blog description"
   keywords = ["Blog", "Portfolio", "PaperMod"]
   DateFormat = "2006年1月2日"
@@ -31,11 +30,8 @@ pygmentsUseClasses = true
   ShowBreadCrumbs = true
   ShowCodeCopyButtons = false
   ShowRssButtonInSectionTermList = true
-  UseHugoToc = true
   disableSpecial1stPost = false
   disableScrollToTop = false
-  hideSummary = false
-  math = true
   comments = true
 
   [params.assets]
@@ -53,16 +49,6 @@ pygmentsUseClasses = true
   [params.homeInfoParams]
     Title = "Hi there, Welcome"
     Content = "Fleeting thoughts come and go, but sometimes, they pause and stay here."
-
-  [params.fuseOpts]
-    isCaseSensitive = false
-    shouldSort = true
-    location = 0
-    distance = 1000
-    threshold = 0.4
-    minMatchCharLength = 0
-    limit = 10
-    keys = ["title", "permalink", "summary", "content"]
 
   [[params.socialIcons]]
     name = "github"

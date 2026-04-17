@@ -30,6 +30,7 @@
 {{- $media := (resources.Get "css/core/zmedia.css") }}
 {{- $license_css := (resources.Get "css/core/license.css") }}
 {{- $common := (resources.Match "css/common/*.css") | resources.Concat "assets/css/common.css" }}
+{{- $fingerprint := not site.Params.assets.disableFingerprinting }}
 
 {{- $isHLJSdisabled := (site.Params.assets.disableHLJS | default false) }}
 {{- $needsHLJS := false }}
@@ -42,7 +43,7 @@
 
 {{- $stylesheet := (slice $license_css $core) | resources.Concat "assets/css/stylesheet.css"  }}
 
-{{- if not site.Params.assets.disableFingerprinting }}
+{{- if $fingerprint }}
 {{- $stylesheet := $stylesheet | fingerprint }}
 <link crossorigin="anonymous" href="{{ $stylesheet.RelPermalink }}" integrity="{{ $stylesheet.Data.Integrity }}" rel="preload stylesheet" as="style">
 {{- else }}
@@ -50,7 +51,7 @@
 {{- end }}
 
 {{- if $needsHLJS }}
-{{- if not site.Params.assets.disableFingerprinting }}
+{{- if $fingerprint }}
 {{- $highlight := slice (resources.Get "js/highlight.min.js") | resources.Concat "assets/js/highlight.js" | fingerprint }}
 <script defer crossorigin="anonymous" src="{{ $highlight.RelPermalink }}" integrity="{{ $highlight.Data.Integrity }}"
     onload="hljs.initHighlightingOnLoad();"></script>
@@ -61,7 +62,7 @@
 {{- end }}
 
 {{- if eq .Layout "logs" }}
-{{- if not site.Params.assets.disableFingerprinting }}
+{{- if $fingerprint }}
 {{- $logStyle := (resources.Get "css/extended/log.css") | resources.Minify | fingerprint }}
 <link crossorigin="anonymous" href="{{ $logStyle.RelPermalink }}" integrity="{{ $logStyle.Data.Integrity }}" rel="preload stylesheet" as="style">
 {{- else }}

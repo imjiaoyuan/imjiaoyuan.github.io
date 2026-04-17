@@ -125,6 +125,11 @@
 </script>
 {{- end }}
 
+{{- $needsMath := false }}
+{{- if and .IsPage (or .Params.math (in .RawContent "$$") (in .RawContent "\\(")) }}
+{{- $needsMath = true }}
+{{- end }}
+{{- if $needsMath }}
 <script>
 window.MathJax = {
   tex: {
@@ -133,9 +138,5 @@ window.MathJax = {
   }
 };
 </script>
-<script
-  async
-  id="MathJax-script"
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-  onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js';"
-></script>
+<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js';"></script>
+{{- end }}
