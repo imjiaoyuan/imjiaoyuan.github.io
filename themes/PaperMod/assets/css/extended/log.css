@@ -3,7 +3,7 @@
 }
 
 .log-entry {
-    margin-bottom: 1rem;
+    margin-bottom: 10px;
 }
 
 .log-date {
@@ -17,12 +17,14 @@
 .log-card {
     background: var(--entry);
     border-radius: var(--radius);
-    padding: 1.5rem 2rem;
+    padding: 10px;
     border: 1px solid var(--border);
 }
 
 .log-card.post-content {
     color: var(--primary);
+    white-space: pre-line;
+    font-size: 0.85em;
 }
 
 .log-card.post-content p {
