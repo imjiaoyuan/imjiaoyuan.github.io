@@ -32,12 +32,15 @@
 {{- $common := (resources.Match "css/common/*.css") | resources.Concat "assets/css/common.css" }}
 
 {{- $isHLJSdisabled := (site.Params.assets.disableHLJS | default false) }}
-{{- $hljs := (cond ($isHLJSdisabled) (".chroma { background-color: unset !important;}" | resources.FromString "assets/css/hljs-blank.css") (resources.Get "css/hljs/an-old-hope.min.css")) }}
+{{- $needsHLJS := false }}
+{{- if and (not $isHLJSdisabled) (eq .Kind "page") (ne .Layout "archives") (in .Content "<pre") }}
+    {{- $needsHLJS = true }}
+{{- end }}
+{{- $hljs := (cond ($needsHLJS) (resources.Get "css/hljs/an-old-hope.min.css") (".chroma { background-color: unset !important;}" | resources.FromString "assets/css/hljs-blank.css")) }}
 
 {{- $core := (slice $theme_vars $reset $common $hljs $includes_all $media) | resources.Concat "assets/css/core.css" | resources.Minify }}
-{{- $extended := (resources.Match "css/extended/*.css") | resources.Concat "assets/css/extended.css" | resources.Minify }}
 
-{{- $stylesheet := (slice $license_css $core $extended) | resources.Concat "assets/css/stylesheet.css"  }}
+{{- $stylesheet := (slice $license_css $core) | resources.Concat "assets/css/stylesheet.css"  }}
 
 {{- if not site.Params.assets.disableFingerprinting }}
 {{- $stylesheet := $stylesheet | fingerprint }}
@@ -46,8 +49,7 @@
 <link crossorigin="anonymous" href="{{ $stylesheet.RelPermalink }}" rel="preload stylesheet" as="style">
 {{- end }}
 
-{{- $isHLJSdisabled := (site.Params.assets.disableHLJS | default .Params.disableHLJS ) }}
-{{- if (and (eq .Kind "page") (ne .Layout "archives") (not $isHLJSdisabled)) }}
+{{- if $needsHLJS }}
 {{- if not site.Params.assets.disableFingerprinting }}
 {{- $highlight := slice (resources.Get "js/highlight.min.js") | resources.Concat "assets/js/highlight.js" | fingerprint }}
 <script defer crossorigin="anonymous" src="{{ $highlight.RelPermalink }}" integrity="{{ $highlight.Data.Integrity }}"
@@ -55,6 +57,16 @@
 {{- else }}
 {{- $highlight := slice (resources.Get "js/highlight.min.js") | resources.Concat "assets/js/highlight.js" }}
 <script defer crossorigin="anonymous" src="{{ $highlight.RelPermalink }}" onload="hljs.initHighlightingOnLoad();"></script>
+{{- end }}
+{{- end }}
+
+{{- if eq .Layout "logs" }}
+{{- if not site.Params.assets.disableFingerprinting }}
+{{- $logStyle := (resources.Get "css/extended/log.css") | resources.Minify | fingerprint }}
+<link crossorigin="anonymous" href="{{ $logStyle.RelPermalink }}" integrity="{{ $logStyle.Data.Integrity }}" rel="preload stylesheet" as="style">
+{{- else }}
+{{- $logStyle := (resources.Get "css/extended/log.css") | resources.Minify }}
+<link crossorigin="anonymous" href="{{ $logStyle.RelPermalink }}" rel="preload stylesheet" as="style">
 {{- end }}
 {{- end }}
 
