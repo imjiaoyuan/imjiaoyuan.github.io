@@ -207,7 +207,18 @@ h1, h2, h3 {
 .content blockquote {
   margin: 10px 0;
   padding: 0 0 0 10px;
-  border-left: 2px solid var(--line);
+  border-left: 0;
+  position: relative;
+}
+
+.content blockquote::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.2em;
+  bottom: 0.2em;
+  width: 2px;
+  background: var(--line);
 }
 
 .content blockquote p {
