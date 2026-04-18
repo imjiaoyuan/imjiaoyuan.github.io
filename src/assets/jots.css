@@ -205,20 +205,10 @@ h1, h2, h3 {
 }
 
 .content blockquote {
-  margin: 10px 0;
-  padding: 0 0 0 10px;
-  border-left: 0;
-  position: relative;
-}
-
-.content blockquote::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.2em;
-  bottom: 0.2em;
-  width: 2px;
-  background: var(--line);
+  margin: 0 0 8px;
+  padding: 0 0 0 1em;
+  border-left: 0.25em solid var(--line);
+  color: var(--muted);
 }
 
 .content blockquote p {
