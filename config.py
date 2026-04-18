@@ -1,0 +1,36 @@
+SITE = {
+    "title": "JiaoYuan's blog",
+    "base_url": "https://jiaoyuan.org",
+    "description": "JiaoYuan's blog description",
+    "icon": "/favicon.ico",
+    "home_posts_per_page": 30,
+    "posts_dir": "posts",
+    "pages_dir": "pages",
+    "static_dir": "static",
+    "public_dir": "public",
+    "menu": [
+        {"name": "LOGS", "url": "/logs"},
+        {"name": "README", "url": "/readme"},
+    ],
+    "theme_options": {
+        "home_intro": "Fleeting thoughts come and go, but sometimes, they pause and stay here.",
+        "socials": [
+            {"name": "GitHub", "url": "https://github.com/imjiaoyuan"},
+            {"name": "Email", "url": "mailto:imjiaoyuan@gmail.com"},
+            {"name": "RSS", "url": "/atom.xml"},
+        ],
+        "giscus": {
+            "repo": "imjiaoyuan/imjiaoyuan.github.io",
+            "repo_id": "R_kgDOQgaTJQ",
+            "category": "General",
+            "category_id": "DIC_kwDOQgaTJc4CzQPO",
+            "mapping": "pathname",
+            "strict": "1",
+            "reactions_enabled": "0",
+            "emit_metadata": "0",
+            "input_position": "bottom",
+            "lang": "en",
+        },
+    },
+    "server": {"host": "127.0.0.1", "port": 1313},
+}
