@@ -11,7 +11,21 @@ def _head(cfg: SiteConfig, page_title: str, has_math: bool) -> str:
     math_block = ""
     if has_math:
         math_block = """
+<link rel="preload" href="/assets/jots/vendor/katex/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/jots/vendor/katex/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/jots/vendor/katex/fonts/KaTeX_Main-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/jots/vendor/katex/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/jots/vendor/katex/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/jots/vendor/katex/fonts/KaTeX_Size3-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/jots/vendor/katex/katex.min.css">
+<style>
+@font-face{font-family:KaTeX_Main;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/jots/vendor/katex/fonts/KaTeX_Main-Regular.woff2") format("woff2")}
+@font-face{font-family:KaTeX_Main;font-style:normal;font-weight:700;font-display:swap;src:url("/assets/jots/vendor/katex/fonts/KaTeX_Main-Bold.woff2") format("woff2")}
+@font-face{font-family:KaTeX_Math;font-style:italic;font-weight:400;font-display:swap;src:url("/assets/jots/vendor/katex/fonts/KaTeX_Math-Italic.woff2") format("woff2")}
+@font-face{font-family:KaTeX_Size1;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/jots/vendor/katex/fonts/KaTeX_Size1-Regular.woff2") format("woff2")}
+@font-face{font-family:KaTeX_Size2;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/jots/vendor/katex/fonts/KaTeX_Size2-Regular.woff2") format("woff2")}
+@font-face{font-family:KaTeX_Size3;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/jots/vendor/katex/fonts/KaTeX_Size3-Regular.woff2") format("woff2")}
+</style>
 <script defer src="/assets/jots/vendor/katex/katex.min.js"></script>
 <script defer src="/assets/jots/vendor/katex/auto-render.min.js"></script>
 <script>
@@ -77,6 +91,7 @@ def render_shell(
   const root=document.documentElement;
   const topBtn=document.getElementById("to-top");
   const themeBtn=document.getElementById("theme-toggle");
+  const notifyThemeChange=(theme)=>window.dispatchEvent(new CustomEvent("jots:theme-change",{{detail:{{theme}}}}));
   const currentTheme=()=>{{
     const saved=root.getAttribute("data-theme");
     if(saved==="light"||saved==="dark")return saved;
@@ -93,7 +108,13 @@ def render_shell(
     const next=current==="dark"?"light":"dark";
     root.setAttribute("data-theme",next);
     localStorage.setItem("jots-theme",next);
+    notifyThemeChange(next);
     syncThemeLabel();
+  }});
+  window.matchMedia?.("(prefers-color-scheme: dark)")?.addEventListener?.("change",()=>{{
+    const saved=root.getAttribute("data-theme");
+    if(saved==="light"||saved==="dark")return;
+    notifyThemeChange(currentTheme());
   }});
   syncThemeLabel();
 }})();
@@ -109,6 +130,16 @@ def render_post(cfg: SiteConfig, item: ContentItem) -> str:
         giscus_html = f"""<section class="comments" id="comments"></section>
 <script>
 (()=>{{
+  const root=document.documentElement;
+  const currentTheme=()=>{{
+    const saved=root.getAttribute("data-theme");
+    if(saved==="light"||saved==="dark")return saved;
+    return window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+  }};
+  const syncGiscusTheme=(theme)=>{{
+    const frame=document.querySelector("iframe.giscus-frame");
+    frame?.contentWindow?.postMessage({{giscus:{{setConfig:{{theme}}}}}},"*");
+  }};
   const s=document.createElement("script");
   s.src="https://giscus.app/client.js";
   s.setAttribute("data-repo","{html.escape(str(giscus.get('repo', '')))}");
@@ -120,10 +151,15 @@ def render_post(cfg: SiteConfig, item: ContentItem) -> str:
   s.setAttribute("data-reactions-enabled","{html.escape(str(giscus.get('reactions_enabled', '0')))}");
   s.setAttribute("data-emit-metadata","{html.escape(str(giscus.get('emit_metadata', '0')))}");
   s.setAttribute("data-input-position","{html.escape(str(giscus.get('input_position', 'bottom')))}");
-  s.setAttribute("data-theme","preferred_color_scheme");
+  s.setAttribute("data-theme",currentTheme());
   s.setAttribute("data-lang","{html.escape(str(giscus.get('lang', 'en')))}");
   s.setAttribute("crossorigin","anonymous");
   s.async=true;
+  s.addEventListener("load",()=>syncGiscusTheme(currentTheme()),{{once:true}});
+  window.addEventListener("jots:theme-change",(event)=>{{
+    const theme=event?.detail?.theme==="dark"?"dark":"light";
+    syncGiscusTheme(theme);
+  }});
   document.getElementById("comments")?.appendChild(s);
 }})();
 </script>"""

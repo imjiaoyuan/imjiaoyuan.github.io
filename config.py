@@ -24,7 +24,7 @@ SITE = {
             "category": "General",
             "category_id": "DIC_kwDOQgaTJc4CzQPO",
             "mapping": "pathname",
-            "strict": "1",
+            "strict": "0",
             "reactions_enabled": "0",
             "emit_metadata": "0",
             "input_position": "bottom",
