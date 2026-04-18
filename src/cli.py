@@ -4,9 +4,9 @@ import argparse
 from datetime import date
 from pathlib import Path
 
-from .builder import build
-from .config_loader import load_site_config
-from .server import serve
+from builder import build
+from config_loader import load_site_config
+from server import serve
 
 
 def _create_post(root: Path, name: str) -> None:

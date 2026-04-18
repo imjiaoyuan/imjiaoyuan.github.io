@@ -3,7 +3,7 @@ from __future__ import annotations
 import shutil
 from pathlib import Path
 
-from .models import ContentItem, SiteConfig
+from models import ContentItem, SiteConfig
 
 
 def _copy_dir(src: Path, dst: Path) -> None:
@@ -39,7 +39,18 @@ def copy_static(cfg: SiteConfig) -> None:
 def copy_jots_assets(cfg: SiteConfig) -> None:
     src = Path(__file__).resolve().parent / "assets"
     dst = cfg.public_dir / "assets" / "jots"
-    _copy_dir(src, dst)
+    if dst.exists():
+        shutil.rmtree(dst)
+    dst.mkdir(parents=True, exist_ok=True)
+    for name in ("jots.css", "vendor"):
+        item = src / name
+        if not item.exists():
+            continue
+        target = dst / name
+        if item.is_dir():
+            shutil.copytree(item, target)
+        else:
+            shutil.copy2(item, target)
 
 
 def copy_post_assets(cfg: SiteConfig, posts: list[ContentItem]) -> None:

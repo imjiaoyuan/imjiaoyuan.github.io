@@ -6,7 +6,7 @@ SITE = {
     "home_limit": 30,
     "log_limit": 15,
     "content_dir": "content",
-    "static_dir": "static",
+    "static_dir": "src/assets",
     "public_dir": "public",
     "menu": [
         {"name": "LOGS", "url": "/logs"},
