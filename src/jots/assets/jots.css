@@ -218,12 +218,21 @@ h1, h2, h3 {
 }
 
 .content pre code.hljs {
+  display: block;
+  line-height: 1.6;
   background: transparent;
   padding: 0;
 }
 
 .content pre code.nohighlight {
+  display: block;
+  line-height: 1.6;
   background: transparent;
+}
+
+.content pre code {
+  display: block;
+  line-height: 1.6;
 }
 
 .content code {

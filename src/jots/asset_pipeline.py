@@ -44,6 +44,18 @@ def copy_jots_assets(cfg: SiteConfig) -> None:
 
 def copy_post_assets(cfg: SiteConfig, posts: list[ContentItem]) -> None:
     for p in posts:
+        post_dir = p.source.parent
+        out_post_dir = cfg.public_dir / p.out_dir
+        for item in post_dir.iterdir():
+            if item.name in {"index.md", "assets"}:
+                continue
+            target = out_post_dir / item.name
+            if item.is_dir():
+                _copy_dir(item, target)
+            else:
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(item, target)
+
         asset_src = p.source.parent / "assets"
         if not asset_src.exists():
             continue

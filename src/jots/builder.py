@@ -27,7 +27,7 @@ def _to_atom_date(raw: str) -> str:
 
 
 def _render_atom(cfg, posts) -> str:
-    base = cfg.base_url.rstrip("/") + "/"
+    base = cfg.domain.rstrip("/") + "/"
     updated = _to_atom_date(posts[0].date) if posts else dt.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
     site_title = xml_escape(cfg.title)
     site_desc = xml_escape(cfg.description)
@@ -78,7 +78,14 @@ def build(root: Path) -> None:
         _write(cfg.public_dir, p.out_dir, render_post(cfg, p))
 
     log_title = logs_index.title if logs_index else "Logs"
-    _write(cfg.public_dir, "logs", render_logs(cfg, log_title, logs))
+    log_size = max(1, cfg.log_limit)
+    total_log_pages = max(1, (len(logs) + log_size - 1) // log_size)
+    for i in range(total_log_pages):
+        page_no = i + 1
+        chunk = logs[i * log_size : (i + 1) * log_size]
+        html = render_logs(cfg, log_title, chunk, page_no=page_no, total_pages=total_log_pages)
+        out_dir = "logs" if page_no == 1 else f"logs/page/{page_no}"
+        _write(cfg.public_dir, out_dir, html)
 
     if "readme" in pages:
         p = pages["readme"]
@@ -89,7 +96,7 @@ def build(root: Path) -> None:
             continue
         _write(cfg.public_dir, slug, render_page(cfg, p))
 
-    pager_size = max(1, cfg.home_posts_per_page)
+    pager_size = max(1, cfg.home_limit)
     total_pages = max(1, (len(posts) + pager_size - 1) // pager_size)
     for i in range(total_pages):
         page_no = i + 1

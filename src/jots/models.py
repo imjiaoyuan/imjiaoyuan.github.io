@@ -8,10 +8,11 @@ from typing import Any
 @dataclass
 class SiteConfig:
     title: str
-    base_url: str
+    domain: str
     description: str
     icon: str
-    home_posts_per_page: int
+    home_limit: int
+    log_limit: int
     posts_dir: Path
     pages_dir: Path
     static_dir: Path
