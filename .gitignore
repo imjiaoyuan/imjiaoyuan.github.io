@@ -1,2 +1,13 @@
-.hugo_build.lock
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+.python-version
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
 public/
+.DS_Store
