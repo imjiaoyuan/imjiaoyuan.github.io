@@ -4,8 +4,8 @@ import datetime as dt
 import re
 from pathlib import Path
 
-from .markdown_engine import MarkdownEngine
-from .models import ContentItem, SiteConfig
+from markdown_engine import MarkdownEngine
+from models import ContentItem, SiteConfig
 
 
 MATH_RE = re.compile(r"\$\$.*?\$\$|\$[^$\n]+\$", re.DOTALL)

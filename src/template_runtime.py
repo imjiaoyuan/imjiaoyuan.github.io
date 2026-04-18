@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import html
 
-from .models import ContentItem, SiteConfig
+from models import ContentItem, SiteConfig
 
 
 def _head(cfg: SiteConfig, page_title: str, has_math: bool) -> str:
