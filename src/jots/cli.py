@@ -14,7 +14,7 @@ def _create_post(root: Path, name: str) -> None:
     slug = name.strip().replace(" ", "-")
     if not slug:
         raise ValueError("post name cannot be empty")
-    post_dir = cfg.posts_dir / slug
+    post_dir = cfg.content_dir / "posts" / slug
     post_file = post_dir / "index.md"
     assets_dir = post_dir / "assets"
     if post_file.exists():
@@ -35,7 +35,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="jots static site generator")
     parser.add_argument("-d", "--build", action="store_true", help="build static site to public/")
     parser.add_argument("-s", "--serve", action="store_true", help="build then serve public/ locally")
-    parser.add_argument("-n", "--new", metavar="NAME", help="create a new post folder at posts/NAME/")
+    parser.add_argument("-n", "--new", metavar="NAME", help="create a new post folder at content/posts/NAME/")
     parser.add_argument("-p", "--port", type=int, default=None, help="serve port")
     parser.add_argument("--host", default=None, help="serve host")
     parser.add_argument("--root", default=".", help="project root (default: .)")

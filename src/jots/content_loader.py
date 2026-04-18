@@ -9,7 +9,6 @@ from .models import ContentItem, SiteConfig
 
 
 MATH_RE = re.compile(r"\$\$.*?\$\$|\$[^$\n]+\$", re.DOTALL)
-CODE_RE = re.compile(r"```[\s\S]*?```")
 
 
 def _parse_front_matter(text: str) -> tuple[dict, str]:
@@ -81,7 +80,6 @@ def _load_markdown_file(path: Path, rel_url: str, out_dir: str, is_log: bool, en
     fallback_date = path.stem if is_log else ""
     date = str(meta.get("date", fallback_date))
     draft = bool(meta.get("draft"))
-    has_code = bool(CODE_RE.search(body))
     has_math = bool(MATH_RE.search(body)) or bool(meta.get("math"))
     return ContentItem(
         source=path,
@@ -91,16 +89,16 @@ def _load_markdown_file(path: Path, rel_url: str, out_dir: str, is_log: bool, en
         rel_url=rel_url,
         out_dir=out_dir,
         draft=draft,
-        has_code=has_code,
         has_math=has_math,
     )
 
 
 def load_posts(cfg: SiteConfig, engine: MarkdownEngine) -> list[ContentItem]:
     items: list[ContentItem] = []
-    if not cfg.posts_dir.exists():
+    posts_dir = cfg.content_dir / "posts"
+    if not posts_dir.exists():
         return items
-    for folder in sorted(cfg.posts_dir.iterdir()):
+    for folder in sorted(posts_dir.iterdir()):
         if not folder.is_dir():
             continue
         md = folder / "index.md"
@@ -115,7 +113,7 @@ def load_posts(cfg: SiteConfig, engine: MarkdownEngine) -> list[ContentItem]:
 
 
 def load_logs(cfg: SiteConfig, engine: MarkdownEngine) -> tuple[ContentItem | None, list[ContentItem]]:
-    logs_dir = cfg.pages_dir / "logs"
+    logs_dir = cfg.content_dir / "logs"
     if not logs_dir.exists():
         return None, []
     index_item: ContentItem | None = None
@@ -134,9 +132,9 @@ def load_logs(cfg: SiteConfig, engine: MarkdownEngine) -> tuple[ContentItem | No
 
 def load_pages(cfg: SiteConfig, engine: MarkdownEngine) -> dict[str, ContentItem]:
     out: dict[str, ContentItem] = {}
-    if not cfg.pages_dir.exists():
+    if not cfg.content_dir.exists():
         return out
-    for md in sorted(cfg.pages_dir.glob("*.md")):
+    for md in sorted(cfg.content_dir.glob("*.md")):
         slug = md.stem
         out[slug] = _load_markdown_file(md, f"/{slug}/", slug, False, engine)
     return out

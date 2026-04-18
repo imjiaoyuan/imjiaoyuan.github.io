@@ -13,8 +13,7 @@ class SiteConfig:
     icon: str
     home_limit: int
     log_limit: int
-    posts_dir: Path
-    pages_dir: Path
+    content_dir: Path
     static_dir: Path
     public_dir: Path
     menu: list[dict[str, Any]]
@@ -32,5 +31,4 @@ class ContentItem:
     rel_url: str
     out_dir: str
     draft: bool = False
-    has_code: bool = False
     has_math: bool = False

@@ -5,37 +5,26 @@ import html
 from .models import ContentItem, SiteConfig
 
 
-def _head(cfg: SiteConfig, page_title: str, has_math: bool, has_code: bool) -> str:
+def _head(cfg: SiteConfig, page_title: str, has_math: bool) -> str:
     full_title = html.escape(cfg.title) if not page_title else f"{html.escape(page_title)} | {html.escape(cfg.title)}"
     atom_url = f"{cfg.domain.rstrip('/')}/atom.xml"
     math_block = ""
     if has_math:
         math_block = """
+<link rel="stylesheet" href="/assets/jots/vendor/katex/katex.min.css">
+<script defer src="/assets/jots/vendor/katex/katex.min.js"></script>
+<script defer src="/assets/jots/vendor/katex/auto-render.min.js"></script>
 <script>
-window.MathJax = {tex:{inlineMath:[['$','$'],['\\\\(','\\\\)']],displayMath:[['$$','$$'],['\\\\[','\\\\]']]}};
-</script>
-<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js';"></script>
-"""
-    code_block = ""
-    if has_code:
-        code_block = """
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script>
- document.addEventListener("DOMContentLoaded",()=>{
-  if(!window.hljs)return;
-  const alias={conf:"ini",shell:"bash",sh:"bash",zsh:"bash",yml:"yaml"};
-  const known=new Set(["bash","python","json","yaml","toml","ini","r","sql","javascript","typescript","html","xml","css","markdown","text","plaintext"]);
-  document.querySelectorAll("pre code").forEach(el=>{
-    const cls=[...el.classList].find(c=>c.startsWith("language-"));
-    if(!cls){el.classList.add("nohighlight");return;}
-    let lang=cls.slice(9).toLowerCase();
-    lang=alias[lang]||lang;
-    el.classList.remove(cls);
-    if(!known.has(lang)){el.classList.add("nohighlight");return;}
-    el.classList.add("language-"+lang);
-    hljs.highlightElement(el);
+document.addEventListener("DOMContentLoaded",()=>{
+  if(!window.renderMathInElement)return;
+  window.renderMathInElement(document.body,{
+    delimiters:[
+      {left:"$$",right:"$$",display:true},
+      {left:"\\\\[",right:"\\\\]",display:true},
+      {left:"$",right:"$",display:false},
+      {left:"\\\\(",right:"\\\\)",display:false}
+    ],
+    throwOnError:false
   });
 });
 </script>
@@ -55,7 +44,6 @@ window.MathJax = {tex:{inlineMath:[['$','$'],['\\\\(','\\\\)']],displayMath:[['$
 </script>
 <link rel="stylesheet" href="/assets/jots/jots.css">
 {math_block}
-{code_block}
 </head>"""
 
 
@@ -71,12 +59,12 @@ def _header(cfg: SiteConfig) -> str:
 
 
 def render_shell(
-    cfg: SiteConfig, page_title: str, main_html: str, has_math: bool, has_code: bool, show_top: bool = False
+    cfg: SiteConfig, page_title: str, main_html: str, has_math: bool, show_top: bool = False
 ) -> str:
     top_button = '<button type="button" class="tool-btn" id="to-top">top</button>' if show_top else ""
     return f"""<!doctype html>
 <html lang="en" dir="auto">
-{_head(cfg, page_title, has_math, has_code)}
+{_head(cfg, page_title, has_math)}
 <body>
 {_header(cfg)}
 <main>{main_html}</main>
@@ -145,7 +133,7 @@ def render_post(cfg: SiteConfig, item: ContentItem) -> str:
 <div class="content">{item.body_html}</div>
 </article>
 {giscus_html}"""
-    return render_shell(cfg, item.title, body, has_math=item.has_math, has_code=item.has_code, show_top=True)
+    return render_shell(cfg, item.title, body, has_math=item.has_math, show_top=True)
 
 
 def render_page(cfg: SiteConfig, item: ContentItem) -> str:
@@ -153,7 +141,7 @@ def render_page(cfg: SiteConfig, item: ContentItem) -> str:
 <h1>{html.escape(item.title)}</h1>
 <div class="content">{item.body_html}</div>
 </article>"""
-    return render_shell(cfg, item.title, body, has_math=item.has_math, has_code=item.has_code, show_top=False)
+    return render_shell(cfg, item.title, body, has_math=item.has_math, show_top=False)
 
 
 def render_home(cfg: SiteConfig, posts: list[ContentItem], page_no: int, total_pages: int) -> str:
@@ -181,7 +169,7 @@ def render_home(cfg: SiteConfig, posts: list[ContentItem], page_no: int, total_p
 </section>
 <ul class="post-list">{items}</ul>
 {pager}"""
-    return render_shell(cfg, "", body, has_math=False, has_code=False, show_top=False)
+    return render_shell(cfg, "", body, has_math=False, show_top=False)
 
 
 def render_logs(cfg: SiteConfig, title: str, logs: list[ContentItem], page_no: int, total_pages: int) -> str:
@@ -198,4 +186,4 @@ def render_logs(cfg: SiteConfig, title: str, logs: list[ContentItem], page_no: i
         pager = f'<div class="pager">{prev_html}{next_html}</div>'
     body = f"<section><h1>{html.escape(title)}</h1>{blocks}{pager}</section>"
     has_math = any(i.has_math for i in logs)
-    return render_shell(cfg, title, body, has_math=has_math, has_code=False, show_top=True)
+    return render_shell(cfg, title, body, has_math=has_math, show_top=True)
