@@ -118,8 +118,25 @@ class MarkdownEngine:
             if bq:
                 flush_para()
                 close_list()
-                out.append(f"<blockquote><p>{self._inline(bq.group(1).strip())}</p></blockquote>")
-                i += 1
+                bq_lines: list[str] = []
+                while i < len(lines):
+                    cur = re.match(r"^>\s?(.*)$", lines[i])
+                    if not cur:
+                        break
+                    bq_lines.append(cur.group(1).strip())
+                    i += 1
+                bq_parts: list[str] = []
+                para_lines: list[str] = []
+                for ql in bq_lines:
+                    if ql:
+                        para_lines.append(ql)
+                        continue
+                    if para_lines:
+                        bq_parts.append("<p>" + "<br>".join(self._inline(x) for x in para_lines) + "</p>")
+                        para_lines = []
+                if para_lines:
+                    bq_parts.append("<p>" + "<br>".join(self._inline(x) for x in para_lines) + "</p>")
+                out.append(f"<blockquote>{''.join(bq_parts) if bq_parts else '<p></p>'}</blockquote>")
                 continue
 
             ul = re.match(r"^\s*[-*]\s+(.*)$", line)
