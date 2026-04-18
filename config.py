@@ -1,9 +1,10 @@
 SITE = {
     "title": "JiaoYuan's blog",
-    "base_url": "https://jiaoyuan.org",
-    "description": "JiaoYuan's blog description",
+    "domain": "https://jiaoyuan.org",
+    "description": "Fleeting thoughts come and go, but sometimes, they pause and stay here.",
     "icon": "/favicon.ico",
-    "home_posts_per_page": 30,
+    "home_limit": 30,
+    "log_limit": 15,
     "posts_dir": "posts",
     "pages_dir": "pages",
     "static_dir": "static",
@@ -13,7 +14,6 @@ SITE = {
         {"name": "README", "url": "/readme"},
     ],
     "theme_options": {
-        "home_intro": "Fleeting thoughts come and go, but sometimes, they pause and stay here.",
         "socials": [
             {"name": "GitHub", "url": "https://github.com/imjiaoyuan"},
             {"name": "Email", "url": "mailto:imjiaoyuan@gmail.com"},

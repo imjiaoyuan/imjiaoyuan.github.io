@@ -7,7 +7,7 @@ from .models import ContentItem, SiteConfig
 
 def _head(cfg: SiteConfig, page_title: str, has_math: bool, has_code: bool) -> str:
     full_title = html.escape(cfg.title) if not page_title else f"{html.escape(page_title)} | {html.escape(cfg.title)}"
-    atom_url = f"{cfg.base_url.rstrip('/')}/atom.xml"
+    atom_url = f"{cfg.domain.rstrip('/')}/atom.xml"
     math_block = ""
     if has_math:
         math_block = """
@@ -23,7 +23,7 @@ window.MathJax = {tex:{inlineMath:[['$','$'],['\\\\(','\\\\)']],displayMath:[['$
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>
-window.addEventListener("load",()=>{
+ document.addEventListener("DOMContentLoaded",()=>{
   if(!window.hljs)return;
   const alias={conf:"ini",shell:"bash",sh:"bash",zsh:"bash",yml:"yaml"};
   const known=new Set(["bash","python","json","yaml","toml","ini","r","sql","javascript","typescript","html","xml","css","markdown","text","plaintext"]);
@@ -158,7 +158,7 @@ def render_page(cfg: SiteConfig, item: ContentItem) -> str:
 
 def render_home(cfg: SiteConfig, posts: list[ContentItem], page_no: int, total_pages: int) -> str:
     theme_opts = cfg.theme_options or {}
-    intro = html.escape(str(theme_opts.get("home_intro", "")))
+    intro = html.escape(cfg.description)
     socials = theme_opts.get("socials", [])
     social_html = "".join(
         f'<a class="icon" href="{html.escape(str(s.get("url", "#")))}">{html.escape(str(s.get("name", "")))}</a>'
@@ -184,11 +184,18 @@ def render_home(cfg: SiteConfig, posts: list[ContentItem], page_no: int, total_p
     return render_shell(cfg, "", body, has_math=False, has_code=False, show_top=False)
 
 
-def render_logs(cfg: SiteConfig, title: str, logs: list[ContentItem]) -> str:
+def render_logs(cfg: SiteConfig, title: str, logs: list[ContentItem], page_no: int, total_pages: int) -> str:
     blocks = "".join(
         f'<article class="log-item"><h2>{html.escape(i.date)}</h2><div class="content">{i.body_html}</div></article>'
         for i in logs
     )
-    body = f"<section><h1>{html.escape(title)}</h1>{blocks}</section>"
+    pager = ""
+    if total_pages > 1:
+        prev_link = "/logs/" if page_no <= 2 else f"/logs/page/{page_no-1}/"
+        next_link = f"/logs/page/{page_no+1}/"
+        prev_html = f'<a href="{prev_link}">Prev</a>' if page_no > 1 else "<span></span>"
+        next_html = f'<a href="{next_link}">Next</a>' if page_no < total_pages else "<span></span>"
+        pager = f'<div class="pager">{prev_html}{next_html}</div>'
+    body = f"<section><h1>{html.escape(title)}</h1>{blocks}{pager}</section>"
     has_math = any(i.has_math for i in logs)
     return render_shell(cfg, title, body, has_math=has_math, has_code=False, show_top=True)

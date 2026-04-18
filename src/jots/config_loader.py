@@ -24,10 +24,11 @@ def load_site_config(root: Path) -> SiteConfig:
     menu = list(site.get("menu", []))
     return SiteConfig(
         title=site.get("title", "Site"),
-        base_url=site.get("base_url", "/"),
+        domain=site.get("domain", "/"),
         description=site.get("description", ""),
         icon=site.get("icon", "/favicon.ico"),
-        home_posts_per_page=int(site.get("home_posts_per_page", 20)),
+        home_limit=int(site.get("home_limit", 20)),
+        log_limit=int(site.get("log_limit", 20)),
         posts_dir=root / site.get("posts_dir", "posts"),
         pages_dir=root / site.get("pages_dir", "pages"),
         static_dir=root / site.get("static_dir", "static"),
