@@ -5,6 +5,13 @@
   --line: #d0d7de;
   --code: #f6f8fa;
   --accent: #0969da;
+  --scroll-thumb: #d0d7de;
+  --scroll-thumb-hover: #afb8c1;
+  --scroll-track: transparent;
+  --tok-k: #0550ae;
+  --tok-s: #0a3069;
+  --tok-c: #6e7781;
+  --tok-n: #953800;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -15,6 +22,13 @@
     --line: #30363d;
     --code: #161b22;
     --accent: #58a6ff;
+    --scroll-thumb: #30363d;
+    --scroll-thumb-hover: #484f58;
+    --scroll-track: transparent;
+    --tok-k: #79c0ff;
+    --tok-s: #a5d6ff;
+    --tok-c: #8b949e;
+    --tok-n: #ffa657;
   }
 }
 
@@ -25,6 +39,13 @@
   --line: #d0d7de;
   --code: #f6f8fa;
   --accent: #0969da;
+  --scroll-thumb: #d0d7de;
+  --scroll-thumb-hover: #afb8c1;
+  --scroll-track: transparent;
+  --tok-k: #0550ae;
+  --tok-s: #0a3069;
+  --tok-c: #6e7781;
+  --tok-n: #953800;
 }
 
 [data-theme="dark"] {
@@ -34,6 +55,13 @@
   --line: #30363d;
   --code: #161b22;
   --accent: #58a6ff;
+  --scroll-thumb: #30363d;
+  --scroll-thumb-hover: #484f58;
+  --scroll-track: transparent;
+  --tok-k: #79c0ff;
+  --tok-s: #a5d6ff;
+  --tok-c: #8b949e;
+  --tok-n: #ffa657;
 }
 
 * {
@@ -199,40 +227,48 @@ h1, h2, h3 {
 }
 
 .content pre {
-  margin: 12px 0;
+  margin: 10px 0;
   padding: 12px;
   background: var(--code);
   border: 1px solid var(--line);
   border-radius: 8px;
   overflow-x: auto;
-  position: relative;
 }
 
-.content pre[data-lang]::before {
-  content: attr(data-lang);
-  position: absolute;
-  top: 5px;
-  right: 8px;
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.content pre code.hljs {
+.content pre code.codehilite {
   display: block;
   line-height: 1.6;
   background: transparent;
   padding: 0;
+  color: var(--fg);
 }
 
 .content pre code.nohighlight {
   display: block;
   line-height: 1.6;
   background: transparent;
+  color: var(--fg);
 }
 
 .content pre code {
   display: block;
   line-height: 1.6;
+}
+
+.content pre code .tok-k {
+  color: var(--tok-k);
+}
+
+.content pre code .tok-s {
+  color: var(--tok-s);
+}
+
+.content pre code .tok-c {
+  color: var(--tok-c);
+}
+
+.content pre code .tok-n {
+  color: var(--tok-n);
 }
 
 .content code {
@@ -247,10 +283,42 @@ h1, h2, h3 {
   padding: 1px 5px;
 }
 
-.content mjx-container[display="true"],
-.content .MathJax_Display {
+.content .katex-display {
   overflow-x: auto;
   overflow-y: hidden;
+}
+
+.content pre,
+.table-wrap,
+.content .katex-display {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+}
+
+.content pre::-webkit-scrollbar,
+.table-wrap::-webkit-scrollbar,
+.content .katex-display::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.content pre::-webkit-scrollbar-track,
+.table-wrap::-webkit-scrollbar-track,
+.content .katex-display::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+}
+
+.content pre::-webkit-scrollbar-thumb,
+.table-wrap::-webkit-scrollbar-thumb,
+.content .katex-display::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: 999px;
+}
+
+.content pre:hover::-webkit-scrollbar-thumb,
+.table-wrap:hover::-webkit-scrollbar-thumb,
+.content .katex-display:hover::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb-hover);
 }
 
 .pager {

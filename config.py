@@ -5,8 +5,7 @@ SITE = {
     "icon": "/favicon.ico",
     "home_limit": 30,
     "log_limit": 15,
-    "posts_dir": "posts",
-    "pages_dir": "pages",
+    "content_dir": "content",
     "static_dir": "static",
     "public_dir": "public",
     "menu": [
