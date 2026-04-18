@@ -24,7 +24,7 @@ date: 2026-02-26
 
 AI 始终是一个逃不开的话题，前几天 Claude 创始人 Boris Cherny 上了 Y Combinator 的 Lightcone 播客，聊了将近一个小时，
 
-<iframe width=100% height="415" src="https://www.youtube.com/embed/PQU9o_5rHC4?si=8_-hcOyUbC1hP4kM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width=100% height="415" src="https://www.youtube-nocookie.com/embed/PQU9o_5rHC4?si=8_-hcOyUbC1hP4kM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 据他所说，“软件工程师”这个头衔，要消失了，访谈里的原话，值得完整引用：
 
