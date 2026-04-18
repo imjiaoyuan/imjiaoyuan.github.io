@@ -82,6 +82,14 @@ class MarkdownEngine:
                 i += 1
                 continue
 
+            hr = re.match(r"^\s{0,3}([-*_])(\s*\1){2,}\s*$", line)
+            if hr:
+                flush_para()
+                close_list()
+                out.append("<hr>")
+                i += 1
+                continue
+
             if i + 1 < len(lines) and "|" in line and self._TABLE_ALIGN_RE.match(lines[i + 1] or ""):
                 flush_para()
                 close_list()
