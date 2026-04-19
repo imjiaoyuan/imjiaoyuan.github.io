@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   if(saved==="light"||saved==="dark")document.documentElement.setAttribute("data-theme",saved);
 }})();
 </script>
-<link rel="stylesheet" href="/assets/jots/jots.css">
+<link rel="stylesheet" href="/assets/jots/style.css">
 {math_block}
 </head>"""
 
@@ -210,7 +210,7 @@ def render_home(cfg: SiteConfig, posts: list[ContentItem], page_no: int, total_p
 
 def render_logs(cfg: SiteConfig, title: str, logs: list[ContentItem], page_no: int, total_pages: int) -> str:
     blocks = "".join(
-        f'<article class="log-item"><h2>{html.escape(i.date)}</h2><div class="content">{i.body_html}</div></article>'
+        f'<article class="log-item"><h2>{html.escape(i.date)}</h2><div class="content log-content">{i.body_html}</div><button type="button" class="log-toggle" hidden>Read more</button></article>'
         for i in logs
     )
     pager = ""
@@ -220,6 +220,35 @@ def render_logs(cfg: SiteConfig, title: str, logs: list[ContentItem], page_no: i
         prev_html = f'<a href="{prev_link}">Prev</a>' if page_no > 1 else "<span></span>"
         next_html = f'<a href="{next_link}">Next</a>' if page_no < total_pages else "<span></span>"
         pager = f'<div class="pager">{prev_html}{next_html}</div>'
-    body = f"<section><h1>{html.escape(title)}</h1>{blocks}{pager}</section>"
+    body = f"""<section><h1>{html.escape(title)}</h1>{blocks}{pager}</section>
+<script>
+(() => {{
+  const maxLines = 12;
+  document.querySelectorAll(".log-item").forEach((item) => {{
+    const content = item.querySelector(".log-content");
+    const toggle = item.querySelector(".log-toggle");
+    if (!content || !toggle) return;
+    const style = window.getComputedStyle(content);
+    let lineHeight = Number.parseFloat(style.lineHeight);
+    if (!Number.isFinite(lineHeight)) {{
+      lineHeight = Number.parseFloat(style.fontSize) * 1.55;
+    }}
+    const collapsedHeight = Math.max(1, Math.round(lineHeight * maxLines));
+    content.style.setProperty("--log-collapsed-height", `${{collapsedHeight}}px`);
+    content.classList.add("is-collapsed");
+    if (content.scrollHeight <= collapsedHeight + 1) {{
+      content.classList.remove("is-collapsed");
+      toggle.remove();
+      return;
+    }}
+    toggle.hidden = false;
+    toggle.textContent = "Read more";
+    toggle.addEventListener("click", () => {{
+      const expanded = content.classList.toggle("is-collapsed");
+      toggle.textContent = expanded ? "Read more" : "Collapse";
+    }});
+  }});
+}})();
+</script>"""
     has_math = any(i.has_math for i in logs)
     return render_shell(cfg, title, body, has_math=has_math, show_top=True)

@@ -56,4 +56,4 @@ def main() -> None:
         cfg = load_site_config(root)
         host = args.host or cfg.server.get("host", "127.0.0.1")
         port = args.port or int(cfg.server.get("port", 1313))
-        serve(cfg.public_dir, host, port)
+        serve(cfg.public_dir, host, port, root)
