@@ -42,7 +42,7 @@ def copy_jots_assets(cfg: SiteConfig) -> None:
     if dst.exists():
         shutil.rmtree(dst)
     dst.mkdir(parents=True, exist_ok=True)
-    for name in ("jots.css", "vendor"):
+    for name in ("style.css", "vendor"):
         item = src / name
         if not item.exists():
             continue
