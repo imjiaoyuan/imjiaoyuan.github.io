@@ -92,6 +92,8 @@ def serve(public_dir: Path, host: str, port: int, root: Path) -> None:
         def __init__(self, *args, **kwargs):
             super().__init__(*args, directory=str(public_dir), **kwargs)
 
+        _CACHE_FOR = {"image/": 86400, "font/": 86400, "text/css": 86400, "application/javascript": 86400}
+
         def _resolved_html_path(self) -> Path | None:
             req_path = urlsplit(self.path).path
             fs_path = Path(self.translate_path(req_path))
@@ -101,23 +103,65 @@ def serve(public_dir: Path, host: str, port: int, root: Path) -> None:
                 return fs_path
             return None
 
+        def _guess_mime(self, path: Path) -> str:
+            ext = path.suffix.lower()
+            return {
+                ".html": "text/html",
+                ".css": "text/css",
+                ".js": "application/javascript",
+                ".json": "application/json",
+                ".png": "image/png",
+                ".jpg": "image/jpeg",
+                ".jpeg": "image/jpeg",
+                ".webp": "image/webp",
+                ".gif": "image/gif",
+                ".svg": "image/svg+xml",
+                ".ico": "image/x-icon",
+                ".woff2": "font/woff2",
+                ".woff": "font/woff",
+                ".ttf": "font/ttf",
+                ".otf": "font/otf",
+                ".xml": "application/xml",
+                ".txt": "text/plain",
+            }.get(ext, "application/octet-stream")
+
+        def _serve_file(self, fs_path: Path) -> None:
+            mime = self._guess_mime(fs_path)
+            payload = fs_path.read_bytes()
+            self.send_response(200)
+            self.send_header("Content-Type", mime + "; charset=utf-8" if mime.startswith("text/") else mime)
+            self.send_header("Content-Length", str(len(payload)))
+            cache_age = next((v for k, v in self._CACHE_FOR.items() if mime.startswith(k)), None)
+            if mime == "text/html":
+                self.send_header("Cache-Control", "no-store")
+            elif cache_age:
+                self.send_header("Cache-Control", f"public, max-age={cache_age}")
+            self.end_headers()
+            self.wfile.write(payload)
+
         def do_GET(self) -> None:
             if urlsplit(self.path).path == "/__live_reload":
                 self._serve_live_reload()
                 return
 
             html_path = self._resolved_html_path()
-            if html_path is None:
-                super().do_GET()
+            if html_path is not None:
+                payload = _inject_live_reload(html_path.read_text(encoding="utf-8")).encode("utf-8")
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(payload)))
+                self.send_header("Cache-Control", "no-store")
+                self.end_headers()
+                self.wfile.write(payload)
                 return
 
-            payload = _inject_live_reload(html_path.read_text(encoding="utf-8")).encode("utf-8")
-            self.send_response(200)
-            self.send_header("Content-Type", "text/html; charset=utf-8")
-            self.send_header("Content-Length", str(len(payload)))
-            self.send_header("Cache-Control", "no-store")
-            self.end_headers()
-            self.wfile.write(payload)
+            req_path = urlsplit(self.path).path
+            fs_path = Path(self.translate_path(req_path))
+            if fs_path.exists() and fs_path.is_file():
+                self._serve_file(fs_path)
+                return
+
+            super().do_GET()
 
         def _serve_live_reload(self) -> None:
             q = hub.subscribe()

@@ -116,18 +116,18 @@ nav a:focus-visible {
 main {
   max-width: 900px;
   margin: 0 auto;
-  padding: 20px 16px 44px;
+  padding: 14px 16px 40px;
 }
 
 h1, h2, h3 {
-  margin: 0 0 10px;
+  margin: 0 0 6px;
   line-height: 1.35;
 }
 
 .date {
   color: var(--muted);
   font-size: 14px;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
 .home-intro {
@@ -223,7 +223,7 @@ h1, h2, h3 {
 }
 
 .content p {
-  margin: 0 0 8px;
+  margin: 0 0 6px;
 }
 
 .content a {
@@ -234,11 +234,11 @@ h1, h2, h3 {
   display: block;
   max-width: 100%;
   height: auto;
-  margin: 8px 0;
+  margin: 6px 0;
 }
 
 .content blockquote {
-  margin: 0 0 8px;
+  margin: 0 0 6px;
   padding: 0 0 0 1em;
   border-left: 0.25em solid var(--line);
   color: var(--muted);
@@ -250,7 +250,7 @@ h1, h2, h3 {
 
 .content ul,
 .content ol {
-  margin: 0 0 8px;
+  margin: 0 0 6px;
   padding-left: 22px;
 }
 
@@ -261,12 +261,12 @@ h1, h2, h3 {
 .content hr {
   border: 0;
   border-top: 1px solid var(--line);
-  margin: 10px 0;
+  margin: 8px 0;
 }
 
 .table-wrap {
   overflow-x: auto;
-  margin: 12px 0;
+  margin: 10px 0;
 }
 
 .table-wrap table {
@@ -283,8 +283,8 @@ h1, h2, h3 {
 }
 
 .content pre {
-  margin: 8px 0;
-  padding: 8px;
+  margin: 6px 0;
+  padding: 6px;
   background: var(--code);
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -393,9 +393,28 @@ h1, h2, h3 {
 }
 
 .comments {
-  margin-top: 28px;
+  margin-top: 20px;
   border-top: 1px solid var(--line);
-  padding-top: 18px;
+  padding-top: 8px;
+}
+
+.comment-btn {
+  display: inline-block;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 12px;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.comment-btn:hover,
+.comment-btn:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .floating-tools {
