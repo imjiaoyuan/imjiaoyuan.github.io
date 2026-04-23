@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import binascii
 import datetime as dt
 import re
 from pathlib import Path
@@ -9,6 +10,19 @@ from models import ContentItem, SiteConfig
 
 
 MATH_RE = re.compile(r"\$\$.*?\$\$|\$[^$\n]+\$", re.DOTALL)
+
+BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+RESERVED_SLUGS = frozenset({"assets", "logs", "readme", "page", "atom", "posts"})
+
+
+def _slug_hash(name: str) -> str:
+    crc = binascii.crc32(name.encode()) & 0xFFFFFFFF
+    result = []
+    while crc > 0:
+        result.append(BASE62[crc % 62])
+        crc //= 62
+    return "".join(reversed(result)).rjust(6, "0")
 
 
 def _parse_front_matter(text: str) -> tuple[dict, str]:
@@ -98,13 +112,21 @@ def load_posts(cfg: SiteConfig, engine: MarkdownEngine) -> list[ContentItem]:
     posts_dir = cfg.content_dir / "posts"
     if not posts_dir.exists():
         return items
+    used: set[str] = set()
     for folder in sorted(posts_dir.iterdir()):
         if not folder.is_dir():
             continue
         md = folder / "index.md"
         if not md.exists():
             continue
-        item = _load_markdown_file(md, f"/posts/{folder.name}/", f"posts/{folder.name}", False, engine)
+        slug = _slug_hash(folder.name)
+        if slug in used or slug in RESERVED_SLUGS:
+            i = 1
+            while f"{slug}-{i}" in used:
+                i += 1
+            slug = f"{slug}-{i}"
+        used.add(slug)
+        item = _load_markdown_file(md, f"/{slug}/", slug, False, engine)
         if item.draft:
             continue
         items.append(item)
