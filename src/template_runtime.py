@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import html
+import json
+from urllib.parse import quote
 
 from models import ContentItem, SiteConfig
 
@@ -86,6 +88,13 @@ def render_shell(
 {top_button}
 <button type="button" class="tool-btn" id="theme-toggle"></button>
 </div>
+<div id="email-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:999;align-items:center;justify-content:center" onclick="if(event.target===this)this.style.display='none'">
+<div style="background:var(--bg);padding:20px 28px;border-radius:8px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15)">
+<p style="margin:0 0 10px;font-size:15px">imjiaoyuan@gmail.com</p>
+<button class="tool-btn" onclick="navigator.clipboard.writeText('imjiaoyuan@gmail.com')">Copy</button>
+<button class="tool-btn" onclick="this.closest('#email-modal').style.display='none'">Close</button>
+</div>
+</div>
 <script>
 (()=>{{
   const root=document.documentElement;
@@ -117,6 +126,7 @@ def render_shell(
     notifyThemeChange(currentTheme());
   }});
   syncThemeLabel();
+  document.querySelector('a[href^="mailto"]')?.addEventListener('click',function(e){{e.preventDefault();document.getElementById('email-modal').style.display='flex'}});
 }})();
 </script>
 </body>
@@ -124,43 +134,29 @@ def render_shell(
 
 
 def render_post(cfg: SiteConfig, item: ContentItem) -> str:
-    giscus_html = ""
-    giscus = (cfg.theme_options or {}).get("giscus", {})
-    if giscus:
-        giscus_html = f"""<section class="comments" id="comments"></section>
+    repo = cfg.theme_options.get("comment_repo", "imjiaoyuan/imjiaoyuan.github.io") if cfg.theme_options else "imjiaoyuan/imjiaoyuan.github.io"
+    new_issue_url = f"https://github.com/{repo}/issues/new?title={quote(item.title)}&labels=comment"
+    js_title = json.dumps(item.title)
+    comment_html = f"""<section class="comments">
+<p><a class="comment-btn" href="{new_issue_url}" target="_blank">Go to GitHub issues to discuss with me</a></p>
+</section>
 <script>
-(()=>{{
-  const root=document.documentElement;
-  const currentTheme=()=>{{
-    const saved=root.getAttribute("data-theme");
-    if(saved==="light"||saved==="dark")return saved;
-    return window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
-  }};
-  const syncGiscusTheme=(theme)=>{{
-    const frame=document.querySelector("iframe.giscus-frame");
-    frame?.contentWindow?.postMessage({{giscus:{{setConfig:{{theme}}}}}},"*");
-  }};
-  const s=document.createElement("script");
-  s.src="https://giscus.app/client.js";
-  s.setAttribute("data-repo","{html.escape(str(giscus.get('repo', '')))}");
-  s.setAttribute("data-repo-id","{html.escape(str(giscus.get('repo_id', '')))}");
-  s.setAttribute("data-category","{html.escape(str(giscus.get('category', 'General')))}");
-  s.setAttribute("data-category-id","{html.escape(str(giscus.get('category_id', '')))}");
-  s.setAttribute("data-mapping","{html.escape(str(giscus.get('mapping', 'pathname')))}");
-  s.setAttribute("data-strict","{html.escape(str(giscus.get('strict', '1')))}");
-  s.setAttribute("data-reactions-enabled","{html.escape(str(giscus.get('reactions_enabled', '0')))}");
-  s.setAttribute("data-emit-metadata","{html.escape(str(giscus.get('emit_metadata', '0')))}");
-  s.setAttribute("data-input-position","{html.escape(str(giscus.get('input_position', 'bottom')))}");
-  s.setAttribute("data-theme",currentTheme());
-  s.setAttribute("data-lang","{html.escape(str(giscus.get('lang', 'en')))}");
-  s.setAttribute("crossorigin","anonymous");
-  s.async=true;
-  s.addEventListener("load",()=>syncGiscusTheme(currentTheme()),{{once:true}});
-  window.addEventListener("jots:theme-change",(event)=>{{
-    const theme=event?.detail?.theme==="dark"?"dark":"light";
-    syncGiscusTheme(theme);
-  }});
-  document.getElementById("comments")?.appendChild(s);
+(function() {{
+  var title = {js_title};
+  var btn = document.querySelector('.comment-btn');
+  if (!btn) return;
+  var q = encodeURIComponent(title) + '+in:title+repo:{repo}+is:issue';
+  fetch('https://api.github.com/search/issues?q=' + q, {{
+    headers: {{'Accept': 'application/vnd.github.v3+json'}}
+  }})
+    .then(function(r) {{ return r.json(); }})
+    .then(function(data) {{
+      if (data.total_count > 0) {{
+        btn.href = data.items[0].html_url;
+        btn.textContent = 'Go to GitHub issues to discuss with me';
+      }}
+    }})
+    .catch(function() {{}});
 }})();
 </script>"""
     body = f"""<article class="single">
@@ -168,7 +164,7 @@ def render_post(cfg: SiteConfig, item: ContentItem) -> str:
 <div class="date">{html.escape(item.date)}</div>
 <div class="content">{item.body_html}</div>
 </article>
-{giscus_html}"""
+{comment_html}"""
     return render_shell(cfg, item.title, body, has_math=item.has_math, show_top=True)
 
 
