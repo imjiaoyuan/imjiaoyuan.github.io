@@ -128,8 +128,7 @@ def render_shell(
   syncThemeLabel();
   document.querySelector('a[href^="mailto"]')?.addEventListener('click',function(e){{e.preventDefault();document.getElementById('email-modal').style.display='flex'}});
 }})();
-</script>
-</body>
+</script></body>
 </html>"""
 
 
