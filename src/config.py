@@ -1,5 +1,5 @@
 SITE = {
-    "title": "JiaoYuan/Blog",
+    "title": "JiaoYuan's blog",
     "domain": "https://jiaoyuan.org",
     "description": "Fleeting thoughts come and go, but sometimes, they pause and stay here.",
     "icon": "/favicon.ico",
