@@ -77,7 +77,7 @@ def _header(cfg: SiteConfig) -> str:
 def render_shell(
     cfg: SiteConfig, page_title: str, main_html: str, has_math: bool, show_top: bool = False
 ) -> str:
-    top_button = '<button type="button" class="tool-btn" id="to-top">top</button>' if show_top else ""
+    top_button = '<button type="button" class="tool-btn" id="to-top">Top</button>' if show_top else ""
     return f"""<!doctype html>
 <html lang="en" dir="auto">
 {_head(cfg, page_title, has_math)}
@@ -109,7 +109,7 @@ def render_shell(
   const syncThemeLabel=()=>{{
     if(!themeBtn)return;
     const current=currentTheme();
-    themeBtn.textContent=current==="dark"?"light":"dark";
+    themeBtn.textContent=current==="dark"?"Light":"Dark";
   }};
   topBtn?.addEventListener("click",()=>window.scrollTo({{top:0,behavior:"smooth"}}));
   themeBtn?.addEventListener("click",()=>{{
@@ -188,19 +188,45 @@ def render_home(cfg: SiteConfig, posts: list[ContentItem], page_no: int, total_p
         f'<li><a href="{p.rel_url}">{html.escape(p.title)}</a><time>{html.escape(p.date)}</time></li>'
         for p in posts
     )
-    pager = ""
-    if total_pages > 1:
-        prev_link = "/" if page_no <= 2 else f"/page/{page_no-1}/"
-        next_link = f"/page/{page_no+1}/"
-        prev_html = f'<a href="{prev_link}">Prev</a>' if page_no > 1 else "<span></span>"
-        next_html = f'<a href="{next_link}">Next</a>' if page_no < total_pages else "<span></span>"
-        pager = f'<div class="pager">{prev_html}{next_html}</div>'
+    scroll = ""
+    if page_no == 1 and total_pages > 1:
+        scroll = f"""<div id="scroll-sentinel" style="height:1px"></div>
+<script>
+(function() {{
+  let page = 1;
+  const total = {total_pages};
+  const sentinel = document.getElementById('scroll-sentinel');
+  const list = document.querySelector('.post-list');
+  let loading = false;
+  if (!sentinel || total <= 1) return;
+  const obs = new IntersectionObserver(function(entries) {{
+    if (entries[0].isIntersecting && !loading && page < total) {{
+      loading = true;
+      page++;
+      fetch('/page/' + page + '/')
+        .then(function(r) {{ return r.text(); }})
+        .then(function(html) {{
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+          const items = doc.querySelector('.post-list');
+          if (items) {{
+            while (items.firstChild) {{
+              list.appendChild(items.firstChild);
+            }}
+          }}
+          loading = false;
+        }})
+        .catch(function() {{ loading = false; }});
+    }}
+  }});
+  obs.observe(sentinel);
+}})();
+</script>"""
     body = f"""<section class="home-intro">
 <p>{intro}</p>
 <div class="icons">{social_html}</div>
 </section>
 <ul class="post-list">{items}</ul>
-{pager}"""
+{scroll}"""
     return render_shell(cfg, "", body, has_math=False, show_top=False)
 
 
@@ -209,42 +235,39 @@ def render_logs(cfg: SiteConfig, title: str, logs: list[ContentItem], page_no: i
         f'<article class="log-item"><h2>{html.escape(i.date)}</h2><div class="content log-content">{i.body_html}</div><button type="button" class="log-toggle" hidden>Read more</button></article>'
         for i in logs
     )
-    pager = ""
-    if total_pages > 1:
-        prev_link = "/logs/" if page_no <= 2 else f"/logs/page/{page_no-1}/"
-        next_link = f"/logs/page/{page_no+1}/"
-        prev_html = f'<a href="{prev_link}">Prev</a>' if page_no > 1 else "<span></span>"
-        next_html = f'<a href="{next_link}">Next</a>' if page_no < total_pages else "<span></span>"
-        pager = f'<div class="pager">{prev_html}{next_html}</div>'
-    body = f"""<section><h1>{html.escape(title)}</h1>{blocks}{pager}</section>
+    scroll = ""
+    if page_no == 1 and total_pages > 1:
+        scroll = """<div id="scroll-sentinel" style="height:1px"></div>
 <script>
-(() => {{
-  const maxLines = 12;
-  document.querySelectorAll(".log-item").forEach((item) => {{
-    const content = item.querySelector(".log-content");
-    const toggle = item.querySelector(".log-toggle");
-    if (!content || !toggle) return;
-    const style = window.getComputedStyle(content);
-    let lineHeight = Number.parseFloat(style.lineHeight);
-    if (!Number.isFinite(lineHeight)) {{
-      lineHeight = Number.parseFloat(style.fontSize) * 1.55;
-    }}
-    const collapsedHeight = Math.max(1, Math.round(lineHeight * maxLines));
-    content.style.setProperty("--log-collapsed-height", `${{collapsedHeight}}px`);
-    content.classList.add("is-collapsed");
-    if (content.scrollHeight <= collapsedHeight + 1) {{
-      content.classList.remove("is-collapsed");
-      toggle.remove();
-      return;
-    }}
-    toggle.hidden = false;
-    toggle.textContent = "Read more";
-    toggle.addEventListener("click", () => {{
-      const expanded = content.classList.toggle("is-collapsed");
-      toggle.textContent = expanded ? "Read more" : "Collapse";
-    }});
-  }});
-}})();
-</script>"""
+(function() {
+  let page = 1;
+  const total = %d;
+  const sentinel = document.getElementById('scroll-sentinel');
+  const section = document.querySelector('section');
+  let loading = false;
+  if (!sentinel || total <= 1) return;
+  const obs = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting && !loading && page < total) {
+      loading = true;
+      page++;
+      fetch('/logs/page/' + page + '/')
+        .then(function(r) { return r.text(); })
+        .then(function(html) {
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(html, 'text/html');
+          var items = doc.querySelectorAll('.log-item');
+          items.forEach(function(el) {
+            section.appendChild(el);
+          });
+          initLogToggles();
+          loading = false;
+        })
+        .catch(function() { loading = false; });
+    }
+  });
+  obs.observe(sentinel);
+})();
+</script>""" % total_pages
+    body = "<section><h1>%s</h1>%s</section>\n%s\n<script>\n(function() {\n  const maxLines = 12;\n  window.initLogToggles = function(container) {\n    (container || document).querySelectorAll(\".log-item\").forEach(function(item) {\n      const content = item.querySelector(\".log-content\");\n      const toggle = item.querySelector(\".log-toggle\");\n      if (!content || !toggle) return;\n      if (item.classList.contains(\"is-initialized\")) return;\n      item.classList.add(\"is-initialized\");\n      const style = window.getComputedStyle(content);\n      let lineHeight = Number.parseFloat(style.lineHeight);\n      if (!Number.isFinite(lineHeight)) {\n        lineHeight = Number.parseFloat(style.fontSize) * 1.55;\n      }\n      const collapsedHeight = Math.max(1, Math.round(lineHeight * maxLines));\n      content.style.setProperty(\"--log-collapsed-height\", collapsedHeight + \"px\");\n      content.classList.add(\"is-collapsed\");\n      if (content.scrollHeight <= collapsedHeight + 1) {\n        content.classList.remove(\"is-collapsed\");\n        toggle.remove();\n        return;\n      }\n      toggle.hidden = false;\n      toggle.textContent = \"Read more\";\n      toggle.addEventListener(\"click\", function() {\n        const expanded = content.classList.toggle(\"is-collapsed\");\n        toggle.textContent = expanded ? \"Read more\" : \"Collapse\";\n      });\n    });\n  };\n  initLogToggles();\n})();\n</script>""" % (html.escape(title), blocks, scroll)
     has_math = any(i.has_math for i in logs)
     return render_shell(cfg, title, body, has_math=has_math, show_top=True)

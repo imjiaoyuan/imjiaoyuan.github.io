@@ -422,7 +422,7 @@ h1, h2, h3 {
   right: 16px;
   bottom: 16px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 8px;
 }
 
