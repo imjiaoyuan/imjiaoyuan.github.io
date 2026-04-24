@@ -125,8 +125,6 @@ complete -W "dcim contacts" pull
 
 此前我使用的是 zram，二者对比如下：
 
-## zram vs zswap 简明对比
-
 | 维度 | zram | zswap |
 |------|------|-------|
 | 架构 | 压缩块设备，独立 swap 分区 | 内存管理集成层，位于磁盘 swap 之前 |
@@ -138,8 +136,8 @@ complete -W "dcim contacts" pull
 | OOM 行为 | 可能长时间假死（should_reclaim_retry 误判），OOM 难触发 | 渐进降级，压力大时部分页直写磁盘 |
 | cgroup 隔离 | 内存不计入 cgroup，破坏隔离 | 支持 per-cgroup 写回控制 |
 | SSD 磨损 | 无磁盘 swap 时反而增加 page cache 颠簸，可能增加 I/O | 有磁盘 swap 时减少 25% 写（如 Instagram 数据） |
-| 典型适用场景 | 无磁盘嵌入式设备、Android（+ lmkd）、Fedora 桌面（+ systemd-oomd，无磁盘 swap） | 绝大多数通用场景（服务器、桌面、笔记本，有 SSD/HDD） |
-| 内核维护趋势 | 上游逐步减少支持，计划用 zswap 替代 | 正扩展“无磁盘模式”，将覆盖 zram 用例 |
+| 适用场景 | 无磁盘嵌入式设备、Android（+ lmkd）、Fedora 桌面（+ systemd-oomd，无磁盘 swap） | 绝大多数通用场景（服务器、桌面、笔记本，有 SSD/HDD） |
+| 维护趋势 | 上游逐步减少支持，计划用 zswap 替代 | 正扩展“无磁盘模式”，将覆盖 zram 用例 |
 
 参考：[Debunking zswap and zram myths](https://chrisdown.name/2026/03/24/zswap-vs-zram-when-to-use-what.html)
 
