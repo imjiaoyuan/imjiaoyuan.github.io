@@ -163,8 +163,10 @@ h1, h2, h3 {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  padding: 8px 0;
+  padding: 4px 0;
   border-bottom: 1px solid var(--line);
+  content-visibility: auto;
+  contain-intrinsic-size: 28px;
 }
 
 .post-list a {
