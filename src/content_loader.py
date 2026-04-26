@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import binascii
 import datetime as dt
 import re
 from pathlib import Path
@@ -11,18 +10,29 @@ from models import ContentItem, SiteConfig
 
 MATH_RE = re.compile(r"\$\$.*?\$\$|\$[^$\n]+\$", re.DOTALL)
 
-BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+BASE62 = "0123456789abcdefghijklmnopqrstuvwxyz"
 
 RESERVED_SLUGS = frozenset({"assets", "logs", "readme", "page", "atom", "posts"})
 
 
+def _crc24(data: bytes) -> int:
+    crc = 0xB704CE
+    for b in data:
+        crc ^= b << 16
+        for _ in range(8):
+            crc <<= 1
+            if crc & 0x1000000:
+                crc ^= 0x1864CFB
+    return crc & 0xFFFFFF
+
+
 def _slug_hash(name: str) -> str:
-    crc = binascii.crc32(name.encode()) & 0xFFFFFFFF
+    val = _crc24(name.encode())
     result = []
-    while crc > 0:
-        result.append(BASE62[crc % 62])
-        crc //= 62
-    return "".join(reversed(result)).rjust(6, "0")
+    while val > 0:
+        result.append(BASE62[val % len(BASE62)])
+        val //= len(BASE62)
+    return "".join(reversed(result)).rjust(5, "0")
 
 
 def _parse_front_matter(text: str) -> tuple[dict, str]:

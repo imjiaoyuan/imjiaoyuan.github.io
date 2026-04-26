@@ -3,25 +3,35 @@ title: Vibe Coding 了一个博客框架
 date: 2026-04-24
 ---
 
-从 2022 年自己搭建博客至今，中间折腾了不少东西，框架换来换去，记录在这里 [博客再改版](https://jiaoyuan.org/16C7QR/) 但是没有一个让我自己最满意的。而为了写个博客去学习它的模板语法、配置方式，感觉很麻烦，一直都想自己写一个，知道最近才抽空用 copilot 写了一个基于 python 的框架，核心代码就几百行，不依赖任何外部库，自己控制所有逻辑，想咋样就咋样，出问题也知道去哪修。
+从 2022 年自己搭建博客至今，中间折腾了不少东西，框架换来换去，记录在这里 [博客再改版](/8ukmv/) 但是没有一个让我自己最满意的。而为了写个博客去学习它的模板语法、配置方式，感觉很麻烦，一直都想自己写一个，知道最近才抽空用 copilot 写了一个基于 python 的框架，核心代码就几百行，不依赖任何外部库，自己控制所有逻辑，想咋样就咋样，出问题也知道去哪修。
 
 这个博客框架有以下几个我比较喜欢的特性：
 
 **短链**
 
-`_slug_hash` 函数根据每个文章的文件夹名称，使用 CRC32 哈希计算然后通过 base62 输出短链，直接映射到主域名下面，比如 https://jiaoyuan.org/3WZw02/，既干净又便于分享，也不会产生冲突。
+`_slug_hash` 函数根据每个文章的文件夹名称，使用 CRC24 哈希并通过 base36 输出 5 位全小写短链，直接映射到主域名下面，比如 https://jiaoyuan.org/5xbok/，既干净又便于分享，也不会产生冲突。
 
 ```python
-BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+BASE62 = "0123456789abcdefghijklmnopqrstuvwxyz"
 RESERVED_SLUGS = frozenset({"assets", "logs", "readme", "page", "atom", "posts"})
 
+def _crc24(data: bytes) -> int:
+    crc = 0xB704CE
+    for b in data:
+        crc ^= b << 16
+        for _ in range(8):
+            crc <<= 1
+            if crc & 0x1000000:
+                crc ^= 0x1864CFB
+    return crc & 0xFFFFFF
+
 def _slug_hash(name: str) -> str:
-    crc = binascii.crc32(name.encode()) & 0xFFFFFFFF
+    val = _crc24(name.encode())
     result = []
-    while crc > 0:
-        result.append(BASE62[crc % 62])
-        crc //= 62
-    return "".join(reversed(result)).rjust(6, "0")
+    while val > 0:
+        result.append(BASE62[val % len(BASE62)])
+        val //= len(BASE62)
+    return "".join(reversed(result)).rjust(5, "0")
 ```
 
 `load_posts` 读取文章时自动计算短链，并且通过 `used` 集合做唯一性检查，撞了自动加后缀：
