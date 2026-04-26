@@ -15,6 +15,7 @@ _LIVE_RELOAD_SNIPPET = """
 (() => {
   const es = new EventSource("/__live_reload");
   es.onmessage = () => window.location.reload();
+  addEventListener("beforeunload", () => es.close());
 })();
 </script>
 """
