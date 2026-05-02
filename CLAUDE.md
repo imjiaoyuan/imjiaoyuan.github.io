@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Important Rules
+
+- **Never** stage, commit, or push changes automatically. Only do so when explicitly asked by the user.
+
 ## Common Development Commands
 
 This repository uses a custom static site generator called **jots**, implemented in Python. The main entry point is `run.py`.

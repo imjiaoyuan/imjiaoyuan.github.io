@@ -76,8 +76,22 @@ body {
   font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
 }
 
+.page-wrap {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-wrap > * {
+  width: 100%;
+}
+
+.page-wrap main {
+  flex: 1;
+}
+
 .top {
-  max-width: 900px;
+  max-width: 720px;
   margin: 0 auto;
   padding: 12px 16px;
   display: flex;
@@ -114,9 +128,9 @@ nav a:focus-visible {
 }
 
 main {
-  max-width: 900px;
+  max-width: 720px;
   margin: 0 auto;
-  padding: 14px 16px 40px;
+  padding: 14px 16px 16px;
 }
 
 h1, h2, h3 {
@@ -131,11 +145,18 @@ h1, h2, h3 {
 }
 
 .home-intro {
-  margin-bottom: 16px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
 }
 
 .home-intro p {
-  margin: 0 0 8px;
+  margin: 0;
+  color: var(--muted);
+}
+
+.home-posts {
+  margin-top: 10px;
 }
 
 .icons {
@@ -162,8 +183,9 @@ h1, h2, h3 {
 .post-list li {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
   gap: 12px;
-  padding: 4px 0;
+  padding: 6px 0;
   border-bottom: 1px solid var(--line);
   content-visibility: auto;
   contain-intrinsic-size: 28px;
@@ -172,12 +194,21 @@ h1, h2, h3 {
 .post-list a {
   color: var(--accent);
   text-decoration: none;
+  line-height: 1.45;
 }
 
 .post-list time {
   color: var(--muted);
   white-space: nowrap;
   font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .post-list li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
 }
 
 .log-item {
@@ -417,6 +448,15 @@ h1, h2, h3 {
 .comment-btn:focus-visible {
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+.site-footer {
+  max-width: 720px;
+  margin: 0 auto 10px;
+  padding: 2px 16px 0;
+  color: var(--muted);
+  font-size: 15px;
+  text-align: center;
 }
 
 .floating-tools {
