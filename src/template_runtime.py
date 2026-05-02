@@ -91,7 +91,7 @@ def render_shell(
 </div>
 <div class="floating-tools">
 {top_button}
-<button type="button" class="tool-btn" id="theme-toggle"></button>
+<button type="button" class="tool-btn" id="theme-toggle" aria-label="Toggle theme"></button>
 </div>
 <div id="email-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:999;align-items:center;justify-content:center" onclick="if(event.target===this)this.style.display='none'">
 <div style="background:var(--bg);padding:20px 28px;border-radius:8px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15)">

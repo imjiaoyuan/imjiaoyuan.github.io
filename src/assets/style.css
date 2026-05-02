@@ -155,25 +155,6 @@ h1, h2, h3 {
   color: var(--muted);
 }
 
-.home-posts {
-  margin-top: 10px;
-}
-
-.icons {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.icon {
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 4px 9px;
-  text-decoration: none;
-  color: var(--fg);
-  font-size: 13px;
-}
-
 .post-list {
   list-style: none;
   margin: 0;
