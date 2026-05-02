@@ -9,16 +9,13 @@ SITE = {
     "static_dir": "src/assets",
     "public_dir": "public",
     "menu": [
-        {"name": "LOGS", "url": "/logs"},
-        {"name": "README", "url": "/readme"},
+        {"name": "Readme", "url": "/readme"},
+        {"name": "Logs", "url": "/logs"},
+        {"name": "GitHub", "url": "https://github.com/imjiaoyuan"},
+        {"name": "RSS", "url": "/atom.xml"},
     ],
     "theme_options": {
         "comment_repo": "imjiaoyuan/imjiaoyuan.github.io",
-        "socials": [
-            {"name": "GitHub", "url": "https://github.com/imjiaoyuan"},
-            {"name": "Email", "url": "mailto:imjiaoyuan@gmail.com"},
-            {"name": "RSS", "url": "/atom.xml"},
-        ],
     },
     "server": {"host": "127.0.0.1", "port": 1313},
 }
