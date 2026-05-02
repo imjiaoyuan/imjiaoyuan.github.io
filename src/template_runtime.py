@@ -176,13 +176,7 @@ def render_page(cfg: SiteConfig, item: ContentItem) -> str:
 
 
 def render_home(cfg: SiteConfig, posts: list[ContentItem], page_no: int, total_pages: int) -> str:
-    theme_opts = cfg.theme_options or {}
     intro = html.escape(cfg.description)
-    socials = theme_opts.get("socials", [])
-    social_html = "".join(
-        f'<a class="icon" href="{html.escape(str(s.get("url", "#")))}">{html.escape(str(s.get("name", "")))}</a>'
-        for s in socials
-    )
     items = "".join(
         f'<li><a href="{p.rel_url}">{html.escape(p.title)}</a><time>{html.escape(p.date)}</time></li>'
         for p in posts
@@ -222,7 +216,6 @@ def render_home(cfg: SiteConfig, posts: list[ContentItem], page_no: int, total_p
 </script>"""
     body = f"""<section class="home-intro">
 <p>{intro}</p>
-<div class="icons">{social_html}</div>
 </section>
 <ul class="post-list">{items}</ul>
 {scroll}"""
