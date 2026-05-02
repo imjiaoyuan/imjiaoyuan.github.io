@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import html
 import json
+from datetime import datetime
 from urllib.parse import quote
 
 from models import ContentItem, SiteConfig
@@ -78,12 +79,16 @@ def render_shell(
     cfg: SiteConfig, page_title: str, main_html: str, has_math: bool, show_top: bool = False
 ) -> str:
     top_button = '<button type="button" class="tool-btn" id="to-top">Top</button>' if show_top else ""
+    footer = f'<footer class="site-footer">© 2022 - {datetime.now().year} JiaoYuan · Built with Python.</footer>'
     return f"""<!doctype html>
 <html lang="en" dir="auto">
 {_head(cfg, page_title, has_math)}
 <body>
+<div class="page-wrap">
 {_header(cfg)}
 <main>{main_html}</main>
+{footer}
+</div>
 <div class="floating-tools">
 {top_button}
 <button type="button" class="tool-btn" id="theme-toggle"></button>

@@ -1,7 +1,7 @@
 SITE = {
     "title": "JiaoYuan's blog",
     "domain": "https://jiaoyuan.org",
-    "description": "Fleeting thoughts come and go, but sometimes, they pause and stay here.",
+    "description": "Master's student in Bioinformatics at Sichuan University.",
     "icon": "/favicon.ico",
     "home_limit": 30,
     "log_limit": 15,
