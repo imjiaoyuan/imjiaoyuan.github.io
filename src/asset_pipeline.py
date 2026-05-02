@@ -36,21 +36,19 @@ def copy_static(cfg: SiteConfig) -> None:
             shutil.copy2(item, target)
 
 
-def copy_jots_assets(cfg: SiteConfig) -> None:
+def copy_jots_assets(cfg: SiteConfig, needs_math: bool = True) -> None:
     src = Path(__file__).resolve().parent / "assets"
     dst = cfg.public_dir / "assets" / "jots"
     if dst.exists():
         shutil.rmtree(dst)
     dst.mkdir(parents=True, exist_ok=True)
-    for name in ("style.css", "vendor"):
-        item = src / name
-        if not item.exists():
-            continue
-        target = dst / name
-        if item.is_dir():
-            shutil.copytree(item, target)
-        else:
-            shutil.copy2(item, target)
+    style = src / "style.css"
+    if style.exists():
+        shutil.copy2(style, dst / "style.css")
+    if needs_math:
+        vendor = src / "vendor"
+        if vendor.exists():
+            shutil.copytree(vendor, dst / "vendor")
 
 
 def copy_post_assets(cfg: SiteConfig, posts: list[ContentItem]) -> None:

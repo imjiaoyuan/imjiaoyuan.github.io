@@ -5,7 +5,7 @@ from pathlib import Path
 from urllib.parse import urljoin
 from xml.sax.saxutils import escape as xml_escape
 
-from asset_pipeline import copy_jots_assets, copy_post_assets, copy_static, prepare_public_dir
+from asset_pipeline import copy_jots_assets, copy_post_assets, copy_static
 from config_loader import load_site_config
 from content_loader import load_logs, load_pages, load_posts
 from markdown_engine import MarkdownEngine
@@ -15,7 +15,13 @@ from template_runtime import render_home, render_logs, render_page, render_post
 def _write(public_dir: Path, rel_out_dir: str, html_text: str) -> None:
     out = public_dir / rel_out_dir
     out.mkdir(parents=True, exist_ok=True)
-    (out / "index.html").write_text(html_text, encoding="utf-8")
+    out_path = out / "index.html"
+    try:
+        if out_path.read_text(encoding="utf-8") == html_text:
+            return
+    except (FileNotFoundError, OSError):
+        pass
+    out_path.write_text(html_text, encoding="utf-8")
 
 
 def _to_atom_date(raw: str) -> str:
@@ -69,9 +75,10 @@ def build(root: Path) -> None:
     logs_index, logs = load_logs(cfg, engine)
     pages = load_pages(cfg, engine)
 
-    prepare_public_dir(cfg)
+    cfg.public_dir.mkdir(parents=True, exist_ok=True)
     copy_static(cfg)
-    copy_jots_assets(cfg)
+    needs_math = any(p.has_math for p in posts) or any(l.has_math for l in logs) or any(p.has_math for p in pages.values())
+    copy_jots_assets(cfg, needs_math)
     copy_post_assets(cfg, posts)
 
     for p in posts:
