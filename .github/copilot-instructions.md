@@ -1,5 +1,9 @@
 # Copilot Instructions for `imjiaoyuan.github.io`
 
+## Important Rules
+
+- **Never** stage, commit, or push changes automatically. Only do so when explicitly asked by the user.
+
 ## Build, test, and lint
 
 This repository is a Hugo site (theme: PaperMod). The production build command used in CI is:
