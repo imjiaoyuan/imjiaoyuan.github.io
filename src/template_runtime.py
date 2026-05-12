@@ -14,23 +14,23 @@ def _head(cfg: SiteConfig, page_title: str, has_math: bool) -> str:
     math_block = ""
     if has_math:
         math_block = """
-<link rel="preload" href="/assets/jots/vendor/katex/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/jots/vendor/katex/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/jots/vendor/katex/fonts/KaTeX_Main-Bold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/jots/vendor/katex/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/jots/vendor/katex/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/assets/jots/vendor/katex/fonts/KaTeX_Size3-Regular.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/jots/vendor/katex/katex.min.css">
+<link rel="preload" href="/assets/site/vendor/katex/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/site/vendor/katex/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/site/vendor/katex/fonts/KaTeX_Main-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/site/vendor/katex/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/site/vendor/katex/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/site/vendor/katex/fonts/KaTeX_Size3-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/site/vendor/katex/katex.min.css">
 <style>
-@font-face{font-family:KaTeX_Main;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/jots/vendor/katex/fonts/KaTeX_Main-Regular.woff2") format("woff2")}
-@font-face{font-family:KaTeX_Main;font-style:normal;font-weight:700;font-display:swap;src:url("/assets/jots/vendor/katex/fonts/KaTeX_Main-Bold.woff2") format("woff2")}
-@font-face{font-family:KaTeX_Math;font-style:italic;font-weight:400;font-display:swap;src:url("/assets/jots/vendor/katex/fonts/KaTeX_Math-Italic.woff2") format("woff2")}
-@font-face{font-family:KaTeX_Size1;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/jots/vendor/katex/fonts/KaTeX_Size1-Regular.woff2") format("woff2")}
-@font-face{font-family:KaTeX_Size2;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/jots/vendor/katex/fonts/KaTeX_Size2-Regular.woff2") format("woff2")}
-@font-face{font-family:KaTeX_Size3;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/jots/vendor/katex/fonts/KaTeX_Size3-Regular.woff2") format("woff2")}
+@font-face{font-family:KaTeX_Main;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/site/vendor/katex/fonts/KaTeX_Main-Regular.woff2") format("woff2")}
+@font-face{font-family:KaTeX_Main;font-style:normal;font-weight:700;font-display:swap;src:url("/assets/site/vendor/katex/fonts/KaTeX_Main-Bold.woff2") format("woff2")}
+@font-face{font-family:KaTeX_Math;font-style:italic;font-weight:400;font-display:swap;src:url("/assets/site/vendor/katex/fonts/KaTeX_Math-Italic.woff2") format("woff2")}
+@font-face{font-family:KaTeX_Size1;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/site/vendor/katex/fonts/KaTeX_Size1-Regular.woff2") format("woff2")}
+@font-face{font-family:KaTeX_Size2;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/site/vendor/katex/fonts/KaTeX_Size2-Regular.woff2") format("woff2")}
+@font-face{font-family:KaTeX_Size3;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/site/vendor/katex/fonts/KaTeX_Size3-Regular.woff2") format("woff2")}
 </style>
-<script defer src="/assets/jots/vendor/katex/katex.min.js"></script>
-<script defer src="/assets/jots/vendor/katex/auto-render.min.js"></script>
+<script defer src="/assets/site/vendor/katex/katex.min.js"></script>
+<script defer src="/assets/site/vendor/katex/auto-render.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded",()=>{
   if(!window.renderMathInElement)return;
@@ -55,11 +55,11 @@ document.addEventListener("DOMContentLoaded",()=>{
 <link rel="alternate" type="application/atom+xml" title="{html.escape(cfg.title)} Atom Feed" href="{html.escape(atom_url)}">
 <script>
 (()=>{{
-  const saved=localStorage.getItem("jots-theme");
+  const saved=localStorage.getItem("site-theme");
   if(saved==="light"||saved==="dark")document.documentElement.setAttribute("data-theme",saved);
 }})();
 </script>
-<link rel="stylesheet" href="/assets/jots/style.css">
+<link rel="stylesheet" href="/assets/site/style.css">
 {math_block}
 </head>"""
 
@@ -105,7 +105,7 @@ def render_shell(
   const root=document.documentElement;
   const topBtn=document.getElementById("to-top");
   const themeBtn=document.getElementById("theme-toggle");
-  const notifyThemeChange=(theme)=>window.dispatchEvent(new CustomEvent("jots:theme-change",{{detail:{{theme}}}}));
+  const notifyThemeChange=(theme)=>window.dispatchEvent(new CustomEvent("site:theme-change",{{detail:{{theme}}}}));
   const currentTheme=()=>{{
     const saved=root.getAttribute("data-theme");
     if(saved==="light"||saved==="dark")return saved;
@@ -121,7 +121,7 @@ def render_shell(
     const current=currentTheme();
     const next=current==="dark"?"light":"dark";
     root.setAttribute("data-theme",next);
-    localStorage.setItem("jots-theme",next);
+    localStorage.setItem("site-theme",next);
     notifyThemeChange(next);
     syncThemeLabel();
   }});
