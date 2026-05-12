@@ -32,7 +32,7 @@ def _create_post(root: Path, name: str) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="jots static site generator")
+    parser = argparse.ArgumentParser(description="static site generator")
     parser.add_argument("-d", "--build", action="store_true", help="build static site to public/")
     parser.add_argument("-s", "--serve", action="store_true", help="build then serve public/ locally")
     parser.add_argument("-n", "--new", metavar="NAME", help="create a new post folder at content/posts/NAME/")
