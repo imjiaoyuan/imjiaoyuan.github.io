@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Common Development Commands
 
-This repository uses a custom static site generator called **jots**, implemented in Python. The main entry point is `run.py`.
+This repository uses a custom static site generator implemented in Python. The main entry point is `run.py`.
 
 ### Building the site
 ```bash
@@ -34,7 +34,7 @@ python run.py -h
 ## High-Level Architecture
 
 ### Overview
-- **jots** is a custom static site generator written in Python (no external dependencies).
+- The site generator is written in Python (no external dependencies).
 - Content is authored in Markdown with YAML front matter, stored in `content/`.
 - The generator reads configuration from `src/config.py` (hardcoded Python dict).
 - Output is static HTML written to `public/`.
@@ -48,7 +48,7 @@ python run.py -h
 1. Load site configuration (`src/config.py`).
 2. Parse Markdown content (`src/content_loader.py`, `src/markdown_engine.py`).
 3. Copy static assets (`src/asset_pipeline.py`):
-   - `src/assets/` → `public/assets/jots/` (theme CSS, favicon, KaTeX vendor files).
+   - `src/assets/` → `public/assets/site/` (theme CSS, favicon, KaTeX vendor files).
    - Post-specific `assets/` folders are copied to the output.
 4. Render HTML using inline templates (`src/template_runtime.py`):
    - Home page (paginated post list).
@@ -80,11 +80,11 @@ python run.py -h
 - **Comments**: Giscus integration is configured in `src/config.py` under `theme_options.giscus`.
 
 ### Deployment
-- GitHub Actions workflow (`.github/workflows/jots.yml`) builds the site with `python run.py -d` and deploys the `public/` folder to GitHub Pages.
+- GitHub Actions workflow (`.github/workflows/deploy.yml`) builds the site with `python run.py -d` and deploys the `public/` folder to GitHub Pages.
 - The site is served from the root of `imjiaoyuan.github.io`.
 
 ## Notes
-- The `.github/copilot-instructions.md` file is outdated (describes a Hugo‑based setup). Ignore its content; the current stack is the custom jots generator.
+- The `.github/copilot-instructions.md` file is outdated (describes a Hugo‑based setup). Ignore its content.
 - There are no external Python dependencies; the generator uses only the standard library.
-- The CI uses Python 3.12 (see `.github/workflows/jots.yml`). The code should be compatible with Python 3.7+ (uses `from __future__ import annotations`).
+- The CI uses Python 3.12 (see `.github/workflows/deploy.yml`). The code should be compatible with Python 3.7+ (uses `from __future__ import annotations`).
 - No test suite or linter is currently configured.
