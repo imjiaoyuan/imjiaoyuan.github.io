@@ -11,7 +11,7 @@ def load_site_config(root: Path) -> SiteConfig:
     if not config_path.exists():
         raise FileNotFoundError(f"src/config.py not found in {root}")
 
-    spec = importlib.util.spec_from_file_location("jots_site_config", config_path)
+    spec = importlib.util.spec_from_file_location("site_config", config_path)
     if spec is None or spec.loader is None:
         raise RuntimeError("failed to load src/config.py")
 

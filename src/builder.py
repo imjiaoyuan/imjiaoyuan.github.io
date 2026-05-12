@@ -5,7 +5,7 @@ from pathlib import Path
 from urllib.parse import urljoin
 from xml.sax.saxutils import escape as xml_escape
 
-from asset_pipeline import copy_jots_assets, copy_post_assets, copy_static
+from asset_pipeline import copy_site_assets, copy_post_assets, copy_static
 from config_loader import load_site_config
 from content_loader import load_logs, load_pages, load_posts
 from markdown_engine import MarkdownEngine
@@ -78,7 +78,7 @@ def build(root: Path) -> None:
     cfg.public_dir.mkdir(parents=True, exist_ok=True)
     copy_static(cfg)
     needs_math = any(p.has_math for p in posts) or any(l.has_math for l in logs) or any(p.has_math for p in pages.values())
-    copy_jots_assets(cfg, needs_math)
+    copy_site_assets(cfg, needs_math)
     copy_post_assets(cfg, posts)
 
     for p in posts:

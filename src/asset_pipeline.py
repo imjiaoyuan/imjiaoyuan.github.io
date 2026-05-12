@@ -36,9 +36,9 @@ def copy_static(cfg: SiteConfig) -> None:
             shutil.copy2(item, target)
 
 
-def copy_jots_assets(cfg: SiteConfig, needs_math: bool = True) -> None:
+def copy_site_assets(cfg: SiteConfig, needs_math: bool = True) -> None:
     src = Path(__file__).resolve().parent / "assets"
-    dst = cfg.public_dir / "assets" / "jots"
+    dst = cfg.public_dir / "assets" / "site"
     if dst.exists():
         shutil.rmtree(dst)
     dst.mkdir(parents=True, exist_ok=True)

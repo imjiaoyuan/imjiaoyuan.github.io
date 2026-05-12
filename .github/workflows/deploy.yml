@@ -1,4 +1,4 @@
-name: Build and Deploy Jots site to Pages
+name: Build and Deploy site to Pages
 
 on:
   push:
