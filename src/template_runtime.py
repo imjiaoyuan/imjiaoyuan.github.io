@@ -33,16 +33,16 @@ def _head(cfg: SiteConfig, page_title: str, has_math: bool) -> str:
 <script defer src="/assets/site/vendor/katex/auto-render.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded",()=>{
-  if(!window.renderMathInElement)return;
-  window.renderMathInElement(document.body,{
-    delimiters:[
-      {left:"$$",right:"$$",display:true},
-      {left:"\\\\[",right:"\\\\]",display:true},
-      {left:"$",right:"$",display:false},
-      {left:"\\\\(",right:"\\\\)",display:false}
-    ],
-    throwOnError:false
-  });
+    if(!window.renderMathInElement)return;
+    window.renderMathInElement(document.body,{
+        delimiters:[
+            {left:"$$",right:"$$",display:true},
+            {left:"\\\\[",right:"\\\\]",display:true},
+            {left:"$",right:"$",display:false},
+            {left:"\\\\(",right:"\\\\)",display:false}
+        ],
+        throwOnError:false
+    });
 });
 </script>
 """
@@ -55,8 +55,8 @@ document.addEventListener("DOMContentLoaded",()=>{
 <link rel="alternate" type="application/atom+xml" title="{html.escape(cfg.title)} Atom Feed" href="{html.escape(atom_url)}">
 <script>
 (()=>{{
-  const saved=localStorage.getItem("site-theme");
-  if(saved==="light"||saved==="dark")document.documentElement.setAttribute("data-theme",saved);
+    const saved=localStorage.getItem("site-theme");
+    if(saved==="light"||saved==="dark")document.documentElement.setAttribute("data-theme",saved);
 }})();
 </script>
 <link rel="stylesheet" href="/assets/site/style.css">
@@ -102,36 +102,36 @@ def render_shell(
 </div>
 <script>
 (()=>{{
-  const root=document.documentElement;
-  const topBtn=document.getElementById("to-top");
-  const themeBtn=document.getElementById("theme-toggle");
-  const notifyThemeChange=(theme)=>window.dispatchEvent(new CustomEvent("site:theme-change",{{detail:{{theme}}}}));
-  const currentTheme=()=>{{
-    const saved=root.getAttribute("data-theme");
-    if(saved==="light"||saved==="dark")return saved;
-    return window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
-  }};
-  const syncThemeLabel=()=>{{
-    if(!themeBtn)return;
-    const current=currentTheme();
-    themeBtn.textContent=current==="dark"?"Light":"Dark";
-  }};
-  topBtn?.addEventListener("click",()=>window.scrollTo({{top:0,behavior:"smooth"}}));
-  themeBtn?.addEventListener("click",()=>{{
-    const current=currentTheme();
-    const next=current==="dark"?"light":"dark";
-    root.setAttribute("data-theme",next);
-    localStorage.setItem("site-theme",next);
-    notifyThemeChange(next);
+    const root=document.documentElement;
+    const topBtn=document.getElementById("to-top");
+    const themeBtn=document.getElementById("theme-toggle");
+    const notifyThemeChange=(theme)=>window.dispatchEvent(new CustomEvent("site:theme-change",{{detail:{{theme}}}}));
+    const currentTheme=()=>{{
+        const saved=root.getAttribute("data-theme");
+        if(saved==="light"||saved==="dark")return saved;
+        return window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+    }};
+    const syncThemeLabel=()=>{{
+        if(!themeBtn)return;
+        const current=currentTheme();
+        themeBtn.textContent=current==="dark"?"Light":"Dark";
+    }};
+    topBtn?.addEventListener("click",()=>window.scrollTo({{top:0,behavior:"smooth"}}));
+    themeBtn?.addEventListener("click",()=>{{
+        const current=currentTheme();
+        const next=current==="dark"?"light":"dark";
+        root.setAttribute("data-theme",next);
+        localStorage.setItem("site-theme",next);
+        notifyThemeChange(next);
+        syncThemeLabel();
+    }});
+    window.matchMedia?.("(prefers-color-scheme: dark)")?.addEventListener?.("change",()=>{{
+        const saved=root.getAttribute("data-theme");
+        if(saved==="light"||saved==="dark")return;
+        notifyThemeChange(currentTheme());
+    }});
     syncThemeLabel();
-  }});
-  window.matchMedia?.("(prefers-color-scheme: dark)")?.addEventListener?.("change",()=>{{
-    const saved=root.getAttribute("data-theme");
-    if(saved==="light"||saved==="dark")return;
-    notifyThemeChange(currentTheme());
-  }});
-  syncThemeLabel();
-  document.querySelector('a[href^="mailto"]')?.addEventListener('click',function(e){{e.preventDefault();document.getElementById('email-modal').style.display='flex'}});
+    document.querySelector('a[href^="mailto"]')?.addEventListener('click',function(e){{e.preventDefault();document.getElementById('email-modal').style.display='flex'}});
 }})();
 </script></body>
 </html>"""
@@ -146,21 +146,21 @@ def render_post(cfg: SiteConfig, item: ContentItem) -> str:
 </section>
 <script>
 (function() {{
-  var title = {js_title};
-  var btn = document.querySelector('.comment-btn');
-  if (!btn) return;
-  var q = encodeURIComponent(title) + '+in:title+repo:{repo}+is:issue';
-  fetch('https://api.github.com/search/issues?q=' + q, {{
-    headers: {{'Accept': 'application/vnd.github.v3+json'}}
-  }})
-    .then(function(r) {{ return r.json(); }})
-    .then(function(data) {{
-      if (data.total_count > 0) {{
-        btn.href = data.items[0].html_url;
-        btn.textContent = 'Go to GitHub issues to discuss with me';
-      }}
+    var title = {js_title};
+    var btn = document.querySelector('.comment-btn');
+    if (!btn) return;
+    var q = encodeURIComponent(title) + '+in:title+repo:{repo}+is:issue';
+    fetch('https://api.github.com/search/issues?q=' + q, {{
+        headers: {{'Accept': 'application/vnd.github.v3+json'}}
     }})
-    .catch(function() {{}});
+        .then(function(r) {{ return r.json(); }})
+        .then(function(data) {{
+            if (data.total_count > 0) {{
+                btn.href = data.items[0].html_url;
+                btn.textContent = 'Go to GitHub issues to discuss with me';
+            }}
+        }})
+        .catch(function() {{}});
 }})();
 </script>"""
     body = f"""<article class="single">
@@ -191,32 +191,32 @@ def render_home(cfg: SiteConfig, posts: list[ContentItem], page_no: int, total_p
         scroll = f"""<div id="scroll-sentinel" style="height:1px"></div>
 <script>
 (function() {{
-  let page = 1;
-  const total = {total_pages};
-  const sentinel = document.getElementById('scroll-sentinel');
-  const list = document.querySelector('.post-list');
-  let loading = false;
-  if (!sentinel || total <= 1) return;
-  const obs = new IntersectionObserver(function(entries) {{
-    if (entries[0].isIntersecting && !loading && page < total) {{
-      loading = true;
-      page++;
-      fetch('/page/' + page + '/')
-        .then(function(r) {{ return r.text(); }})
-        .then(function(html) {{
-          const doc = new DOMParser().parseFromString(html, 'text/html');
-          const items = doc.querySelector('.post-list');
-          if (items) {{
-            while (items.firstChild) {{
-              list.appendChild(items.firstChild);
-            }}
-          }}
-          loading = false;
-        }})
-        .catch(function() {{ loading = false; }});
-    }}
-  }});
-  obs.observe(sentinel);
+    let page = 1;
+    const total = {total_pages};
+    const sentinel = document.getElementById('scroll-sentinel');
+    const list = document.querySelector('.post-list');
+    let loading = false;
+    if (!sentinel || total <= 1) return;
+    const obs = new IntersectionObserver(function(entries) {{
+        if (entries[0].isIntersecting && !loading && page < total) {{
+            loading = true;
+            page++;
+            fetch('/page/' + page + '/')
+                .then(function(r) {{ return r.text(); }})
+                .then(function(html) {{
+                    const doc = new DOMParser().parseFromString(html, 'text/html');
+                    const items = doc.querySelector('.post-list');
+                    if (items) {{
+                        while (items.firstChild) {{
+                            list.appendChild(items.firstChild);
+                        }}
+                    }}
+                    loading = false;
+                }})
+                .catch(function() {{ loading = false; }});
+        }}
+    }});
+    obs.observe(sentinel);
 }})();
 </script>"""
     body = f"""<section class="home-intro">
@@ -237,34 +237,34 @@ def render_logs(cfg: SiteConfig, title: str, logs: list[ContentItem], page_no: i
         scroll = """<div id="scroll-sentinel" style="height:1px"></div>
 <script>
 (function() {
-  let page = 1;
-  const total = %d;
-  const sentinel = document.getElementById('scroll-sentinel');
-  const section = document.querySelector('section');
-  let loading = false;
-  if (!sentinel || total <= 1) return;
-  const obs = new IntersectionObserver(function(entries) {
-    if (entries[0].isIntersecting && !loading && page < total) {
-      loading = true;
-      page++;
-      fetch('/logs/page/' + page + '/')
-        .then(function(r) { return r.text(); })
-        .then(function(html) {
-          var parser = new DOMParser();
-          var doc = parser.parseFromString(html, 'text/html');
-          var items = doc.querySelectorAll('.log-item');
-          items.forEach(function(el) {
-            section.appendChild(el);
-          });
-          initLogToggles();
-          loading = false;
-        })
-        .catch(function() { loading = false; });
-    }
-  });
-  obs.observe(sentinel);
+    let page = 1;
+    const total = %d;
+    const sentinel = document.getElementById('scroll-sentinel');
+    const section = document.querySelector('section');
+    let loading = false;
+    if (!sentinel || total <= 1) return;
+    const obs = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting && !loading && page < total) {
+            loading = true;
+            page++;
+            fetch('/logs/page/' + page + '/')
+                .then(function(r) { return r.text(); })
+                .then(function(html) {
+                    var parser = new DOMParser();
+                    var doc = parser.parseFromString(html, 'text/html');
+                    var items = doc.querySelectorAll('.log-item');
+                    items.forEach(function(el) {
+                        section.appendChild(el);
+                    });
+                    initLogToggles();
+                    loading = false;
+                })
+                .catch(function() { loading = false; });
+        }
+    });
+    obs.observe(sentinel);
 })();
 </script>""" % total_pages
-    body = "<section><h1>%s</h1>%s</section>\n%s\n<script>\n(function() {\n  const maxLines = 12;\n  window.initLogToggles = function(container) {\n    (container || document).querySelectorAll(\".log-item\").forEach(function(item) {\n      const content = item.querySelector(\".log-content\");\n      const toggle = item.querySelector(\".log-toggle\");\n      if (!content || !toggle) return;\n      if (item.classList.contains(\"is-initialized\")) return;\n      item.classList.add(\"is-initialized\");\n      const style = window.getComputedStyle(content);\n      let lineHeight = Number.parseFloat(style.lineHeight);\n      if (!Number.isFinite(lineHeight)) {\n        lineHeight = Number.parseFloat(style.fontSize) * 1.55;\n      }\n      const collapsedHeight = Math.max(1, Math.round(lineHeight * maxLines));\n      content.style.setProperty(\"--log-collapsed-height\", collapsedHeight + \"px\");\n      content.classList.add(\"is-collapsed\");\n      if (content.scrollHeight <= collapsedHeight + 1) {\n        content.classList.remove(\"is-collapsed\");\n        toggle.remove();\n        return;\n      }\n      toggle.hidden = false;\n      toggle.textContent = \"Read more\";\n      toggle.addEventListener(\"click\", function() {\n        const expanded = content.classList.toggle(\"is-collapsed\");\n        toggle.textContent = expanded ? \"Read more\" : \"Collapse\";\n      });\n    });\n  };\n  initLogToggles();\n})();\n</script>""" % (html.escape(title), blocks, scroll)
+    body = "<section><h1>%s</h1>%s</section>\n%s\n<script>\n(function() {\n    const maxLines = 12;\n    window.initLogToggles = function(container) {\n        (container || document).querySelectorAll(\".log-item\").forEach(function(item) {\n            const content = item.querySelector(\".log-content\");\n            const toggle = item.querySelector(\".log-toggle\");\n            if (!content || !toggle) return;\n            if (item.classList.contains(\"is-initialized\")) return;\n            item.classList.add(\"is-initialized\");\n            const style = window.getComputedStyle(content);\n            let lineHeight = Number.parseFloat(style.lineHeight);\n            if (!Number.isFinite(lineHeight)) {\n                lineHeight = Number.parseFloat(style.fontSize) * 1.55;\n            }\n            const collapsedHeight = Math.max(1, Math.round(lineHeight * maxLines));\n            content.style.setProperty(\"--log-collapsed-height\", collapsedHeight + \"px\");\n            content.classList.add(\"is-collapsed\");\n            if (content.scrollHeight <= collapsedHeight + 1) {\n                content.classList.remove(\"is-collapsed\");\n                toggle.remove();\n                return;\n            }\n            toggle.hidden = false;\n            toggle.textContent = \"Read more\";\n            toggle.addEventListener(\"click\", function() {\n                const expanded = content.classList.toggle(\"is-collapsed\");\n                toggle.textContent = expanded ? \"Read more\" : \"Collapse\";\n            });\n        });\n    };\n    initLogToggles();\n})();\n</script>""" % (html.escape(title), blocks, scroll)
     has_math = any(i.has_math for i in logs)
     return render_shell(cfg, title, body, has_math=has_math, show_top=True)
