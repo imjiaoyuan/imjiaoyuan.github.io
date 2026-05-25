@@ -93,12 +93,20 @@ def _parse_scalar(val: str):
 def _safe_date(date_str: str) -> dt.date:
     try:
         return dt.date.fromisoformat(str(date_str)[:10])
-    except Exception:
+    except (ValueError, TypeError):
         return dt.date(1970, 1, 1)
 
 
 def _load_markdown_file(path: Path, rel_url: str, out_dir: str, is_log: bool, engine: MarkdownEngine) -> ContentItem:
-    raw = path.read_text(encoding="utf-8")
+    try:
+        raw = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError as e:
+        print(f"Warning: Failed to decode {path} as UTF-8: {e}. Trying with error handling.")
+        raw = path.read_text(encoding="utf-8", errors="replace")
+    except (FileNotFoundError, PermissionError) as e:
+        print(f"Error: Cannot read file {path}: {e}")
+        raise
+
     meta, body = _parse_front_matter(raw)
     title = str(meta.get("title", path.stem))
     fallback_date = path.stem if is_log else ""
