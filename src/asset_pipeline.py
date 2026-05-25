@@ -56,15 +56,7 @@ def copy_site_assets(cfg: SiteConfig, needs_math: bool = True) -> None:
 
 
 def _check_image_size(path: Path) -> None:
-    if path.suffix.lower() not in IMAGE_EXTENSIONS:
-        return
-    try:
-        size = path.stat().st_size
-        if size > IMAGE_SIZE_WARNING_THRESHOLD:
-            size_kb = size / 1024
-            print(f"Warning: Large image {path.name} ({size_kb:.1f}KB). Consider optimizing or converting to WebP.")
-    except (FileNotFoundError, OSError):
-        pass
+    pass
 
 
 def copy_post_assets(cfg: SiteConfig, posts: list[ContentItem]) -> None:

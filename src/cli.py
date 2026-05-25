@@ -50,7 +50,7 @@ def _create_post(root: Path, name: str) -> None:
             f"---\n\n",
             encoding="utf-8",
         )
-        print(f"✓ Created {post_file}")
+        print(f"Created {post_file}")
         print(f"  Edit the file and add your content, then run: python run.py -s")
     except (PermissionError, OSError) as e:
         print(f"Error: Failed to create post: {e}", file=sys.stderr)
@@ -79,24 +79,24 @@ def main() -> None:
 
     try:
         build(root)
-        print("✓ Build completed successfully")
+        print("Build completed successfully")
     except FileNotFoundError as e:
-        print(f"\n✗ Build failed: File not found", file=sys.stderr)
+        print(f"\nBuild failed: File not found", file=sys.stderr)
         print(f"  {e}", file=sys.stderr)
         print(f"\nSuggestion: Check that all content files exist and paths are correct.", file=sys.stderr)
         sys.exit(1)
     except PermissionError as e:
-        print(f"\n✗ Build failed: Permission denied", file=sys.stderr)
+        print(f"\nBuild failed: Permission denied", file=sys.stderr)
         print(f"  {e}", file=sys.stderr)
         print(f"\nSuggestion: Check file permissions or try running with appropriate privileges.", file=sys.stderr)
         sys.exit(1)
     except UnicodeDecodeError as e:
-        print(f"\n✗ Build failed: Encoding error", file=sys.stderr)
+        print(f"\nBuild failed: Encoding error", file=sys.stderr)
         print(f"  {e}", file=sys.stderr)
         print(f"\nSuggestion: Ensure all content files are saved as UTF-8.", file=sys.stderr)
         sys.exit(1)
     except Exception as e:
-        print(f"\n✗ Build failed: {type(e).__name__}", file=sys.stderr)
+        print(f"\nBuild failed: {type(e).__name__}", file=sys.stderr)
         print(f"  {e}", file=sys.stderr)
         print(f"\nSuggestion: Check the error message above for details.", file=sys.stderr)
         print(f"  - Verify front matter syntax in your markdown files", file=sys.stderr)
@@ -111,8 +111,8 @@ def main() -> None:
             port = args.port or int(cfg.server.get("port", 1313))
             serve(cfg.public_dir, host, port, root)
         except KeyboardInterrupt:
-            print("\n✓ Server stopped")
+            print("\nServer stopped")
         except Exception as e:
-            print(f"\n✗ Server failed: {e}", file=sys.stderr)
+            print(f"\nServer failed: {e}", file=sys.stderr)
             print(f"Suggestion: Check that the port is not already in use.", file=sys.stderr)
             sys.exit(1)
