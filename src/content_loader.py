@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import datetime as dt
 import re
 from pathlib import Path
 
+from date_utils import parse_date
 from markdown_engine import MarkdownEngine
 from models import ContentItem, SiteConfig
 
@@ -155,7 +155,7 @@ def load_posts(cfg: SiteConfig, engine: MarkdownEngine) -> list[ContentItem]:
         if item.draft:
             continue
         items.append(item)
-    items.sort(key=lambda x: _safe_date(x.date), reverse=True)
+    items.sort(key=lambda x: parse_date(x.date), reverse=True)
     return items
 
 
