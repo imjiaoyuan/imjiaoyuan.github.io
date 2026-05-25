@@ -6,6 +6,10 @@ from pathlib import Path
 from models import ContentItem, SiteConfig
 
 
+IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"}
+IMAGE_SIZE_WARNING_THRESHOLD = 500 * 1024
+
+
 def _copy_dir(src: Path, dst: Path) -> None:
     if not src.exists():
         return
@@ -51,6 +55,18 @@ def copy_site_assets(cfg: SiteConfig, needs_math: bool = True) -> None:
             shutil.copytree(vendor, dst / "vendor")
 
 
+def _check_image_size(path: Path) -> None:
+    if path.suffix.lower() not in IMAGE_EXTENSIONS:
+        return
+    try:
+        size = path.stat().st_size
+        if size > IMAGE_SIZE_WARNING_THRESHOLD:
+            size_kb = size / 1024
+            print(f"Warning: Large image {path.name} ({size_kb:.1f}KB). Consider optimizing or converting to WebP.")
+    except (FileNotFoundError, OSError):
+        pass
+
+
 def copy_post_assets(cfg: SiteConfig, posts: list[ContentItem]) -> None:
     for p in posts:
         post_dir = p.source.parent
@@ -63,10 +79,17 @@ def copy_post_assets(cfg: SiteConfig, posts: list[ContentItem]) -> None:
                 _copy_dir(item, target)
             else:
                 target.parent.mkdir(parents=True, exist_ok=True)
+                _check_image_size(item)
                 shutil.copy2(item, target)
 
         asset_src = p.source.parent / "assets"
         if not asset_src.exists():
             continue
         target = cfg.public_dir / p.out_dir / "assets"
+
+        if asset_src.is_dir():
+            for img in asset_src.iterdir():
+                if img.is_file():
+                    _check_image_size(img)
+
         _copy_dir(asset_src, target)

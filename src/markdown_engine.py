@@ -256,9 +256,18 @@ class MarkdownEngine:
 
     def _inline(self, text: str) -> str:
         s = html.escape(text)
-        s = re.sub(r"!\[([^\]]*)\]\(([^)]+)\)", r'<img alt="\1" src="\2" loading="lazy" decoding="async">', s)
-        s = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', s)
-        s = re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
-        s = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)
-        s = re.sub(r"\*([^*]+)\*", r"<em>\1</em>", s)
+        def replace_image(match):
+            alt = match.group(1)
+            src_and_title = match.group(2)
+            parts = src_and_title.split('"', 1)
+            src = parts[0].strip()
+            title_attr = f' title="{parts[1].rstrip('"')}"' if len(parts) > 1 else ''
+            img_attrs = f'alt="{alt}" src="{src}" loading="lazy" decoding="async"{title_attr}'
+            return f'<img {img_attrs}>'
+
+        s = re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', replace_image, s)
+        s = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', s)
+        s = re.sub(r'`([^`]+)`', r'<code>\1</code>', s)
+        s = re.sub(r'\*\*([^*]+)\*\*', r'<strong>\1</strong>', s)
+        s = re.sub(r'\*([^*]+)\*', r'<em>\1</em>', s)
         return s
