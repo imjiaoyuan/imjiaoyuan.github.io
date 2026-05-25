@@ -10,13 +10,6 @@ from config_loader import load_site_config
 from server import serve
 
 
-class BuildError(Exception):
-    def __init__(self, message: str, suggestion: str = ""):
-        self.message = message
-        self.suggestion = suggestion
-        super().__init__(message)
-
-
 def _create_post(root: Path, name: str) -> None:
     try:
         cfg = load_site_config(root)

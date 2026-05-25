@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import html
 import json
+import re
 from datetime import datetime
 from urllib.parse import quote
 
@@ -14,7 +15,6 @@ def _head(cfg: SiteConfig, page_title: str, has_math: bool, description: str = "
     page_desc = html.escape(description) if description else html.escape(cfg.description)
     page_url = f"{cfg.domain.rstrip('/')}{url}" if url else cfg.domain.rstrip('/')
 
-    # SEO meta tags
     seo_meta = f"""<meta name="description" content="{page_desc}">
 <meta property="og:title" content="{full_title}">
 <meta property="og:description" content="{page_desc}">
@@ -185,8 +185,6 @@ def render_post(cfg: SiteConfig, item: ContentItem) -> str:
 <div class="content">{item.body_html}</div>
 </article>
 {comment_html}"""
-    # Extract first 160 chars from body_html as description
-    import re
     text_only = re.sub(r'<[^>]+>', '', item.body_html)
     description = text_only[:160].strip() + ('...' if len(text_only) > 160 else '')
     return render_shell(cfg, item.title, body, has_math=item.has_math, show_top=True,
