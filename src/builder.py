@@ -14,20 +14,30 @@ from template_runtime import render_home, render_logs, render_page, render_post
 
 def _write(public_dir: Path, rel_out_dir: str, html_text: str) -> None:
     out = public_dir / rel_out_dir
-    out.mkdir(parents=True, exist_ok=True)
+    try:
+        out.mkdir(parents=True, exist_ok=True)
+    except (PermissionError, OSError) as e:
+        print(f"Error: Cannot create directory {out}: {e}")
+        raise
+
     out_path = out / "index.html"
     try:
         if out_path.read_text(encoding="utf-8") == html_text:
             return
     except (FileNotFoundError, OSError):
         pass
-    out_path.write_text(html_text, encoding="utf-8")
+
+    try:
+        out_path.write_text(html_text, encoding="utf-8")
+    except (PermissionError, OSError) as e:
+        print(f"Error: Cannot write file {out_path}: {e}")
+        raise
 
 
 def _to_atom_date(raw: str) -> str:
     try:
         d = dt.date.fromisoformat(str(raw)[:10])
-    except Exception:
+    except (ValueError, TypeError):
         d = dt.date(1970, 1, 1)
     return f"{d.isoformat()}T00:00:00Z"
 
@@ -75,11 +85,26 @@ def build(root: Path) -> None:
     logs_index, logs = load_logs(cfg, engine)
     pages = load_pages(cfg, engine)
 
-    cfg.public_dir.mkdir(parents=True, exist_ok=True)
-    copy_static(cfg)
+    try:
+        cfg.public_dir.mkdir(parents=True, exist_ok=True)
+    except (PermissionError, OSError) as e:
+        print(f"Error: Cannot create public directory {cfg.public_dir}: {e}")
+        raise
+
+    try:
+        copy_static(cfg)
+    except (PermissionError, OSError) as e:
+        print(f"Error: Failed to copy static files: {e}")
+        raise
+
     needs_math = any(p.has_math for p in posts) or any(l.has_math for l in logs) or any(p.has_math for p in pages.values())
-    copy_site_assets(cfg, needs_math)
-    copy_post_assets(cfg, posts)
+
+    try:
+        copy_site_assets(cfg, needs_math)
+        copy_post_assets(cfg, posts)
+    except (PermissionError, OSError) as e:
+        print(f"Error: Failed to copy assets: {e}")
+        raise
 
     for p in posts:
         _write(cfg.public_dir, p.out_dir, render_post(cfg, p))
@@ -112,6 +137,10 @@ def build(root: Path) -> None:
         out_dir = "" if page_no == 1 else f"page/{page_no}"
         _write(cfg.public_dir, out_dir, html)
 
-    (cfg.public_dir / "atom.xml").write_text(_render_atom(cfg, posts), encoding="utf-8")
+    try:
+        (cfg.public_dir / "atom.xml").write_text(_render_atom(cfg, posts), encoding="utf-8")
+    except (PermissionError, OSError) as e:
+        print(f"Error: Cannot write atom.xml: {e}")
+        raise
 
     print(f"Built {len(posts)} posts, {len(logs)} logs -> {cfg.public_dir}")
