@@ -364,7 +364,8 @@ h1, h2, h3 {
   background: var(--code);
   border: 1px solid var(--line);
   border-radius: 6px;
-  padding: 1px 5px;
+  padding: 2px 5px;
+  vertical-align: middle;
 }
 
 .content .katex-display {
