@@ -8,9 +8,24 @@ from urllib.parse import quote
 from models import ContentItem, SiteConfig
 
 
-def _head(cfg: SiteConfig, page_title: str, has_math: bool) -> str:
+def _head(cfg: SiteConfig, page_title: str, has_math: bool, description: str = "", url: str = "", og_type: str = "website") -> str:
     full_title = html.escape(cfg.title) if not page_title else f"{html.escape(page_title)} | {html.escape(cfg.title)}"
     atom_url = f"{cfg.domain.rstrip('/')}/atom.xml"
+    page_desc = html.escape(description) if description else html.escape(cfg.description)
+    page_url = f"{cfg.domain.rstrip('/')}{url}" if url else cfg.domain.rstrip('/')
+
+    # SEO meta tags
+    seo_meta = f"""<meta name="description" content="{page_desc}">
+<meta property="og:title" content="{full_title}">
+<meta property="og:description" content="{page_desc}">
+<meta property="og:type" content="{html.escape(og_type)}">
+<meta property="og:url" content="{html.escape(page_url)}">
+<meta property="og:site_name" content="{html.escape(cfg.title)}">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{full_title}">
+<meta name="twitter:description" content="{page_desc}">
+<link rel="canonical" href="{html.escape(page_url)}">"""
+
     math_block = ""
     if has_math:
         math_block = """
@@ -50,7 +65,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>{full_title}</title>
-<meta name="description" content="{html.escape(cfg.description)}">
+{seo_meta}
 <link rel="icon" href="{html.escape(cfg.icon)}">
 <link rel="alternate" type="application/atom+xml" title="{html.escape(cfg.title)} Atom Feed" href="{html.escape(atom_url)}">
 <script>
@@ -76,13 +91,14 @@ def _header(cfg: SiteConfig) -> str:
 
 
 def render_shell(
-    cfg: SiteConfig, page_title: str, main_html: str, has_math: bool, show_top: bool = False
+    cfg: SiteConfig, page_title: str, main_html: str, has_math: bool, show_top: bool = False,
+    description: str = "", url: str = "", og_type: str = "website"
 ) -> str:
     top_button = '<button type="button" class="tool-btn" id="to-top">Top</button>' if show_top else ""
     footer = f'<footer class="site-footer">© 2022 - {datetime.now().year} JiaoYuan · Built with Python.</footer>'
     return f"""<!doctype html>
 <html lang="en" dir="auto">
-{_head(cfg, page_title, has_math)}
+{_head(cfg, page_title, has_math, description, url, og_type)}
 <body>
 <div class="page-wrap">
 {_header(cfg)}
@@ -169,7 +185,12 @@ def render_post(cfg: SiteConfig, item: ContentItem) -> str:
 <div class="content">{item.body_html}</div>
 </article>
 {comment_html}"""
-    return render_shell(cfg, item.title, body, has_math=item.has_math, show_top=True)
+    # Extract first 160 chars from body_html as description
+    import re
+    text_only = re.sub(r'<[^>]+>', '', item.body_html)
+    description = text_only[:160].strip() + ('...' if len(text_only) > 160 else '')
+    return render_shell(cfg, item.title, body, has_math=item.has_math, show_top=True,
+                       description=description, url=item.rel_url, og_type="article")
 
 
 def render_page(cfg: SiteConfig, item: ContentItem) -> str:
