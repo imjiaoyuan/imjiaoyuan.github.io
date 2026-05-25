@@ -249,6 +249,20 @@ h1, h2, h3 {
   max-width: 100%;
   height: auto;
   margin: 6px 0;
+  border-radius: 4px;
+}
+
+.content img[loading="lazy"] {
+  min-height: 100px;
+}
+
+.content picture {
+  display: block;
+  margin: 6px 0;
+}
+
+.content picture img {
+  margin: 0;
 }
 
 .content blockquote {
