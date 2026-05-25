@@ -101,11 +101,18 @@ def _load_markdown_file(path: Path, rel_url: str, out_dir: str, is_log: bool, en
     try:
         raw = path.read_text(encoding="utf-8")
     except UnicodeDecodeError as e:
-        print(f"Warning: Failed to decode {path} as UTF-8: {e}. Trying with error handling.")
-        raw = path.read_text(encoding="utf-8", errors="replace")
-    except (FileNotFoundError, PermissionError) as e:
-        print(f"Error: Cannot read file {path}: {e}")
-        raise
+        print(f"Warning: Failed to decode {path} as UTF-8, using error replacement.")
+        try:
+            raw = path.read_text(encoding="utf-8", errors="replace")
+        except Exception as e2:
+            print(f"Error: Cannot read {path}: {e2}")
+            raise RuntimeError(f"Failed to read {path}. Ensure the file is readable and properly encoded.") from e2
+    except FileNotFoundError:
+        print(f"Error: File not found: {path}")
+        raise RuntimeError(f"Content file missing: {path}. Check that the file exists.") from None
+    except PermissionError:
+        print(f"Error: Permission denied: {path}")
+        raise RuntimeError(f"Cannot read {path}. Check file permissions.") from None
 
     meta, body = _parse_front_matter(raw)
     title = str(meta.get("title", path.stem))

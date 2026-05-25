@@ -135,24 +135,33 @@ Sitemap: {sitemap_url}
 
 
 def build(root: Path) -> None:
-    cfg = load_site_config(root)
+    try:
+        cfg = load_site_config(root)
+    except Exception as e:
+        print(f"Error: Failed to load configuration: {e}")
+        raise RuntimeError("Configuration error. Check src/config.py for syntax errors.") from e
+
     engine = MarkdownEngine()
 
-    posts = load_posts(cfg, engine)
-    logs_index, logs = load_logs(cfg, engine)
-    pages = load_pages(cfg, engine)
+    try:
+        posts = load_posts(cfg, engine)
+        logs_index, logs = load_logs(cfg, engine)
+        pages = load_pages(cfg, engine)
+    except Exception as e:
+        print(f"Error: Failed to load content: {e}")
+        raise RuntimeError("Content loading failed. Check markdown files for errors.") from e
 
     try:
         cfg.public_dir.mkdir(parents=True, exist_ok=True)
     except (PermissionError, OSError) as e:
         print(f"Error: Cannot create public directory {cfg.public_dir}: {e}")
-        raise
+        raise RuntimeError(f"Cannot create output directory. Check permissions.") from e
 
     try:
         copy_static(cfg)
     except (PermissionError, OSError) as e:
         print(f"Error: Failed to copy static files: {e}")
-        raise
+        raise RuntimeError("Failed to copy static assets. Check file permissions.") from e
 
     needs_math = any(p.has_math for p in posts) or any(l.has_math for l in logs) or any(p.has_math for p in pages.values())
 
@@ -161,7 +170,7 @@ def build(root: Path) -> None:
         copy_post_assets(cfg, posts)
     except (PermissionError, OSError) as e:
         print(f"Error: Failed to copy assets: {e}")
-        raise
+        raise RuntimeError("Failed to copy assets. Check file permissions and disk space.") from e
 
     for p in posts:
         _write(cfg.public_dir, p.out_dir, render_post(cfg, p))
