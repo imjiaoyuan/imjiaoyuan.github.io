@@ -74,14 +74,12 @@ def _render_sitemap(cfg, posts, pages) -> str:
     base = cfg.domain.rstrip("/")
     urls = []
 
-    # Homepage
     urls.append(f"""  <url>
     <loc>{xml_escape(base)}/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>""")
 
-    # Posts
     for post in posts:
         post_url = urljoin(base, post.rel_url.lstrip("/"))
         urls.append(f"""  <url>
@@ -91,7 +89,6 @@ def _render_sitemap(cfg, posts, pages) -> str:
     <priority>0.8</priority>
   </url>""")
 
-    # Pages
     for slug, page in pages.items():
         page_url = urljoin(base, page.rel_url.lstrip("/"))
         urls.append(f"""  <url>
@@ -100,7 +97,6 @@ def _render_sitemap(cfg, posts, pages) -> str:
     <priority>0.6</priority>
   </url>""")
 
-    # Logs
     logs_url = urljoin(base, "/logs/")
     urls.append(f"""  <url>
     <loc>{xml_escape(logs_url)}</loc>
