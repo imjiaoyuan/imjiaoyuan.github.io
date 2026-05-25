@@ -8,6 +8,7 @@ from xml.sax.saxutils import escape as xml_escape
 from asset_pipeline import copy_site_assets, copy_post_assets, copy_static
 from config_loader import load_site_config
 from content_loader import load_logs, load_pages, load_posts
+from date_utils import to_atom_date
 from markdown_engine import MarkdownEngine
 from template_runtime import render_home, render_logs, render_page, render_post
 
@@ -34,17 +35,9 @@ def _write(public_dir: Path, rel_out_dir: str, html_text: str) -> None:
         raise
 
 
-def _to_atom_date(raw: str) -> str:
-    try:
-        d = dt.date.fromisoformat(str(raw)[:10])
-    except (ValueError, TypeError):
-        d = dt.date(1970, 1, 1)
-    return f"{d.isoformat()}T00:00:00Z"
-
-
 def _render_atom(cfg, posts) -> str:
     base = cfg.domain.rstrip("/") + "/"
-    updated = _to_atom_date(posts[0].date) if posts else dt.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    updated = to_atom_date(posts[0].date) if posts else dt.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
     site_title = xml_escape(cfg.title)
     site_desc = xml_escape(cfg.description)
     site_link = xml_escape(base)
@@ -58,7 +51,7 @@ def _render_atom(cfg, posts) -> str:
 <title>{xml_escape(post.title)}</title>
 <link href="{xml_escape(post_url)}"/>
 <id>{xml_escape(post_url)}</id>
-<updated>{_to_atom_date(post.date)}</updated>
+<updated>{to_atom_date(post.date)}</updated>
 <summary>{xml_escape(post.title)}</summary>
 <content type="html">{xml_escape(post.body_html)}</content>
 </entry>"""
