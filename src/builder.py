@@ -77,6 +77,63 @@ def _render_atom(cfg, posts) -> str:
 """
 
 
+def _render_sitemap(cfg, posts, pages) -> str:
+    base = cfg.domain.rstrip("/")
+    urls = []
+
+    # Homepage
+    urls.append(f"""  <url>
+    <loc>{xml_escape(base)}/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>""")
+
+    # Posts
+    for post in posts:
+        post_url = urljoin(base, post.rel_url.lstrip("/"))
+        urls.append(f"""  <url>
+    <loc>{xml_escape(post_url)}</loc>
+    <lastmod>{xml_escape(post.date)}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>""")
+
+    # Pages
+    for slug, page in pages.items():
+        page_url = urljoin(base, page.rel_url.lstrip("/"))
+        urls.append(f"""  <url>
+    <loc>{xml_escape(page_url)}</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>""")
+
+    # Logs
+    logs_url = urljoin(base, "/logs/")
+    urls.append(f"""  <url>
+    <loc>{xml_escape(logs_url)}</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>""")
+
+    urls_xml = "\n".join(urls)
+    return f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{urls_xml}
+</urlset>
+"""
+
+
+def _render_robots_txt(cfg) -> str:
+    base = cfg.domain.rstrip("/")
+    sitemap_url = urljoin(base, "/sitemap.xml")
+    return f"""User-agent: *
+Allow: /
+
+Sitemap: {sitemap_url}
+"""
+
+
+
 def build(root: Path) -> None:
     cfg = load_site_config(root)
     engine = MarkdownEngine()
@@ -141,6 +198,18 @@ def build(root: Path) -> None:
         (cfg.public_dir / "atom.xml").write_text(_render_atom(cfg, posts), encoding="utf-8")
     except (PermissionError, OSError) as e:
         print(f"Error: Cannot write atom.xml: {e}")
+        raise
+
+    try:
+        (cfg.public_dir / "sitemap.xml").write_text(_render_sitemap(cfg, posts, pages), encoding="utf-8")
+    except (PermissionError, OSError) as e:
+        print(f"Error: Cannot write sitemap.xml: {e}")
+        raise
+
+    try:
+        (cfg.public_dir / "robots.txt").write_text(_render_robots_txt(cfg), encoding="utf-8")
+    except (PermissionError, OSError) as e:
+        print(f"Error: Cannot write robots.txt: {e}")
         raise
 
     print(f"Built {len(posts)} posts, {len(logs)} logs -> {cfg.public_dir}")
