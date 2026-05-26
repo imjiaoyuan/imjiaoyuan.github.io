@@ -186,23 +186,17 @@ h1, h2, h3 {
 }
 
 @media (max-width: 640px) {
-  .top,
+  .top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 12px;
+  }
+
   main,
   .site-footer {
     padding-left: 12px;
     padding-right: 12px;
-  }
-
-  nav {
-    gap: 8px;
-    font-size: 14px;
-  }
-
-  nav a {
-    padding: 4px 8px;
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    font-size: 13px;
   }
 
   .post-list li {
