@@ -30,7 +30,7 @@ class MarkdownEngine:
         def flush_para() -> None:
             nonlocal para
             if para:
-                out.append(f"<p>{self._inline(' '.join(para).strip())}</p>")
+                out.append("<p>" + "<br>".join(self._inline(line) for line in para) + "</p>")
                 para = []
 
         def close_list() -> None:

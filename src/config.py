@@ -10,7 +10,6 @@ SITE = {
     "public_dir": "public",
     "menu": [
         {"name": "Readme", "url": "/readme"},
-        {"name": "Logs", "url": "/logs"},
         {"name": "GitHub", "url": "https://github.com/imjiaoyuan"},
         {"name": "RSS", "url": "/atom.xml"},
     ],
