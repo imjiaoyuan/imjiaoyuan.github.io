@@ -1,0 +1,25 @@
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>{{full_title}}</title>
+<meta name="description" content="{{page_desc}}">
+<meta property="og:title" content="{{full_title}}">
+<meta property="og:description" content="{{page_desc}}">
+<meta property="og:type" content="{{og_type}}">
+<meta property="og:url" content="{{page_url}}">
+<meta property="og:site_name" content="{{site_title}}">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{{full_title}}">
+<meta name="twitter:description" content="{{page_desc}}">
+<link rel="canonical" href="{{page_url}}">
+<link rel="icon" href="{{icon}}">
+<link rel="alternate" type="application/atom+xml" title="{{site_title}} Atom Feed" href="{{atom_url}}">
+<script>
+(()=>{
+    const saved=localStorage.getItem("site-theme");
+    if(saved==="light"||saved==="dark")document.documentElement.setAttribute("data-theme",saved);
+})();
+</script>
+<link rel="stylesheet" href="/assets/site/style.css">
+{{math_block}}
+</head>
