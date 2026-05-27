@@ -1,0 +1,31 @@
+<div id="scroll-sentinel" style="height:1px"></div>
+<script>
+(function() {
+    let page = 1;
+    const total = {{total_pages}};
+    const sentinel = document.getElementById('scroll-sentinel');
+    const list = document.querySelector('.post-list');
+    let loading = false;
+    if (!sentinel || total <= 1) return;
+    const obs = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting && !loading && page < total) {
+            loading = true;
+            page++;
+            fetch('/page/' + page + '/')
+                .then(function(r) { return r.text(); })
+                .then(function(html) {
+                    const doc = new DOMParser().parseFromString(html, 'text/html');
+                    const items = doc.querySelector('.post-list');
+                    if (items) {
+                        while (items.firstChild) {
+                            list.appendChild(items.firstChild);
+                        }
+                    }
+                    loading = false;
+                })
+                .catch(function() { loading = false; });
+        }
+    });
+    obs.observe(sentinel);
+})();
+</script>

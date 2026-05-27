@@ -10,7 +10,7 @@ from config_loader import load_site_config
 from content_loader import load_pages, load_posts
 from date_utils import to_atom_date
 from markdown_engine import MarkdownEngine
-from template_runtime import render_home, render_page, render_post
+from template_runtime import render_404, render_home, render_page, render_post
 
 
 def _write(public_dir: Path, rel_out_dir: str, html_text: str) -> None:
@@ -190,6 +190,12 @@ def build(root: Path) -> None:
         (cfg.public_dir / "robots.txt").write_text(_render_robots_txt(cfg), encoding="utf-8")
     except (PermissionError, OSError) as e:
         print(f"Error: Cannot write robots.txt: {e}")
+        raise
+ 
+    try:
+        (cfg.public_dir / "404.html").write_text(render_404(cfg), encoding="utf-8")
+    except (PermissionError, OSError) as e:
+        print(f"Error: Cannot write 404.html: {e}")
         raise
 
     print(f"Built {len(posts)} posts -> {cfg.public_dir}")

@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" dir="auto">
+{{head}}
+<body>
+<div class="page-wrap">
+{{header}}
+<main>{{main}}</main>
+<footer class="site-footer">© 2022 - {{year}} JiaoYuan · Built with Python.</footer>
+</div>
+<div class="floating-tools">
+{{top_button}}
+<button type="button" class="tool-btn" id="theme-toggle" aria-label="Toggle theme"></button>
+</div>
+<div id="email-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:999;align-items:center;justify-content:center" onclick="if(event.target===this)this.style.display='none'">
+<div style="background:var(--bg);padding:20px 28px;border-radius:8px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.15)">
+<p style="margin:0 0 10px;font-size:15px">imjiaoyuan@gmail.com</p>
+<button class="tool-btn" onclick="navigator.clipboard.writeText('imjiaoyuan@gmail.com')">Copy</button>
+<button class="tool-btn" onclick="this.closest('#email-modal').style.display='none'">Close</button>
+</div>
+</div>
+<script>
+(()=>{
+    const root=document.documentElement;
+    const topBtn=document.getElementById("to-top");
+    const themeBtn=document.getElementById("theme-toggle");
+    const notifyThemeChange=(theme)=>window.dispatchEvent(new CustomEvent("site:theme-change",{detail:{theme}}));
+    const currentTheme=()=>{
+        const saved=root.getAttribute("data-theme");
+        if(saved==="light"||saved==="dark")return saved;
+        return window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+    };
+    const syncThemeLabel=()=>{
+        if(!themeBtn)return;
+        const current=currentTheme();
+        themeBtn.textContent=current==="dark"?"Light":"Dark";
+    };
+    topBtn?.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));
+    themeBtn?.addEventListener("click",()=>{
+        const current=currentTheme();
+        const next=current==="dark"?"light":"dark";
+        root.setAttribute("data-theme",next);
+        localStorage.setItem("site-theme",next);
+        notifyThemeChange(next);
+        syncThemeLabel();
+    });
+    window.matchMedia?.("(prefers-color-scheme: dark)")?.addEventListener?.("change",()=>{
+        const saved=root.getAttribute("data-theme");
+        if(saved==="light"||saved==="dark")return;
+        notifyThemeChange(currentTheme());
+    });
+    syncThemeLabel();
+    document.querySelector('a[href^="mailto"]')?.addEventListener('click',function(e){e.preventDefault();document.getElementById('email-modal').style.display='flex'});
+})();
+</script></body>
+</html>

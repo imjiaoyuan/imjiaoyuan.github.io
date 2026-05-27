@@ -159,24 +159,6 @@ def load_posts(cfg: SiteConfig, engine: MarkdownEngine) -> list[ContentItem]:
     return items
 
 
-def load_logs(cfg: SiteConfig, engine: MarkdownEngine) -> tuple[ContentItem | None, list[ContentItem]]:
-    logs_dir = cfg.content_dir / "logs"
-    if not logs_dir.exists():
-        return None, []
-    index_item: ContentItem | None = None
-    entries: list[ContentItem] = []
-    index_file = logs_dir / "_index.md"
-    if index_file.exists():
-        index_item = _load_markdown_file(index_file, "/logs/", "logs", True, engine)
-
-    for md in sorted(logs_dir.glob("*.md"), reverse=True):
-        if md.name == "_index.md":
-            continue
-        slug = md.stem
-        entries.append(_load_markdown_file(md, f"/logs/{slug}/", f"logs/{slug}", True, engine))
-    return index_item, entries
-
-
 def load_pages(cfg: SiteConfig, engine: MarkdownEngine) -> dict[str, ContentItem]:
     out: dict[str, ContentItem] = {}
     if not cfg.content_dir.exists():
