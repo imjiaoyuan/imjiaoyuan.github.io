@@ -1,0 +1,31 @@
+<link rel="preload" href="/assets/site/vendor/katex/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/site/vendor/katex/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/site/vendor/katex/fonts/KaTeX_Main-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/site/vendor/katex/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/site/vendor/katex/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/site/vendor/katex/fonts/KaTeX_Size3-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/site/vendor/katex/katex.min.css">
+<style>
+@font-face{font-family:KaTeX_Main;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/site/vendor/katex/fonts/KaTeX_Main-Regular.woff2") format("woff2")}
+@font-face{font-family:KaTeX_Main;font-style:normal;font-weight:700;font-display:swap;src:url("/assets/site/vendor/katex/fonts/KaTeX_Main-Bold.woff2") format("woff2")}
+@font-face{font-family:KaTeX_Math;font-style:italic;font-weight:400;font-display:swap;src:url("/assets/site/vendor/katex/fonts/KaTeX_Math-Italic.woff2") format("woff2")}
+@font-face{font-family:KaTeX_Size1;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/site/vendor/katex/fonts/KaTeX_Size1-Regular.woff2") format("woff2")}
+@font-face{font-family:KaTeX_Size2;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/site/vendor/katex/fonts/KaTeX_Size2-Regular.woff2") format("woff2")}
+@font-face{font-family:KaTeX_Size3;font-style:normal;font-weight:400;font-display:swap;src:url("/assets/site/vendor/katex/fonts/KaTeX_Size3-Regular.woff2") format("woff2")}
+</style>
+<script defer src="/assets/site/vendor/katex/katex.min.js"></script>
+<script defer src="/assets/site/vendor/katex/auto-render.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+    if(!window.renderMathInElement)return;
+    window.renderMathInElement(document.body,{
+        delimiters:[
+            {left:"$$",right:"$$",display:true},
+            {left:"\\[",right:"\\]",display:true},
+            {left:"$",right:"$",display:false},
+            {left:"\\(",right:"\\)",display:false}
+        ],
+        throwOnError:false
+    });
+});
+</script>
