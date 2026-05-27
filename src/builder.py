@@ -7,10 +7,10 @@ from xml.sax.saxutils import escape as xml_escape
 
 from asset_pipeline import copy_site_assets, copy_post_assets, copy_static
 from config_loader import load_site_config
-from content_loader import load_logs, load_pages, load_posts
+from content_loader import load_pages, load_posts
 from date_utils import to_atom_date
 from markdown_engine import MarkdownEngine
-from template_runtime import render_home, render_logs, render_page, render_post
+from template_runtime import render_home, render_page, render_post
 
 
 def _write(public_dir: Path, rel_out_dir: str, html_text: str) -> None:
@@ -97,13 +97,6 @@ def _render_sitemap(cfg, posts, pages) -> str:
     <priority>0.6</priority>
   </url>""")
 
-    logs_url = urljoin(base, "/logs/")
-    urls.append(f"""  <url>
-    <loc>{xml_escape(logs_url)}</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>""")
-
     urls_xml = "\n".join(urls)
     return f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -134,7 +127,6 @@ def build(root: Path) -> None:
 
     try:
         posts = load_posts(cfg, engine)
-        logs_index, logs = load_logs(cfg, engine)
         pages = load_pages(cfg, engine)
     except Exception as e:
         print(f"Error: Failed to load content: {e}")
@@ -152,7 +144,7 @@ def build(root: Path) -> None:
         print(f"Error: Failed to copy static files: {e}")
         raise RuntimeError("Failed to copy static assets. Check file permissions.") from e
 
-    needs_math = any(p.has_math for p in posts) or any(l.has_math for l in logs) or any(p.has_math for p in pages.values())
+    needs_math = any(p.has_math for p in posts) or any(p.has_math for p in pages.values())
 
     try:
         copy_site_assets(cfg, needs_math)
@@ -163,16 +155,6 @@ def build(root: Path) -> None:
 
     for p in posts:
         _write(cfg.public_dir, p.out_dir, render_post(cfg, p))
-
-    log_title = logs_index.title if logs_index else "Logs"
-    log_size = max(1, cfg.log_limit)
-    total_log_pages = max(1, (len(logs) + log_size - 1) // log_size)
-    for i in range(total_log_pages):
-        page_no = i + 1
-        chunk = logs[i * log_size : (i + 1) * log_size]
-        html = render_logs(cfg, log_title, chunk, page_no=page_no, total_pages=total_log_pages)
-        out_dir = "logs" if page_no == 1 else f"logs/page/{page_no}"
-        _write(cfg.public_dir, out_dir, html)
 
     if "readme" in pages:
         p = pages["readme"]
@@ -210,4 +192,4 @@ def build(root: Path) -> None:
         print(f"Error: Cannot write robots.txt: {e}")
         raise
 
-    print(f"Built {len(posts)} posts, {len(logs)} logs -> {cfg.public_dir}")
+    print(f"Built {len(posts)} posts -> {cfg.public_dir}")
