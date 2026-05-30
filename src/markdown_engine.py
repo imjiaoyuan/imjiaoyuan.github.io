@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import html
 import re
+from urllib.parse import quote
 
 
 class MarkdownEngine:
@@ -21,7 +22,7 @@ class MarkdownEngine:
         lines = text.replace("\r\n", "\n").split("\n")
         out: list[str] = []
         para: list[str] = []
-        list_mode: str | None = None
+        list_stack: list[tuple[int, str]] = []  # (indent, mode)
         in_code = False
         code_lang = ""
         code_lines: list[str] = []
@@ -34,10 +35,12 @@ class MarkdownEngine:
                 para = []
 
         def close_list() -> None:
-            nonlocal list_mode
-            if list_mode:
-                out.append(f"</{list_mode}>")
-                list_mode = None
+            nonlocal list_stack
+            if list_stack:
+                out.append("</li>")
+                while list_stack:
+                    _, mode = list_stack.pop()
+                    out.append(f"</{mode}>")
 
         while i < len(lines):
             line = lines[i]
@@ -78,7 +81,7 @@ class MarkdownEngine:
                 flush_para()
                 close_list()
                 lvl = len(head.group(1))
-                out.append(f"<h{lvl}>{self._inline(head.group(2).strip())}</h{lvl}>")
+                out.append(f"<h{lvl} id=\"{self._slugify(head.group(2).strip())}\">{self._inline(head.group(2).strip())}</h{lvl}>")
                 i += 1
                 continue
 
@@ -144,12 +147,47 @@ class MarkdownEngine:
             if ul or ol:
                 flush_para()
                 mode = "ul" if ul else "ol"
-                if list_mode != mode:
-                    close_list()
+                indent = len(line) - len(line.lstrip())
+                content = (ul.group(1) if ul else ol.group(1)).strip()
+                if not list_stack:
                     out.append(f"<{mode}>")
-                    list_mode = mode
-                content = ul.group(1) if ul else ol.group(1)
-                out.append(f"<li>{self._inline(content.strip())}</li>")
+                    out.append(f"<li>{self._inline(content)}")
+                    list_stack.append((indent, mode))
+                else:
+                    prev_indent, prev_mode = list_stack[-1]
+                    if indent > prev_indent:
+                        out.append(f"<{mode}>")
+                        out.append(f"<li>{self._inline(content)}")
+                        list_stack.append((indent, mode))
+                    elif indent == prev_indent:
+                        if mode != prev_mode:
+                            out.append("</li>")
+                            out.append(f"</{prev_mode}>")
+                            list_stack.pop()
+                            out.append(f"<{mode}>")
+                            out.append(f"<li>{self._inline(content)}")
+                            list_stack.append((indent, mode))
+                        else:
+                            out.append("</li>")
+                            out.append(f"<li>{self._inline(content)}")
+                    else:
+                        out.append("</li>")
+                        while list_stack and indent < list_stack[-1][0]:
+                            _, m = list_stack.pop()
+                            out.append(f"</{m}>")
+                        if list_stack:
+                            out.append("</li>")
+                        if not list_stack or indent > list_stack[-1][0]:
+                            out.append(f"<{mode}>")
+                            out.append(f"<li>{self._inline(content)}")
+                            list_stack.append((indent, mode))
+                        elif indent == list_stack[-1][0]:
+                            if mode != list_stack[-1][1]:
+                                _, m = list_stack.pop()
+                                out.append(f"</{m}>")
+                                out.append(f"<{mode}>")
+                                list_stack.append((indent, mode))
+                            out.append(f"<li>{self._inline(content)}")
                 i += 1
                 continue
 
@@ -164,6 +202,17 @@ class MarkdownEngine:
         result = re.sub(r"<table>", '<div class="table-wrap"><table>', result)
         result = re.sub(r"</table>", "</table></div>", result)
         return result
+
+    def _slugify(self, text: str) -> str:
+        plain = re.sub(r"<[^>]+>", "", text).strip().lower()
+        plain = re.sub(r"\s+", "-", plain)
+        result: list[str] = []
+        for ch in plain:
+            if ch.isascii() and (ch.isalnum() or ch in "-_."):
+                result.append(ch)
+            elif not ch.isascii():
+                result.append(quote(ch))
+        return "".join(result)
 
     def _normalize_lang(self, raw: str) -> str:
         lang = raw.strip().lower()
