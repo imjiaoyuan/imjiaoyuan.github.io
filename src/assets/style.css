@@ -71,6 +71,7 @@
 body {
   margin: 0;
   overflow-y: scroll;
+  overflow-x: hidden;
   background: var(--bg);
   color: var(--fg);
   font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
@@ -262,12 +263,24 @@ h1, h2, h3 {
   cursor: pointer;
 }
 
+.content {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.content th,
+.content td {
+  word-break: break-word;
+}
+
 .content p {
   margin: 0 0 6px;
 }
 
 .content a {
   color: var(--accent);
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .content img {
@@ -310,6 +323,7 @@ h1, h2, h3 {
 
 .content li {
   margin: 2px 0;
+  overflow-wrap: break-word;
 }
 
 .content hr {

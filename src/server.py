@@ -164,7 +164,13 @@ def serve(public_dir: Path, host: str, port: int, root: Path) -> None:
                 self._serve_file(fs_path)
                 return
 
-            super().do_GET()
+            self._send_404()
+
+        def _send_404(self) -> None:
+            self.send_response(404)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", "0")
+            self.end_headers()
 
         def _serve_live_reload(self) -> None:
             q = hub.subscribe()
