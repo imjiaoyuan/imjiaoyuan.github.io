@@ -167,7 +167,7 @@ trim_galore [options] <filename(s)>
 
 ```bash
 mkdir -p clean
-cat ./SRR_Acc_List.txt | while read id; do 
+cat ./SRR_Acc_List.txt | while read id; do
     trim_galore \
     -q 20 \
     --length 36 \
@@ -290,7 +290,7 @@ cat ./SRR_Acc_List.txt | while read id;do
 done
 ```
 
-这里如果不知道基因组的大小的话可以通过faCount来计算：
+这里如果不知道基因组的大小的话可以通过 faCount 来计算：
 
 ```bash
 conda install -c bioconda ucsc-facount

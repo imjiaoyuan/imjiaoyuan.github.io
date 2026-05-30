@@ -275,13 +275,13 @@ def submit():
         user = User.query.get(session['user_id'])
         if not user:
             return jsonify({'error': '用户未登录'}), 401
-            
+
         data = request.get_json()
         logger.info(f"接收到的数据：{json.dumps(data, indent=2, ensure_ascii=False)}")
-        
+
         # 验证输入数据
         validate_input_data(data)
-        
+
         job_name = data.get('jobName', 'AF3_Job')
         unique_suffix = str(uuid.uuid4())[:4]
         task_id = f"{job_name}_{unique_suffix}".lower()
@@ -309,7 +309,7 @@ def submit():
                 except ValueError as e:
                     logger.error(f"配体处理错误：{str(e)}")
                     return jsonify({"message": str(e), "error": True}), 400
-            
+
             processed_entities.append(entity)
 
         data['entities'] = processed_entities
@@ -371,13 +371,13 @@ def validate_input_data(data):
         # 基本字段验证
         if not isinstance(data, dict):
             raise ValueError("输入数据必须是字典格式")
-            
+
         if not data.get('entities'):
             raise ValueError("缺少 entities 字段")
-            
+
         if not isinstance(data.get('entities'), list):
             raise ValueError("entities 必须是列表格式")
-            
+
         # 验证 model seeds
         if 'modelSeeds' in data:
             try:
@@ -391,13 +391,13 @@ def validate_input_data(data):
         for entity in data['entities']:
             if not isinstance(entity, dict):
                 raise ValueError("每个实体必须是字典格式")
-                
+
             if 'type' not in entity:
                 raise ValueError("实体缺少 type 字段")
-                
+
             if entity['type'] not in ['protein', 'ligand', 'dna', 'rna']:
                 raise ValueError(f"不支持的实体类型：{entity['type']}")
-                
+
             if 'id' not in entity:
                 raise ValueError("实体缺少 id 字段")
 
@@ -474,10 +474,10 @@ def create_input_json(task_id, data):
             "version": 1,
             "modelSeeds": [int(seed) for seed in data['modelSeeds'].split(',')]
         }
-        
+
         # 处理序列数据
         input_data['sequences'] = []
-        
+
         for entity in data['entities']:
             if entity['type'] == 'protein':
                 protein_data = {
@@ -486,7 +486,7 @@ def create_input_json(task_id, data):
                         "sequence": entity['sequence'].strip()
                     }
                 }
-                
+
                 # 处理修饰
                 if 'modifications' in entity:
                     modified_sequence = list(entity['sequence'].strip())
@@ -497,9 +497,9 @@ def create_input_json(task_id, data):
                             modified_sequence[pos] = MODIFICATION_TO_RESIDUE[mod['type']][residue]
                     protein_data['protein']['sequence'] = ''.join(modified_sequence)
                     logger.info(f"应用修饰后的序列：{protein_data['protein']['sequence']}")
-                    
+
                 input_data['sequences'].append(protein_data)
-            
+
             elif entity['type'] in ['dna', 'rna']:
                 sequence_data = {
                     entity['type']: {
@@ -508,19 +508,19 @@ def create_input_json(task_id, data):
                     }
                 }
                 input_data['sequences'].append(sequence_data)
-            
+
             elif entity['type'] == 'ligand':
-                # 处理配体 ... 
+                # 处理配体 ...
                 pass
-        
+
         # 保存到文件
         output_path = os.path.join(AF_INPUT_DIR, f'{task_id}.json')
         with open(output_path, 'w') as f:
             json.dump(input_data, f, indent=2)
-            
+
         logger.info(f"生成的输入文件内容：{json.dumps(input_data, indent=2)}")
         return True
-        
+
     except Exception as e:
         logger.error(f"创建输入文件失败：{str(e)}")
         raise ValueError(f"创建输入文件失败：{str(e)}")
@@ -553,7 +553,7 @@ def run_alphafold3(job_name_unique):
         if not os.path.exists(input_file):
             logger.error(f"输入文件不存在：{input_file}")
             raise FileNotFoundError(f"输入文件不存在：{input_file}")
-            
+
         # 检查目录权限
         for path in [AlphaFold3Config.AF_INPUT_DIR, AlphaFold3Config.AF_OUTPUT_DIR]:
             if not os.access(path, os.W_OK):
@@ -567,10 +567,10 @@ def run_alphafold3(job_name_unique):
             stderr=subprocess.PIPE,
             text=True
         )
-        
+
         # 获取输出
         stdout, stderr = process.communicate()
-        
+
         # 记录详细输出
         logger.info("=== Docker 命令执行结果 ===")
         logger.info(f"标准输出：{stdout}")
@@ -635,7 +635,7 @@ def run_alphafold3(job_name_unique):
       <h2 class="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
         Job Information
       </h2>
-      <button type="button" @click="toggleFormContent" 
+      <button type="button" @click="toggleFormContent"
         class="text-secondary-light hover:text-primary transition-colors duration-200">
         <i class="fas" :class="formContentVisible ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
       </button>
@@ -646,14 +646,14 @@ def run_alphafold3(job_name_unique):
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label class="block text-sm font-medium text-secondary-light mb-2">Job Name</label>
-          <input v-model="formData.name" type="text" 
+          <input v-model="formData.name" type="text"
             class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg
                    focus:ring-2 focus:ring-primary focus:border-primary
                    outline-none transition duration-200" />
         </div>
         <div>
           <label class="block text-sm font-medium text-secondary-light mb-2">Model Seeds</label>
-          <input v-model="formData.modelSeeds" type="text" 
+          <input v-model="formData.modelSeeds" type="text"
             class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg
                    focus:ring-2 focus:ring-primary focus:border-primary
                    outline-none transition duration-200"
@@ -664,12 +664,12 @@ def run_alphafold3(job_name_unique):
       <!-- Entities Section -->
       <div class="space-y-4">
         <h3 class="text-xl font-semibold text-secondary-dark">Entities</h3>
-        <div v-for="(entity, index) in formData.sequences" :key="index" 
+        <div v-for="(entity, index) in formData.sequences" :key="index"
           class="p-6 bg-gray-50 rounded-xl border border-gray-200">
           <!-- Entity Header -->
           <div class="flex justify-between items-center mb-4">
             <div class="flex space-x-4">
-              <select v-model="entity.type" 
+              <select v-model="entity.type"
                 class="px-4 py-2 bg-white border border-gray-200 rounded-lg
                        focus:ring-2 focus:ring-primary focus:border-primary">
                 <option value="protein">Protein</option>
@@ -678,7 +678,7 @@ def run_alphafold3(job_name_unique):
                 <option value="ligand">Ligand</option>
               </select>
               <div class="relative w-full">
-                <input v-model="entity.id" type="text" 
+                <input v-model="entity.id" type="text"
                   placeholder="Chain ID (e.g., A or [A,B])"
                   class="px-4 py-2 bg-white border border-gray-200 rounded-lg
                          focus:ring-2 focus:ring-primary focus:border-primary w-full" />
@@ -713,7 +713,7 @@ def run_alphafold3(job_name_unique):
             <!-- SMILES 输入 -->
             <div v-if="entity.inputType === 'smiles'" class="mb-4">
               <label class="block text-sm font-medium text-gray-700 mb-2">SMILES</label>
-              <input v-model="entity.smiles" type="text" 
+              <input v-model="entity.smiles" type="text"
                 class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary"
                 placeholder="输入 SMILES 字符串，如 CC(=O)OC1=CC=CC=C1C(=O)O" />
               <div class="text-xs text-gray-500 mt-1">
@@ -727,10 +727,10 @@ def run_alphafold3(job_name_unique):
             <!-- CCD Code 输入 -->
             <div v-if="entity.inputType === 'ccd'" class="space-y-2">
               <label class="block text-sm font-medium text-gray-700">CCD Code</label>
-              
+
               <!-- CCD 代码选择器 -->
               <div class="relative mt-2">
-                <select v-model="entity.selectedOption" 
+                <select v-model="entity.selectedOption"
                   class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary"
                   @change="updateCcdCodes(entity)">
                   <option value="">选择 CCD 代码 ... </option>
@@ -746,7 +746,7 @@ def run_alphafold3(job_name_unique):
           <div v-else>
             <div class="mb-4">
               <label class="block text-gray-700 mb-1">序列</label>
-              <textarea v-model="entity.sequence" 
+              <textarea v-model="entity.sequence"
                 class="w-full mt-1 p-2 border border-gray-300 rounded-md"
                 rows="3"
                 :placeholder="getSequencePlaceholder(entity.type)"></textarea>
@@ -755,7 +755,7 @@ def run_alphafold3(job_name_unique):
 
             <!-- Add Details Section -->
             <div class="mt-2">
-              <button type="button" @click="toggleDetails(index)" 
+              <button type="button" @click="toggleDetails(index)"
                 class="text-blue-500 hover:text-blue-700 flex items-center">
                 <span>{{ entity.showDetails ? 'Hide Details' : 'Add Details' }}</span>
                 <i class="fas" :class="entity.showDetails ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
@@ -773,7 +773,7 @@ def run_alphafold3(job_name_unique):
                   用于指定序列中的特定修饰，如磷酸化、甲基化等
                 </div>
                 <div v-if="entity.hasModifications" class="space-y-2">
-                  <div v-for="(mod, modIndex) in entity.modifications" :key="modIndex" 
+                  <div v-for="(mod, modIndex) in entity.modifications" :key="modIndex"
                     class="flex space-x-2 items-start">
                     <div class="flex-1">
                       <select v-model="mod.type" class="w-full p-2 border border-gray-300 rounded-md text-sm">
@@ -783,7 +783,7 @@ def run_alphafold3(job_name_unique):
                       </select>
                     </div>
                     <div class="w-32">
-                      <input v-model.number="mod.position" type="number" 
+                      <input v-model.number="mod.position" type="number"
                         min="1"
                         :max="entity.sequence.length"
                         placeholder="位置"
@@ -899,7 +899,7 @@ KLNPQRSTWVMHYHVKLSQN</pre>
       <!-- Advanced Options -->
       <div class="mt-8 space-y-6">
         <h2 class="text-xl font-bold text-secondary-dark">Advanced Options</h2>
-        
+
         <!-- Bonded Atom Pairs -->
         <div class="space-y-2">
           <div class="flex items-center">
@@ -907,7 +907,7 @@ KLNPQRSTWVMHYHVKLSQN</pre>
             <label for="hasBondedAtomPairs" class="ml-2 text-sm font-medium text-gray-700">Add Bonded Atom Pairs</label>
           </div>
           <div v-if="formData.hasBondedAtomPairs" class="space-y-2">
-            <textarea v-model="formData.bondedAtomPairs" 
+            <textarea v-model="formData.bondedAtomPairs"
               class="w-full h-32 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary"
               placeholder='[
   [["A", 1, "SG"], ["L", 1, "C1"]],  // Chain A residue 1 SG to Ligand residue 1 C1
@@ -917,7 +917,7 @@ KLNPQRSTWVMHYHVKLSQN</pre>
               指定共价键连接。每个键由两个原子指定，每个原子由 [chain_id, residue_number, atom_name] 表示。
             </div>
             <div class="mt-2">
-              <button type="button" @click="loadBondedAtomPairsExample" 
+              <button type="button" @click="loadBondedAtomPairsExample"
                 class="text-blue-600 hover:text-blue-800 text-sm">
                 加载示例数据
               </button>
@@ -936,7 +936,7 @@ KLNPQRSTWVMHYHVKLSQN</pre>
             </div>
           </div>
         </div>
-        
+
         <!-- User CCD -->
         <div class="space-y-2">
           <div class="flex items-center">
@@ -944,7 +944,7 @@ KLNPQRSTWVMHYHVKLSQN</pre>
             <label for="hasUserCCD" class="ml-2 text-sm font-medium text-gray-700">Add User CCD (Chemical Component Dictionary)</label>
           </div>
           <div v-if="formData.hasUserCCD" class="space-y-2">
-            <textarea v-model="formData.userCCD" 
+            <textarea v-model="formData.userCCD"
               class="w-full h-48 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary"
               placeholder='{
   "UNK": {
@@ -976,7 +976,7 @@ KLNPQRSTWVMHYHVKLSQN</pre>
               3. 键列表（定义原子间的连接）
             </div>
             <div class="mt-2">
-              <button type="button" @click="loadUserCCDExample" 
+              <button type="button" @click="loadUserCCDExample"
                 class="text-blue-600 hover:text-blue-800 text-sm">
                 加载示例数据
               </button>
@@ -1132,7 +1132,7 @@ export default {
     },
     addModification(entityIndex) {
       const entity = this.formData.sequences[entityIndex];
-      
+
       // 确保 modifications 数组存在
       if (!Array.isArray(entity.modifications)) {
         this.$set(entity, 'modifications', []);
@@ -1172,7 +1172,7 @@ export default {
     },
     validateSequence(sequence, type) {
       if (!sequence) return false;
-      
+
       // 如果有 userCCD，获取自定义残基代码
       let customResidues = '';
       if (this.formData.hasUserCCD) {
@@ -1183,17 +1183,17 @@ export default {
           console.warn('解析 userCCD 失败：', e);
         }
       }
-      
+
       const validationRules = {
         // 在标准氨基酸序列中加入自定义残基代码
         'protein': new RegExp(`^[ACDEFGHIKLMNPQRSTVWY${customResidues}]+$`, 'i'),
         'rna': /^[AUGC]+$/i,
         'dna': /^[ATGC]+$/i
       }
-      
+
       const rule = validationRules[type];
       if (!rule) return false;
-      
+
       // 移除空格和换行符后再验证
       const cleanSequence = sequence.replace(/[\s\n]/g, '');
       return rule.test(cleanSequence);
@@ -1218,7 +1218,7 @@ export default {
           throw new Error('SMILES 格式不正确')
         }
       }
-      
+
       if (entity.inputType === 'ccd') {
         if (!entity.selectedOption) {
           throw new Error('请选择 CCD 代码')
@@ -1228,13 +1228,13 @@ export default {
     // 添加 MSA 格式验证
     validateMsa(msaText) {
       if (!msaText.trim()) return false;
-      
+
       const lines = msaText.trim().split('\n');
       if (lines.length < 2) return false;  // 至少需要一个序列和标识符
-      
+
       let hasHeader = false;
       let hasSequence = false;
-      
+
       for (const line of lines) {
         if (line.startsWith('>')) {
           hasHeader = true;
@@ -1242,20 +1242,20 @@ export default {
           hasSequence = true;
         }
       }
-      
+
       return hasHeader && hasSequence;
     },
-    
+
     // 添加 Paired MSA 格式验证
     validatePairedMsa(msaText) {
       if (!msaText.trim()) return false;
-      
+
       const lines = msaText.trim().split('\n');
       if (lines.length < 4) return false;  // 至少需要两对序列
-      
+
       const pairs = new Map();
       let currentPrefix = null;
-      
+
       for (const line of lines) {
         if (line.startsWith('>')) {
           const match = line.match(/^>(\w+)_[AB]$/);
@@ -1267,23 +1267,23 @@ export default {
           pairs.get(currentPrefix).add(line.slice(-1));  // 添加 A 或 B
         }
       }
-      
+
       // 检查每个前缀是否都有 A 和 B
       for (const chains of pairs.values()) {
         if (chains.size !== 2 || !chains.has('A') || !chains.has('B')) {
           return false;
         }
       }
-      
+
       return true;
     },
-    
+
     // 添加 Templates 格式验证
     validateTemplates(templatesText) {
       try {
         const templates = JSON.parse(templatesText);
         if (!Array.isArray(templates)) return false;
-        
+
         return templates.every(template => {
           return (
             typeof template === 'object' &&
@@ -1304,10 +1304,10 @@ export default {
       try {
         const pairs = JSON.parse(pairsText);
         if (!Array.isArray(pairs)) return false;
-        
+
         return pairs.every(pair => {
           if (!Array.isArray(pair) || pair.length !== 2) return false;
-          
+
           return pair.every(atom => {
             if (!Array.isArray(atom) || atom.length !== 3) return false;
             const [chainId, resNum, atomName] = atom;
@@ -1328,7 +1328,7 @@ export default {
       try {
         const ccd = JSON.parse(ccdText);
         if (typeof ccd !== 'object' || ccd === null) return false;
-        
+
         return Object.entries(ccd).every(([resName, ccdData]) => {
           return (
             typeof resName === 'string' &&
@@ -1343,10 +1343,10 @@ export default {
     async submitForm() {
       if (this.isSubmitting) return;
       this.errorMessage = ''; // 清除之前的错误消息
-      
+
       try {
         this.isSubmitting = true;
-        
+
         // 表单验证
         if (!this.formData.name.trim()) {
           throw new Error('请输入任务名称');
@@ -1362,7 +1362,7 @@ export default {
           }
 
           if (entity.type === 'ligand') {
-            if ((entity.inputType === 'smiles' && !entity.smiles) || 
+            if ((entity.inputType === 'smiles' && !entity.smiles) ||
                 (entity.inputType === 'ccd' && !entity.selectedOption)) {
               throw new Error('Ligand 需要提供 SMILES 或 CCD Codes')
             }
@@ -1383,12 +1383,12 @@ export default {
             if (entity.hasUnpairedMsa && !this.validateMsa(entity.unpairedMsa)) {
               throw new Error('Unpaired MSA 格式不正确');
             }
-            
+
             if (entity.type === 'protein') {
               if (entity.hasPairedMsa && !this.validatePairedMsa(entity.pairedMsa)) {
                 throw new Error('Paired MSA 格式不正确');
               }
-              
+
               if (entity.hasTemplates && !this.validateTemplates(entity.templates)) {
                 throw new Error('Templates 格式不正确');
               }
@@ -1400,7 +1400,7 @@ export default {
         if (this.formData.hasBondedAtomPairs && !this.validateBondedAtomPairs(this.formData.bondedAtomPairs)) {
           throw new Error('Bonded Atom Pairs 格式不正确');
         }
-        
+
         if (this.formData.hasUserCCD && !this.validateUserCCD(this.formData.userCCD)) {
           throw new Error('User CCD 格式不正确');
         }
@@ -1410,8 +1410,8 @@ export default {
           name: this.formData.name,
           job_name: this.formData.name,
           model_name: 'alphafold3',
-          modelSeeds: Array.isArray(this.formData.modelSeeds) 
-            ? this.formData.modelSeeds 
+          modelSeeds: Array.isArray(this.formData.modelSeeds)
+            ? this.formData.modelSeeds
             : String(this.formData.modelSeeds).split(',').map(Number),
           sequences: this.formData.sequences.map(entity => {
             const sequence = {}
@@ -1445,7 +1445,7 @@ export default {
 
         // 发送请求到后端
         const response = await axios.post('/api/alphafold3/submit', submitData);
-        
+
         if (response.data.error) {
           this.errorMessage = response.data.error;
           return;
@@ -1453,10 +1453,10 @@ export default {
 
         // 显示成功消息
         alert('任务提交成功！');
-        
+
         // 清空表单
         this.resetForm();
-        
+
         // 触发提交成功事件
         this.$emit('submit-success', response.data);
 
@@ -1546,17 +1546,17 @@ export default {
     // 验证修饰位置
     validateModification(entity, modification) {
       if (!modification.position) return false;
-      
+
       const pos = parseInt(modification.position, 10);
       if (isNaN(pos) || pos < 1 || pos > entity.sequence.length) return false;
-      
+
       const residue = entity.sequence[pos - 1];
       const validResidues = {
         'phosphorylation': ['S', 'T', 'Y'],
         'methylation': ['K', 'R'],
         'acetylation': ['K']
       };
-      
+
       return validResidues[modification.type]?.includes(residue) || false;
     },
     // 更新修饰残基信息

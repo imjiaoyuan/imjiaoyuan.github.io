@@ -17,7 +17,7 @@ date: 2024-01-02
 - wine 企业微信，很难评
 - obsidian, 原生 deb 安装包安装，与 Windows 一样
 - VScode, 微软官方源安装，与 Windows 一样
-- fcitx5 输入法，调教一下还不错，搜狗输入法没有更新 Debian/Ubuntu 的新版，只能用这个，除了操作习惯不太一样之外其他面前够用，[fcitx5 词库](https://github.com/wuhgit/CustomPinyinDictionary)，[fcitx5 皮肤](https://github.com/sxqsfun/fcitx5-sogou-themes)
+- fcitx5 输入法，调教一下还不错，搜狗输入法没有更新 Debian/Ubuntu 的新版，只能用这个，除了操作习惯不太一样之外其他勉强够用，[fcitx5 词库](https://github.com/wuhgit/CustomPinyinDictionary)，[fcitx5 皮肤](https://github.com/sxqsfun/fcitx5-sogou-themes)
 - WPS2019, 金山的良心之作，装好字体之后还是很好用的
 - sublime Text, 官网安装包安装，与 Windows 一样
 - Chrome, 谷歌官方源安装，与 Windows 一样
@@ -58,7 +58,7 @@ WantedBy=default.target
 然后设置开机启动：
 
 ```bash
-sudo systemctl enable clash.service 
+sudo systemctl enable clash.service
 ```
 
 至于系统信息，直接看下图
@@ -67,7 +67,7 @@ sudo systemctl enable clash.service
 
 不过有一说一，Debian 确实稳定，但是使用起来体验还是真的不如 POP_OS 这种经过优化的，后面考虑换到 POP_OS，Ubuntu 现在夹杂了太多私货，实在不敢恭维了 ...
 
-Linux 用起来实际上跟 Windows 差别以已经不时很大了，主要是使用习惯的问题，比如 fcitx5 切换输入法是快捷键 Ctrl+空格，而 Windows 是 Ctrl+Shift，还有文件系统也不一样，Linux 里一切皆文件，不管什么，改改配置文件就好，Linux 差的最大的就是软件生态了，不过目前看 ... 似乎暂时够用了，如果需要 Windows, 我还有一台笔记本～
+Linux 用起来实际上跟 Windows 差别已经不是很大了，主要是使用习惯的问题，比如 fcitx5 切换输入法是快捷键 Ctrl+空格，而 Windows 是 Ctrl+Shift，还有文件系统也不一样，Linux 里一切皆文件，不管什么，改改配置文件就好，Linux 差的最大的就是软件生态了，不过目前看 ... 似乎暂时够用了，如果需要 Windows, 我还有一台笔记本～
 
 ---
 
@@ -110,7 +110,7 @@ sudo apt purge sticky hexchat* redshift-gtk firefox* libreoffice-* simple-scan h
 git clone https://github.com/jrouleau/bluetooth-autoconnect.git
 sudo cp bluetooth-autoconnect/bluetooth-autoconnect.service /etc/systemd/system/
 sudo cp bluetooth-autoconnect/bluetooth-autoconnect /usr/bin/
-sudo systemctl enable bluetooth-autoconnect.service 
+sudo systemctl enable bluetooth-autoconnect.service
 sudo systemctl start bluetooth-autoconnect.service
 sudo cp bluetooth-autoconnect/pulseaudio-bluetooth-autoconnect.service /etc/systemd/user/
 systemctl --user enable pulseaudio-bluetooth-autoconnect
