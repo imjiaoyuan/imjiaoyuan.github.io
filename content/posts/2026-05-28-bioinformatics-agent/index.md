@@ -43,7 +43,7 @@ export CLAUDE_CODE_EFFORT_LEVEL=max
 ccapi() {
     unset ANTHROPIC_BASE_URL ANTHROPIC_AUTH_TOKEN API_TIMEOUT_MS ANTHROPIC_MODEL ANTHROPIC_DEFAULT_OPUS_MODEL ANTHROPIC_DEFAULT_SONNET_MODEL ANTHROPIC_DEFAULT_HAIKU_MODEL CLAUDE_CODE_SUBAGENT_MODEL CLAUDE_CODE_EFFORT_LEVEL CLAUDE_CODE_ATTRIBUTION_HEADER
     export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
-    
+
     case $1 in
         "deepseek")
             export ANTHROPIC_BASE_URL="https://api.deepseek.com/anthropic"
@@ -100,16 +100,16 @@ ccapi deepseek
 因此我们要让 agent 去阅读我们以前的流程脚本，让它获取跑流程最需要的那些信息，并且生成说明文档`CLAUDE.md`：
 
 ```bash
-(claude) [jiaoyuan@login01 analysis]$ claude 
+(claude) [jiaoyuan@login01 analysis]$ claude
  ▐▛███▜▌   Claude Code v2.1.148
 ▝▜█████▛▘  deepseek-chat · API Usage Billing
   ▘▘ ▝▝    ~/03.palv_scrna/analysis
 
   Opus 4.7 xhigh is now available! · /model to switch
 
-❯ 查阅当前文件夹下所有的。sh 和。py 脚本，了解本项目的完整流程，你要将各种数据的路径记录下来，还有 conda 环境、slurm 系统的信息等等，不要直接阅读原始数据，注意一定要仅仅阅读代码，严令禁止直接阅读  
-  原始数据，原始数据可以根据拓展名去调用对应的工具去查看格式等，将这些信息写入 CLAUDE.md                                                                                                    
-  
+❯ 查阅当前文件夹下所有的。sh 和。py 脚本，了解本项目的完整流程，你要将各种数据的路径记录下来，还有 conda 环境、slurm 系统的信息等等，不要直接阅读原始数据，注意一定要仅仅阅读代码，严令禁止直接阅读
+  原始数据，原始数据可以根据拓展名去调用对应的工具去查看格式等，将这些信息写入 CLAUDE.md
+
   Searched for 1 pattern, read 22 files, listed 3 directories (ctrl+o to expand)
 
 ● 现在我已经完整掌握了整个项目。让我写入 CLAUDE.md。
@@ -117,12 +117,12 @@ ccapi deepseek
 ● Write(CLAUDE.md)
   ⎿  Wrote 167 lines to CLAUDE.md
        1 # PAL scRNA-seq Analysis Project
-       2 
+       2
        3 ## 物种
        4 **Populus alba × Populus glandulosa** （银白杨 × 腺杨）, 简称 "pal"。
-       5 
+       5
        6 ## 计算环境
-       7 
+       7
        8 ### Conda
        9 - **环境名**: `scrna2`
       10 - **基础路径**: `/public/home/jiaoyuan/00.pipeline/miniforge3`
@@ -148,7 +148,7 @@ ccapi deepseek
 
 ✻ Crunched for 48s
 
-❯ 请你检查 04.umap_composition_qc.R 的代码是否正确，完善脚本并且使用 slurm 作业系统提交任务                                                                                                       
+❯ 请你检查 04.umap_composition_qc.R 的代码是否正确，完善脚本并且使用 slurm 作业系统提交任务
 
 （agent 自动检查并完善了 R 脚本，详见下方总结）
 
@@ -177,9 +177,9 @@ ccapi deepseek
 ✻ Worked for 1m 7s
 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯  
+❯ 
 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  ? for shortcuts                                                                  
+  ? for shortcuts
 ```
 
 等 agent 清楚这些问题了以后再让它去修改流程或者提交任务就会变得简单很多，我把开头的提示词用 AI 润色补充了一下，贴出来：
@@ -244,7 +244,7 @@ pip install pymupdf markdownify
 
   Opus 4.7 xhigh is now available! · /model to switch
 
-❯ 本环境中有 pymupdf，是使用 uv 安装的，你使用它将此文件夹下的 pdf 文献转为 md 文档，然后阅读转换后的文献生成 CLAUDE.md                                                                                                                 
+❯ 本环境中有 pymupdf，是使用 uv 安装的，你使用它将此文件夹下的 pdf 文献转为 md 文档，然后阅读转换后的文献生成 CLAUDE.md
 
   Searched for 1 pattern, listed 1 directory (ctrl+o to expand)
 
@@ -263,12 +263,12 @@ pip install pymupdf markdownify
 ● Write(CLAUDE.md)
   ⎿  Wrote 175 lines to CLAUDE.md
        1 # CLAUDE.md — Long-read Single-cell RNA Sequencing Literature Reference
-       2 
+       2
        3 This project contains reference literature on long-read single-cell RNA sequencing (scRNA-seq)
        4 and isoform-level transcriptome analysis. The three papers below cover experimental methods,
        5 computational tools, and biological applications of full-length isoform detection at
        6 single-cell resolution.
-       7                                                                                                                                                                                                       
+       7
        8 ---
        9
       10 ## Paper 1 — Dondi et al. (2024), Nature Communications
@@ -284,14 +284,14 @@ pip install pymupdf markdownify
   - 41467_2023_Article_43387.pdf → .md（Dondi 等人，Nature Communications — 卵巢癌长读长 scRNA-seq）
   - btaf664.pdf → .md（Chen 等人，Bioinformatics — IsoDiffR 工具）
   - s41593-024-01616-4.pdf → .md（Joglekar 等人，Nature Neuroscience — 脑部异构体图谱）
-  
+
   生成的 CLAUDE.md（175 行） 包含：
   - 每篇论文的方法、关键发现及其与本项目的相关性
   - 跨论文主题：长读长测序揭示短读长无法检测的异构体复杂性、异构体表达≠基因表达、异构体的细胞类型特异性、临床相关性，以及异构体分析的计算工具现状
 
 ✻ Cooked for 2m 21s
 
-❯ 根据文献来看，目前第三代全长单细胞转录组学的分析通常包括哪些？                                                                                                                                                                
+❯ 根据文献来看，目前第三代全长单细胞转录组学的分析通常包括哪些？
 
 ● 根据这三篇文献，我将目前第三代全长单细胞转录组学的分析流程归纳为以下几个层面：
 
@@ -310,9 +310,9 @@ pip install pymupdf markdownify
   一句话总结：目前的分析链路可概括为「预处理质控 → 异构体定量 → 细胞注释 → 差异异构体分析 → 融合/突变检测 → 结构域/蛋白功能预测 → 多维度比较」，其核心区别于短读长分析的是：分析粒度从基因下沉到异构体，且需要回答「观察到的差异是源于基因表达变化还是异构体特异性调控」这一本质问题。
 
 ✻ Churned for 40s
-  
+
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-❯  
+❯ 
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   ? for shortcuts
 
