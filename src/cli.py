@@ -7,6 +7,7 @@ from pathlib import Path
 
 from builder import build
 from config_loader import load_site_config
+from content_loader import format_content
 from server import serve
 
 
@@ -51,23 +52,49 @@ def _create_post(root: Path, name: str) -> None:
         sys.exit(1)
 
 
+def _format_posts(root: Path) -> None:
+    posts_dir = root / "content" / "posts"
+    if not posts_dir.exists():
+        print("No posts directory found.")
+        return
+    count = 0
+    for folder in sorted(posts_dir.iterdir()):
+        if not folder.is_dir():
+            continue
+        md = folder / "index.md"
+        if not md.exists():
+            continue
+        raw = md.read_text(encoding="utf-8")
+        new_raw = format_content(raw)
+        if new_raw == raw:
+            continue
+        md.write_text(new_raw, encoding="utf-8")
+        count += 1
+        print(f"  formatted: {folder.name}")
+    print(f"Done. {count} files updated.")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="static site generator")
     parser.add_argument("-d", "--build", action="store_true", help="build static site to public/")
     parser.add_argument("-s", "--serve", action="store_true", help="build then serve public/ locally")
     parser.add_argument("-n", "--new", metavar="NAME", help="create a new post folder at content/posts/NAME/")
+    parser.add_argument("-f", "--format", action="store_true", help="format all posts (pangu spacing, trailing whitespace, blank lines)")
     parser.add_argument("-p", "--port", type=int, default=None, help="serve port")
-    parser.add_argument("--host", default=None, help="serve host")
-    parser.add_argument("--root", default=".", help="project root (default: .)")
+    parser.add_argument("-H", "--host", default=None, help="serve host")
+    parser.add_argument("-r", "--root", default=".", help="project root (default: .)")
     args = parser.parse_args()
 
-    if not args.build and not args.serve and not args.new:
+    if not args.build and not args.serve and not args.new and not args.format:
         parser.print_help()
         return
 
     root = Path(args.root).resolve()
     if args.new:
         _create_post(root, args.new)
+        return
+    if args.format:
+        _format_posts(root)
         return
 
     try:
