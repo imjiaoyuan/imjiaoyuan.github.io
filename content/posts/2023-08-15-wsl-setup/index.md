@@ -100,7 +100,7 @@ sudo apt-get install neofetch
 
 先使用 [淘宝镜像](https://registry.npmmirror.com/binary.html?path=git-for-windows/) 下载安装最新版的 Git
 
-在 Windows 系统的开始菜单搜索`编辑系统环境变量`，以此点击`环境变量`——系统环境变量里的`Path`——`编辑`——`新建`
+在 Windows 系统的开始菜单搜索`编辑系统环境变量`，依次点击`环境变量`——系统环境变量里的`Path`——`编辑`——`新建`
 
 将 Git 路径下的`usr\bin`添加进去，例如我的 Git 安装在默认路径，这里就写`C:\Program Files\Git\usr\bin`
 
@@ -125,7 +125,7 @@ vi "$(wslpath "C:\Users\YourUsername\.wslconfig")"
 
 ```bash
 [wsl2]
-memory=1GB 
+memory=1GB
 processors=1
 swap=1GB
 ```
@@ -138,7 +138,7 @@ swap=1GB
 
 ### 在指定目录打开终端
 
-默认情况下，VScode 中终端会在用户根目录下打开，即~目录，但~下有很多软件和系统的配置文件等，会影响我们的视野，我采用的方法是在根目录下建立一个`work`目录，然后 cd 到该目录，再输入`code .`打开 VScode，这样每次打开终端都会再`work`目录下打开，将所需要的文件放进去，会方便很多
+默认情况下，VScode 中终端会在用户根目录下打开，即~目录，但~下有很多软件和系统的配置文件等，会影响我们的视野，我采用的方法是在根目录下建立一个`work`目录，然后 cd 到该目录，再输入`code .`打开 VScode，这样每次打开终端都会在`work`目录下打开，将所需要的文件放进去，会方便很多
 
 ### 在 Windows 下查看 Linux 下文件
 

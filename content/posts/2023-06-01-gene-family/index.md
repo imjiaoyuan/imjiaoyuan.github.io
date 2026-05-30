@@ -447,11 +447,11 @@ https://www.megasoftware.net/older_versions
 
 ### 多序列比对
 
-在 [CLUSTALW 网站](https://www.genome.jp/tools-bin/clustalw) 上传基因家族的蛋白质序列进行多序列比对，比对完成后下载比对结果的aln 文件
+在 [CLUSTALW 网站](https://www.genome.jp/tools-bin/clustalw) 上传基因家族的蛋白质序列进行多序列比对，比对完成后下载比对结果的 aln 文件
 
 ![](assets/20230601202649.webp)
 
-打开 [ESPript](https://espript.ibcp.fr/ESPript/cgi-bin/ESPript.cgi) ，上传刚刚的aln 文件进行可视化
+打开 [ESPript](https://espript.ibcp.fr/ESPript/cgi-bin/ESPript.cgi) ，上传刚刚的 aln 文件进行可视化
 
 ![](assets/20230601202703.webp)
 
@@ -487,7 +487,7 @@ TBtools 软件、物种基因组序列、注释文件
 
 ![](assets/20230424205623.webp)
 
-打开 TBtools 的 Text Transformat for Micro-Synteny View 功能，导入上一步获得的 GenePairTable 文件和分析结果中的以gff 为拓展名的文件（即简化后的注释文件），获得 LinkedRegion 文件，也就是基因间的关联文件 LinkedRegion
+打开 TBtools 的 Text Transformat for Micro-Synteny View 功能，导入上一步获得的 GenePairTable 文件和分析结果中的以 gff 为拓展名的文件（即简化后的注释文件），获得 LinkedRegion 文件，也就是基因间的关联文件 LinkedRegion
 
 ![](assets/20230424205705.webp)
 

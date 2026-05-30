@@ -520,10 +520,10 @@ modprobe btusb
 
 ```bash
 pacman -Qqen > packages-repository.txt   # 导出
-pacman --needed -S - < packages-repository.txt  # 安装 
+pacman --needed -S - < packages-repository.txt  # 安装
 ```
 
 ```bash
 pacman -Qqem > packages-AUR.txt   # 导出
-cat packages-AUR.txt | xargs yaourt -S --needed --noconfirm  # 安装 
+cat packages-AUR.txt | xargs yaourt -S --needed --noconfirm  # 安装
 ```

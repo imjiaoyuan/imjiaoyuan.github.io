@@ -19,20 +19,20 @@ date: 2026-04-22
 
 ```bash
 NAME        FSTYPE FSVER LABEL     UUID                                 FSAVAIL FSUSE% MOUNTPOINTS
-nvme0n1                                                                                
+nvme0n1
 ├─nvme0n1p1 vfat   FAT32           1439-CDE2                             913.5M    11% /boot
 └─nvme0n1p2 btrfs        archlinux d319d5d7-0a75-431c-b6e1-bbf69abe2011  698.3G    27% /var/log
                                                                                        /var/cache/pacman/pkg
                                                                                        /home
                                                                                        /
-nvme1n1                                                                                
+nvme1n1
 └─nvme1n1p1 ext4   1.0   data      6076a825-05b0-46ef-89f6-baac02379c1c  776.4G    12% /data
 ```
 
 对于常用的数据，我会通过下面的脚本使用 rsync 和 systemd 配置去定时备份：
 
 ```bash
-jiaoyuan:~ > cat /usr/local/bin/backup.sh 
+jiaoyuan:~ > cat /usr/local/bin/backup.sh
 #!/bin/bash
 
 BACKUP_DIR="/data/data_backup"
