@@ -3,6 +3,41 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+_CJK = r"一-鿿㐀-䶿豈-﫿"
+
+
+def pangu_format(text: str) -> str:
+    blocks: list[str] = []
+
+    def _save(m: re.Match[str]) -> str:
+        blocks.append(m.group(0))
+        return f"\x00{len(blocks) - 1}\x00"
+
+    text = re.sub(r"```[\s\S]*?```", _save, text)
+    text = re.sub(r"`[^`]+`", _save, text)
+    text = re.sub(f"([{_CJK}])([a-zA-Z0-9])", r"\1 \2", text)
+    text = re.sub(f"([a-zA-Z0-9])([{_CJK}])", r"\1 \2", text)
+    for i in range(len(blocks) - 1, -1, -1):
+        text = text.replace(f"\x00{i}\x00", blocks[i])
+    return text
+
+
+def format_content(text: str) -> str:
+    parts = text.split("---\n", 2)
+    if len(parts) < 3:
+        body = text
+        fm = ""
+    else:
+        fm = parts[1]
+        body = parts[2]
+    body = "\n".join(line.rstrip() for line in body.splitlines())
+    body = re.sub(r"\n{4,}", "\n\n\n", body)
+    body = pangu_format(body)
+    body = body.rstrip() + "\n"
+    if fm:
+        return f"---\n{fm}---\n{body}"
+    return body
+
 from date_utils import parse_date
 from markdown_engine import MarkdownEngine
 from models import ContentItem, SiteConfig
