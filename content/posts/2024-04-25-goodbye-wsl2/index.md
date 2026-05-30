@@ -65,13 +65,13 @@ scoop bucket add dorado https://github.com/chawyehsu/dorado
 
 添加了这三个 buckets 的话，基本上就能安装所有日常使用的软件了，除了一些生物信息学软件和游戏之外，其他的软件我基本都用 scoop 装了，干净也方便~
 
-主要的开发工具还是用 VScode，这玩意是在是万金油，我主要用 R 和 Python，加上现在学 C 语言，都可以用 VScode，C 语言的话用 cmake 插件或者用 gcc 编译即可，Python 更方便，官方插件就可以识别解释器路径，而 R 语言需要配置一下。
+主要的开发工具还是用 VScode，这玩意实在是万金油，我主要用 R 和 Python，加上现在学 C 语言，都可以用 VScode，C 语言的话用 cmake 插件或者用 gcc 编译即可，Python 更方便，官方插件就可以识别解释器路径，而 R 语言需要配置一下。
 
 在~目录（即用户目录）新建一个 .Rprofile 文件，写入以下内容：
 
 ```r
 if (interactive() && Sys.getenv("TERM_PROGRAM") == "vscode") {
-  if ("httpgd" %in% .packages(all.available = TRUE)) {        
+  if ("httpgd" %in% .packages(all.available = TRUE)) {
     options(vsc.plot = FALSE)
     options(device = function(...) {
       httpgd::hgd(silent = TRUE)
