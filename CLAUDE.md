@@ -17,13 +17,19 @@ python run.py -d          # Build static site to public/
 
 ### Local development with live reload
 ```bash
-python run.py -s          # Build then serve public/ locally (default port 1313)
-python run.py -s -p 8080  # Serve on a specific port
+python run.py -s              # Build then serve public/ locally (default port 1313)
+python run.py -s -p 8080      # Serve on a specific port
+python run.py -s -H 0.0.0.0   # Serve on a specific host
 ```
 
 ### Creating new content
 ```bash
 python run.py -n 2026-04-22-new-post   # Create a new post folder at content/posts/2026-04-22-new-post/
+```
+
+### Formatting posts
+```bash
+python run.py -f              # Format all posts (pangu spacing, strip trailing whitespace, normalize blank lines)
 ```
 
 ### Help
