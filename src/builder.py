@@ -7,7 +7,7 @@ from xml.sax.saxutils import escape as xml_escape
 
 from asset_pipeline import copy_site_assets, copy_post_assets, copy_static
 from config_loader import load_site_config
-from content_loader import load_pages, load_posts
+from content_loader import BuildCache, _compute_cache_version, load_pages, load_posts
 from date_utils import to_atom_date
 from markdown_engine import MarkdownEngine
 from template_runtime import render_404, render_home, render_page, render_post
@@ -125,9 +125,14 @@ def build(root: Path) -> None:
 
     engine = MarkdownEngine()
 
+    cache_dir = root / ".cache"
+    cache_path = cache_dir / "build_cache.json"
+    cache_version = _compute_cache_version(root)
+    build_cache = BuildCache(cache_path, cache_version)
+
     try:
-        posts = load_posts(cfg, engine)
-        pages = load_pages(cfg, engine)
+        posts = load_posts(cfg, engine, build_cache)
+        pages = load_pages(cfg, engine, build_cache)
     except Exception as e:
         print(f"Error: Failed to load content: {e}")
         raise RuntimeError("Content loading failed. Check markdown files for errors.") from e
@@ -197,5 +202,7 @@ def build(root: Path) -> None:
     except (PermissionError, OSError) as e:
         print(f"Error: Cannot write 404.html: {e}")
         raise
+
+    build_cache.save()
 
     print(f"Built {len(posts)} posts -> {cfg.public_dir}")
