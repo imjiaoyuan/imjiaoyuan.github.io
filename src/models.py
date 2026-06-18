@@ -12,7 +12,7 @@ class SiteConfig:
     description: str
     icon: str
     home_limit: int
-    log_limit: int
+
     content_dir: Path
     static_dir: Path
     public_dir: Path
