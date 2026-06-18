@@ -390,6 +390,31 @@ h3 { font-size: 1.05em; }
   background: var(--scroll-thumb-hover);
 }
 
+.footnotes {
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.footnotes ol {
+  margin: 0;
+  padding-left: 22px;
+}
+
+.footnotes li {
+  margin: 4px 0;
+}
+
+.footnotes a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.content input[type="checkbox"] {
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
 .pager {
   display: flex;
   justify-content: space-between;

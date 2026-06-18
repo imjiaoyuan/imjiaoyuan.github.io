@@ -19,6 +19,8 @@ class MarkdownEngine:
     }
 
     def render(self, text: str) -> str:
+        self._fn_ids: set[str] = set()
+        self._fn_defs: dict[str, str] = {}
         lines = text.replace("\r\n", "\n").split("\n")
         out: list[str] = []
         para: list[str] = []
@@ -73,6 +75,15 @@ class MarkdownEngine:
                 flush_para()
                 close_list()
                 out.append(line)
+                i += 1
+                continue
+
+            fn_def = re.match(r"^\[\^([^\]]+)\]:\s+(.*)", line)
+            if fn_def:
+                flush_para()
+                close_list()
+                fid = fn_def.group(1).strip()
+                self._fn_defs[fid] = self._inline(fn_def.group(2))
                 i += 1
                 continue
 
@@ -149,15 +160,25 @@ class MarkdownEngine:
                 mode = "ul" if ul else "ol"
                 indent = len(line) - len(line.lstrip())
                 content = (ul.group(1) if ul else ol.group(1)).strip()
+                task_checked = None
+                if ul:
+                    tm = re.match(r"^\[([ xX])\]\s+(.*)", content)
+                    if tm:
+                        task_checked = tm.group(1).lower() == "x"
+                        content = tm.group(2)
+                inline_html = self._inline(content)
+                if task_checked is not None:
+                    checked = " checked" if task_checked else ""
+                    inline_html = f'<input type="checkbox"{checked} disabled> {inline_html}'
                 if not list_stack:
                     out.append(f"<{mode}>")
-                    out.append(f"<li>{self._inline(content)}")
+                    out.append(f"<li>{inline_html}")
                     list_stack.append((indent, mode))
                 else:
                     prev_indent, prev_mode = list_stack[-1]
                     if indent > prev_indent:
                         out.append(f"<{mode}>")
-                        out.append(f"<li>{self._inline(content)}")
+                        out.append(f"<li>{inline_html}")
                         list_stack.append((indent, mode))
                     elif indent == prev_indent:
                         if mode != prev_mode:
@@ -165,11 +186,11 @@ class MarkdownEngine:
                             out.append(f"</{prev_mode}>")
                             list_stack.pop()
                             out.append(f"<{mode}>")
-                            out.append(f"<li>{self._inline(content)}")
+                            out.append(f"<li>{inline_html}")
                             list_stack.append((indent, mode))
                         else:
                             out.append("</li>")
-                            out.append(f"<li>{self._inline(content)}")
+                            out.append(f"<li>{inline_html}")
                     else:
                         out.append("</li>")
                         while list_stack and indent < list_stack[-1][0]:
@@ -179,7 +200,7 @@ class MarkdownEngine:
                             out.append("</li>")
                         if not list_stack or indent > list_stack[-1][0]:
                             out.append(f"<{mode}>")
-                            out.append(f"<li>{self._inline(content)}")
+                            out.append(f"<li>{inline_html}")
                             list_stack.append((indent, mode))
                         elif indent == list_stack[-1][0]:
                             if mode != list_stack[-1][1]:
@@ -187,7 +208,7 @@ class MarkdownEngine:
                                 out.append(f"</{m}>")
                                 out.append(f"<{mode}>")
                                 list_stack.append((indent, mode))
-                            out.append(f"<li>{self._inline(content)}")
+                            out.append(f"<li>{inline_html}")
                 i += 1
                 continue
 
@@ -198,6 +219,21 @@ class MarkdownEngine:
         close_list()
         if in_code:
             out.append(self._render_code_block(code_lang, code_lines))
+
+        if self._fn_defs:
+            fn_items = []
+            for fid in sorted(self._fn_ids, key=lambda x: (len(x), x)):
+                if fid in self._fn_defs:
+                    fn_items.append(
+                        f'<li id="fn-{fid}"><p>{self._fn_defs[fid]} '
+                        f'<a href="#fnref-{fid}">↩</a></p></li>'
+                    )
+            if fn_items:
+                out.append('<hr>')
+                out.append('<section class="footnotes"><ol>')
+                out.extend(fn_items)
+                out.append('</ol></section>')
+
         result = "\n".join(out)
         result = re.sub(r"<table>", '<div class="table-wrap"><table>', result)
         result = re.sub(r"</table>", "</table></div>", result)
@@ -305,18 +341,25 @@ class MarkdownEngine:
 
     def _inline(self, text: str) -> str:
         s = html.escape(text)
+
         def replace_image(match):
             alt = match.group(1)
-            src_and_title = match.group(2)
-            parts = src_and_title.split('"', 1)
-            src = parts[0].strip()
-            title_attr = f' title="{parts[1].rstrip('"')}"' if len(parts) > 1 else ''
-            img_attrs = f'alt="{alt}" src="{src}" loading="lazy" decoding="async"{title_attr}'
-            return f'<img {img_attrs}>'
+            src = match.group(2).strip()
+            title = match.group(3)
+            title_attr = f' title="{title}"' if title else ''
+            return f'<img alt="{alt}" src="{src}" loading="lazy" decoding="async"{title_attr}>'
 
-        s = re.sub(r'!\[([^\]]*)\]\(([^)]+)\)', replace_image, s)
+        s = re.sub(r'!\[([^\]]*)\]\((\S+)(?:\s+"([^"]*)")?\)', replace_image, s)
         s = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', s)
         s = re.sub(r'`([^`]+)`', r'<code>\1</code>', s)
+        s = re.sub(r'~~([^~]+)~~', r'<del>\1</del>', s)
         s = re.sub(r'\*\*([^*]+)\*\*', r'<strong>\1</strong>', s)
         s = re.sub(r'\*([^*]+)\*', r'<em>\1</em>', s)
+
+        def replace_fn(match):
+            fid = match.group(1).strip()
+            self._fn_ids.add(fid)
+            return f'<sup><a href="#fn-{fid}" id="fnref-{fid}">[{fid}]</a></sup>'
+
+        s = re.sub(r'\[\^([^\]]+)\]', replace_fn, s)
         return s
