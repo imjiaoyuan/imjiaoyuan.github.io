@@ -1,4 +1,4 @@
-:root {
+:root, [data-theme="light"] {
   --bg: #ffffff;
   --fg: #24292f;
   --muted: #57606a;
@@ -30,22 +30,6 @@
     --tok-c: #8d96a0;
     --tok-n: #ffa657;
   }
-}
-
-[data-theme="light"] {
-  --bg: #ffffff;
-  --fg: #24292f;
-  --muted: #57606a;
-  --line: #d0d7de;
-  --code: #f6f8fa;
-  --accent: #0969da;
-  --scroll-thumb: #d0d7de;
-  --scroll-thumb-hover: #afb8c1;
-  --scroll-track: transparent;
-  --tok-k: #0550ae;
-  --tok-s: #0a3069;
-  --tok-c: #6e7781;
-  --tok-n: #8b4513;
 }
 
 [data-theme="dark"] {
@@ -221,50 +205,6 @@ h3 { font-size: 1.05em; }
     border-left: 0;
     border-right: 0;
   }
-}
-
-.log-item {
-  border-bottom: 1px solid var(--line);
-  padding: 10px 0;
-}
-
-.log-item h2 {
-  color: var(--muted);
-  font-size: 15px;
-  margin-bottom: 8px;
-}
-
-.log-item .log-content {
-  position: relative;
-}
-
-.log-item .log-content.is-collapsed {
-  max-height: var(--log-collapsed-height, 13em);
-  overflow: hidden;
-}
-
-.log-item .log-content.is-collapsed::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 2.4em;
-  background: linear-gradient(to bottom, rgb(0 0 0 / 0), var(--bg));
-  pointer-events: none;
-}
-
-.log-toggle {
-  margin-top: 6px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--bg);
-  color: var(--fg);
-  font: inherit;
-  font-size: 13px;
-  line-height: 1.3;
-  padding: 3px 10px;
-  cursor: pointer;
 }
 
 .content {

@@ -4,7 +4,7 @@ SITE = {
     "description": "Master's student in Bioinformatics at Sichuan University.",
     "icon": "/favicon.ico",
     "home_limit": 30,
-    "log_limit": 15,
+
     "content_dir": "content",
     "static_dir": "src/assets",
     "public_dir": "public",
