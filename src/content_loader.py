@@ -253,13 +253,8 @@ def load_posts(cfg: SiteConfig, engine: MarkdownEngine, cache: BuildCache | None
     if not posts_dir.exists():
         return items
     used: set[str] = set()
-    for folder in sorted(posts_dir.iterdir()):
-        if not folder.is_dir():
-            continue
-        md = folder / "index.md"
-        if not md.exists():
-            continue
-        slug = _slug_hash(folder.name)
+    for md in sorted(posts_dir.glob("*.md")):
+        slug = _slug_hash(md.stem)
         if slug in used or slug in RESERVED_SLUGS:
             i = 1
             while f"{slug}-{i}" in used:
