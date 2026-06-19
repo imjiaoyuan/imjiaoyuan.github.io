@@ -16,5 +16,7 @@ SITE = {
     "theme_options": {
         "comment_repo": "imjiaoyuan/imjiaoyuan.github.io",
     },
+    "r2_remote": "r2:static/blog/images",
+    "r2_base_url": "https://static.jiaoyuan.org/blog/images",
     "server": {"host": "127.0.0.1", "port": 1313},
 }

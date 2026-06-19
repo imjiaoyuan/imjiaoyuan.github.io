@@ -18,6 +18,8 @@ class SiteConfig:
     public_dir: Path
     menu: list[dict[str, Any]]
     theme_options: dict[str, Any]
+    r2_remote: str
+    r2_base_url: str
     server: dict[str, Any]
     root: Path
 

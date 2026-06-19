@@ -9,9 +9,9 @@ date: 2026-04-22
 
 我使用的文件系统是 Btrfs，支持快照，所以备份就很方便简单了，timeshift 默认也支持，此前我也使用 timeshift，但是后来换成了 btrfs-assistant，它本身不直接创建快照，而是调用 snapper 和 btrfsmaintenance 来完成任务。timeshift 主要是定时对系统创建快照然后保存，如果想要在 pacman -Syu 的时候创建快照，就需要使用一个 aur 包 [timeshift-autosnap](https://aur.archlinux.org/packages/timeshift-autosnap)。而 btrfs-assistant 本身就原生支持定时备份和事件驱动，并且记录更加详细，只需要点一下设置一下即可。除了快照管理，还能提供文件系统概览、挂载/卸载子卷、执行数据清理（Scrub）和均衡（Balance）等维护操作。
 
-![](./assets/20260422203227.webp)
+![](https://static.jiaoyuan.org/blog/images/79af8da7.webp)
 
-![](./assets/20260422203300.webp)
+![](https://static.jiaoyuan.org/blog/images/e54be04f.webp)
 
 ## 数据备份
 
