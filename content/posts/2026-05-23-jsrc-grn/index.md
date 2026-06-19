@@ -169,7 +169,7 @@ jsrc grn serve -g grn.json -n annotation.json -p 8000
 
 在浏览器中打开 `http://127.0.0.1:8000` 即可查看可视化界面，效果如下：
 
-![](./assets/20260523230438.webp)
+![](https://static.jiaoyuan.org/blog/images/a4f579d0.webp)
 
 - 搜索框输入基因 ID，点击 Search 按钮查看调控关系
 - 点击节点展开其邻居节点
