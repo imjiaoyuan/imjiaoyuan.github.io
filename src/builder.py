@@ -5,7 +5,7 @@ from pathlib import Path
 from urllib.parse import urljoin
 from xml.sax.saxutils import escape as xml_escape
 
-from asset_pipeline import copy_site_assets, copy_post_assets, copy_static
+from asset_pipeline import copy_site_assets, copy_static
 from config_loader import load_site_config
 from content_loader import BuildCache, _compute_cache_version, load_pages, load_posts
 from date_utils import to_atom_date
@@ -153,7 +153,6 @@ def build(root: Path) -> None:
 
     try:
         copy_site_assets(cfg, needs_math)
-        copy_post_assets(cfg, posts)
     except (PermissionError, OSError) as e:
         print(f"Error: Failed to copy assets: {e}")
         raise RuntimeError("Failed to copy assets. Check file permissions and disk space.") from e

@@ -26,18 +26,14 @@ def _create_post(root: Path, name: str) -> None:
         print("Usage: python run.py -n 'My Post Title'", file=sys.stderr)
         sys.exit(1)
 
-    post_dir = cfg.content_dir / "posts" / slug
-    post_file = post_dir / "index.md"
-    assets_dir = post_dir / "assets"
+    post_file = cfg.content_dir / "posts" / f"{slug}.md"
 
     if post_file.exists():
         print(f"Error: Post already exists: {post_file}", file=sys.stderr)
-        print(f"Suggestion: Use a different name or edit the existing post.", file=sys.stderr)
         sys.exit(1)
 
     try:
-        post_dir.mkdir(parents=True, exist_ok=True)
-        assets_dir.mkdir(exist_ok=True)
+        post_file.parent.mkdir(parents=True, exist_ok=True)
         post_file.write_text(
             f"---\n"
             f"title: {slug}\n"
@@ -59,12 +55,7 @@ def _format_posts(root: Path) -> None:
         print("No posts directory found.")
         return
     count = 0
-    for folder in sorted(posts_dir.iterdir()):
-        if not folder.is_dir():
-            continue
-        md = folder / "index.md"
-        if not md.exists():
-            continue
+    for md in sorted(posts_dir.glob("*.md")):
         raw = md.read_text(encoding="utf-8")
         new_raw = format_content(raw)
         if new_raw == raw:
