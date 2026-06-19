@@ -9,7 +9,7 @@ date: 2026-04-22
 
 ## 叶片轮廓提取
 
-![](./assets/20260422212848.webp)
+![](https://static.jiaoyuan.org/blog/images/e7d3aa5b.webp)
 
 先从相机拍摄的图片中将叶片的轮廓提取出来，首先要对图片进行降噪处理，平滑图像以去除传感器噪声或微小的表面纹理（如叶脉干扰）。使用二维高斯核 $G(x, y)$ 与图像进行卷积。核函数公式为：
 $$G(x, y) = \frac{1}{2\pi\sigma^2} e^{-\frac{x^2+y^2}{2\sigma^2}}$$
@@ -90,7 +90,7 @@ np.save(os.path.join(output_dir, f"{base_name}_{i+1}.npy"), cnt)
 - 数据结构：一个形状为 $(K, 1, 2)$ 的数组，存储了 $K$ 个连续的边界坐标点。
 - 与傅里叶的衔接：傅里叶脚本读取此文件后，会通过 `np.diff` 计算相邻两点间的距离 $\Delta t = \sqrt{\Delta x^2 + \Delta y^2}$。由于 `findContours` 提取的是连续有序的闭合曲线，这完美符合傅里叶级数对周期函数的要求。
 
-![](./assets/20260422212850.webp)
+![](https://static.jiaoyuan.org/blog/images/c29115ae.webp)
 
 ## 椭圆傅里叶描述子
 
@@ -180,7 +180,7 @@ def reconstruct(coeffs, num_points=300):
     return np.stack([xt, yt], axis=1)
 ```
 
-![](./assets/20260422213048.webp)
+![](https://static.jiaoyuan.org/blog/images/fb5d21c9.webp)
 
 每个叶片轮廓被压缩为一个 $N \times 4$ 的矩阵（CSV 文件）：
 
