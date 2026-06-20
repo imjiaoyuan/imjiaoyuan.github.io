@@ -1,11 +1,9 @@
 from __future__ import annotations
 
 import html
-import json
 import re
 from datetime import datetime
 from pathlib import Path
-from urllib.parse import quote
 
 from models import ContentItem, SiteConfig
 
@@ -86,15 +84,15 @@ def render_shell(
 
 
 def render_post(cfg: SiteConfig, item: ContentItem) -> str:
-    repo = cfg.theme_options.get("comment_repo", "imjiaoyuan/imjiaoyuan.github.io") if cfg.theme_options else "imjiaoyuan/imjiaoyuan.github.io"
-    new_issue_url = f"https://github.com/{repo}/issues/new?title={quote(item.title)}&labels=comment"
-    js_title = json.dumps(item.title)
+    giscus = cfg.theme_options.get("giscus", {}) if cfg.theme_options else {}
     comment_html = _render_template(
         "comment.html",
         {
-            "new_issue_url": new_issue_url,
-            "js_title": js_title,
-            "repo": repo,
+            "giscus_repo": str(giscus.get("repo", "")),
+            "giscus_repo_id": str(giscus.get("repo_id", "")),
+            "giscus_category": str(giscus.get("category", "")),
+            "giscus_category_id": str(giscus.get("category_id", "")),
+            "giscus_term": html.escape(item.title),
         },
     )
     body = _render_template(

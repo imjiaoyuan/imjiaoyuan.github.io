@@ -14,7 +14,12 @@ SITE = {
         {"name": "RSS", "url": "/atom.xml"},
     ],
     "theme_options": {
-        "comment_repo": "imjiaoyuan/imjiaoyuan.github.io",
+        "giscus": {
+            "repo": "imjiaoyuan/imjiaoyuan.github.io",
+            "repo_id": "YOUR_REPO_ID",
+            "category": "Announcements",
+            "category_id": "YOUR_CATEGORY_ID",
+        },
     },
     "r2_remote": "r2:static/blog/images",
     "r2_base_url": "https://static.jiaoyuan.org/blog/images",

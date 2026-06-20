@@ -1,22 +1,19 @@
 <section class="comments">
-<p><a class="comment-btn" href="{{new_issue_url}}" target="_blank">Go to GitHub issues to discuss with me</a></p>
-</section>
-<script>
-(function() {
-    var title = {{js_title}};
-    var btn = document.querySelector('.comment-btn');
-    if (!btn) return;
-    var q = encodeURIComponent(title) + '+in:title+repo:{{repo}}+is:issue';
-    fetch('https://api.github.com/search/issues?q=' + q, {
-        headers: {'Accept': 'application/vnd.github.v3+json'}
-    })
-        .then(function(r) { return r.json(); })
-        .then(function(data) {
-            if (data.total_count > 0) {
-                btn.href = data.items[0].html_url;
-                btn.textContent = 'Go to GitHub issues to discuss with me';
-            }
-        })
-        .catch(function() {});
-})();
+<script src="https://giscus.app/client.js"
+    data-repo="{{giscus_repo}}"
+    data-repo-id="{{giscus_repo_id}}"
+    data-category="{{giscus_category}}"
+    data-category-id="{{giscus_category_id}}"
+    data-mapping="specific"
+    data-term="{{giscus_term}}"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="top"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+    data-loading="lazy"
+    crossorigin="anonymous"
+    async>
 </script>
+</section>

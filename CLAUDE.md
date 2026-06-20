@@ -103,7 +103,7 @@ Post URLs are **not** derived from filenames. Each post gets a short hash-based 
 ### Key Conventions
 - **Front matter**: YAML-like, between `---` lines. Required: `title`, `date` (YYYY-MM-DD). Optional: `math: true` (enables KaTeX), `draft: true` (excludes from homepage), `pinned: true` (pin to top of homepage). New posts created via `-n` are drafts by default.
 - **Image references**: Images are uploaded to R2 via `python run.py -u`. In posts, reference them by their full R2 URL (`https://static.jiaoyuan.org/blog/images/<hash>.webp`).
-- **Comments**: Custom GitHub Issues-based system (not Giscus). `src/templates/comment.html` fetches the GitHub Issues API to find an existing issue matching the post title, or links to create a new one. Configured via `theme_options.comment_repo` in `src/config.py`.
+- **Comments**: Giscus-powered, configured via `theme_options.giscus` in `src/config.py` (`repo`, `repo_id`, `category`, `category_id`). The `repo_id` and `category_id` are obtained from https://giscus.app.
 - **Theme**: Dark/light toggle in the shell template. Stores preference in `localStorage` under `site-theme`, applies via `data-theme` attribute on `<html>`. Respects `prefers-color-scheme` when no explicit preference is saved. CSS lives in `src/assets/style.css`.
 - **Math rendering**: KaTeX is vendored in `src/assets/vendor/katex/`. It is only copied to the output when at least one post or page has `math: true` (or contains `$` math delimiters in the body).
 - **Homepage pagination**: Configurable via `home_limit` in `src/config.py` (default 30). Page 1 is at `/`, subsequent pages at `/page/N/`. The homepage uses infinite scroll: an IntersectionObserver fetches the next page's post list and appends it.
