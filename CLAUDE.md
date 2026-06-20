@@ -53,7 +53,7 @@ python run.py -h                          # Show help
 ### Content Organization
 - **Posts**: Flat `.md` files directly under `content/posts/` (e.g., `content/posts/2024-03-20-arch-install.md`). No subdirectories — the structure was flattened from Hugo-style leaf bundles.
 - **Pages**: Any `.md` file directly under `content/` (e.g., `content/readme.md`) becomes a standalone page at `/<stem>/`.
-- **Drafts**: Set `draft: true` in front matter to exclude a post from the build.
+- **Drafts**: New posts created via `-n` default to `draft: true` (hidden from homepage). Delete the `draft` line in front matter to publish.
 
 ### Slug Hashing
 Post URLs are **not** derived from filenames. Each post gets a short hash-based slug computed via CRC24 → base62 (`src/content_loader.py:_slug_hash()`). This means the URL is opaque (e.g., `/3ab7f/`) and does not change when a post file is renamed. Reserved slugs (`assets`, `logs`, `readme`, `page`, `atom`, `posts`) are avoided, and collisions get a numeric suffix.
@@ -101,7 +101,7 @@ Post URLs are **not** derived from filenames. Each post gets a short hash-based 
 - **Development workflow**: run `python run.py -s`, open the browser, edit Markdown files in `content/` — the server rebuilds and pushes a refresh automatically. No manual rebuild needed.
 
 ### Key Conventions
-- **Front matter**: YAML-like, between `---` lines. Required: `title`, `date` (YYYY-MM-DD). Optional: `math: true` (enables KaTeX), `draft: true` (excludes from build).
+- **Front matter**: YAML-like, between `---` lines. Required: `title`, `date` (YYYY-MM-DD). Optional: `math: true` (enables KaTeX), `draft: true` (excludes from homepage), `pinned: true` (pin to top of homepage). New posts created via `-n` are drafts by default.
 - **Image references**: Images are uploaded to R2 via `python run.py -u`. In posts, reference them by their full R2 URL (`https://static.jiaoyuan.org/blog/images/<hash>.webp`).
 - **Comments**: Custom GitHub Issues-based system (not Giscus). `src/templates/comment.html` fetches the GitHub Issues API to find an existing issue matching the post title, or links to create a new one. Configured via `theme_options.comment_repo` in `src/config.py`.
 - **Theme**: Dark/light toggle in the shell template. Stores preference in `localStorage` under `site-theme`, applies via `data-theme` attribute on `<html>`. Respects `prefers-color-scheme` when no explicit preference is saved. CSS lives in `src/assets/style.css`.
