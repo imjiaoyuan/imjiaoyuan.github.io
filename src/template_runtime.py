@@ -92,7 +92,6 @@ def render_post(cfg: SiteConfig, item: ContentItem) -> str:
             "giscus_repo_id": str(giscus.get("repo_id", "")),
             "giscus_category": str(giscus.get("category", "")),
             "giscus_category_id": str(giscus.get("category_id", "")),
-            "giscus_term": html.escape(item.title),
         },
     )
     body = _render_template(

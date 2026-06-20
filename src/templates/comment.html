@@ -4,16 +4,34 @@
     data-repo-id="{{giscus_repo_id}}"
     data-category="{{giscus_category}}"
     data-category-id="{{giscus_category_id}}"
-    data-mapping="specific"
-    data-term="{{giscus_term}}"
+    data-mapping="title"
     data-strict="0"
-    data-reactions-enabled="1"
+    data-reactions-enabled="0"
     data-emit-metadata="0"
-    data-input-position="top"
+    data-input-position="bottom"
     data-theme="preferred_color_scheme"
-    data-lang="zh-CN"
-    data-loading="lazy"
+    data-lang="en"
     crossorigin="anonymous"
     async>
+</script>
+<script>
+(function() {
+    var stored = localStorage.getItem('site-theme');
+    if (stored !== 'light' && stored !== 'dark') return;
+    function setGiscusTheme(t) {
+        var frame = document.querySelector('.giscus-frame');
+        if (frame) {
+            frame.contentWindow.postMessage({
+                giscus: { setConfig: { theme: t } }
+            }, 'https://giscus.app');
+        }
+    }
+    window.addEventListener('site:theme-change', function(e) {
+        setGiscusTheme(e.detail.theme);
+    });
+    document.addEventListener('giscus:ready', function() {
+        setGiscusTheme(stored);
+    });
+})();
 </script>
 </section>

@@ -16,9 +16,9 @@ SITE = {
     "theme_options": {
         "giscus": {
             "repo": "imjiaoyuan/imjiaoyuan.github.io",
-            "repo_id": "YOUR_REPO_ID",
+            "repo_id": "R_kgDOQgeApw",
             "category": "Announcements",
-            "category_id": "YOUR_CATEGORY_ID",
+            "category_id": "DIC_kwDOQgeAp84CzQbH",
         },
     },
     "r2_remote": "r2:static/blog/images",
