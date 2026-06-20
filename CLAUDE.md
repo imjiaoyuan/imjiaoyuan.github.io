@@ -66,9 +66,9 @@ Post URLs are **not** derived from filenames. Each post gets a short hash-based 
 5. Render HTML pages:
    - Home page with paginated post list (infinite scroll via IntersectionObserver for subsequent pages).
    - Individual post pages with comment integration.
-   - Standalone pages.
+   - Standalone pages (the `readme` page gets special treatment — it's rendered first at a fixed `/readme/` path, then skipped in the general pages loop).
    - `404.html`, `atom.xml`, `sitemap.xml`, `robots.txt`.
-6. Write output using directory-permalink structure (`public/<slug>/index.html`).
+6. Write output using directory-permalink structure (`public/<slug>/index.html`). The `_write()` helper skips writing when the output file already contains identical content — an optimization that avoids touching unchanged files.
 
 ### Incremental Build Cache (`src/content_loader.py:BuildCache`)
 - Parsed post/page data is cached to `.cache/build_cache.json` keyed by file path with nanosecond mtime.
@@ -80,6 +80,7 @@ Post URLs are **not** derived from filenames. Each post gets a short hash-based 
 - Simple `{{variable_name}}` placeholder substitution — not Jinja or Django.
 - Templates are cached in memory after first read from `src/templates/`.
 - A `render_shell()` helper wraps page content with the shared `<head>`, header, footer, theme toggle, and email modal.
+- Note: `atom.xml`, `sitemap.xml`, and `robots.txt` are generated inline in `src/builder.py` — they do **not** use the template system.
 
 ### Markdown Engine (`src/markdown_engine.py`)
 - Custom line-by-line parser. Supports: headings (with auto-generated `id` slugs), paragraphs, unordered/ordered lists (nested), blockquotes, tables (wrapped in `<div class="table-wrap">`), horizontal rules, inline formatting (bold, italic, **strikethrough**, code, links, images), **task lists** (`- [ ]` / `- [x]`), and **footnotes** (`[^id]`).
@@ -101,11 +102,13 @@ Post URLs are **not** derived from filenames. Each post gets a short hash-based 
 - **Development workflow**: run `python run.py -s`, open the browser, edit Markdown files in `content/` — the server rebuilds and pushes a refresh automatically. No manual rebuild needed.
 
 ### Key Conventions
-- **Front matter**: YAML-like, between `---` lines. Required: `title`, `date` (YYYY-MM-DD). Optional: `math: true` (enables KaTeX), `draft: true` (excludes from homepage), `pinned: true` (pin to top of homepage). New posts created via `-n` are drafts by default.
+- **Front matter**: A **custom parser** (not real YAML), between `---` lines. Supports: strings (optionally quoted), booleans (`true`/`false`), integers, floats, basic arrays (`[a, b]`), and list values (indented `- item` lines under a key with no initial value). Required fields: `title`, `date` (YYYY-MM-DD). Optional: `math: true` (enables KaTeX), `draft: true` (excludes from homepage), `pinned: true` (pin to top of homepage). New posts created via `-n` are drafts by default.
+- **Post sort order**: Posts on the homepage are sorted by pinned status first (pinned posts at top), then by date descending (most recent first). This is implemented in `src/content_loader.py:load_posts()`.
+- **Formatting**: The `-f` command runs pangu formatting (adds a space between CJK characters and Latin letters/digits), strips trailing whitespace, collapses 4+ consecutive blank lines to 3, and right-strips the body. Code blocks and inline code are preserved during pangu formatting.
 - **Image references**: Images are uploaded to R2 via `python run.py -u`. In posts, reference them by their full R2 URL (`https://static.jiaoyuan.org/blog/images/<hash>.webp`).
 - **Comments**: Giscus-powered, configured via `theme_options.giscus` in `src/config.py` (`repo`, `repo_id`, `category`, `category_id`). The `repo_id` and `category_id` are obtained from https://giscus.app.
 - **Theme**: Dark/light toggle in the shell template. Stores preference in `localStorage` under `site-theme`, applies via `data-theme` attribute on `<html>`. Respects `prefers-color-scheme` when no explicit preference is saved. Dispatches a `site:theme-change` custom event on toggle — Giscus listens for this to sync its theme. CSS lives in `src/assets/style.css`.
-- **Math rendering**: KaTeX is vendored in `src/assets/vendor/katex/`. It is only copied to the output when at least one post or page has `math: true` (or contains `$` math delimiters in the body).
+- **Math rendering**: KaTeX is vendored in `src/assets/vendor/katex/`. It is only copied to the output when at least one post or page has `math: true` (or contains `$` math delimiters in the body — `has_math` is auto-detected via regex).
 - **Homepage pagination**: Configurable via `home_limit` in `src/config.py` (default 30). Page 1 is at `/`, subsequent pages at `/page/N/`. The homepage uses infinite scroll: an IntersectionObserver fetches the next page's post list and appends it.
 
 ### Deployment
