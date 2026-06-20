@@ -33,4 +33,5 @@ class ContentItem:
     rel_url: str
     out_dir: str
     draft: bool = False
+    pinned: bool = False
     has_math: bool = False

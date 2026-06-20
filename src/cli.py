@@ -38,6 +38,7 @@ def _create_post(root: Path, name: str) -> None:
             f"---\n"
             f"title: {slug}\n"
             f"date: {date.today().isoformat()}\n"
+            f"draft: true\n"
             f"---\n\n",
             encoding="utf-8",
         )
