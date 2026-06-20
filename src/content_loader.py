@@ -102,6 +102,7 @@ class BuildCache:
                 "rel_url": item.rel_url,
                 "out_dir": item.out_dir,
                 "draft": item.draft,
+                "pinned": item.pinned,
                 "has_math": item.has_math,
             },
         }
@@ -234,6 +235,7 @@ def _load_markdown_file(path: Path, rel_url: str, out_dir: str, is_log: bool, en
     fallback_date = path.stem if is_log else ""
     date = str(meta.get("date", fallback_date))
     draft = bool(meta.get("draft"))
+    pinned = bool(meta.get("pinned"))
     has_math = bool(MATH_RE.search(body)) or bool(meta.get("math"))
     return ContentItem(
         source=path,
@@ -243,6 +245,7 @@ def _load_markdown_file(path: Path, rel_url: str, out_dir: str, is_log: bool, en
         rel_url=rel_url,
         out_dir=out_dir,
         draft=draft,
+        pinned=pinned,
         has_math=has_math,
     )
 
@@ -273,6 +276,7 @@ def load_posts(cfg: SiteConfig, engine: MarkdownEngine, cache: BuildCache | None
                     rel_url=cached["rel_url"],
                     out_dir=cached["out_dir"],
                     draft=cached["draft"],
+                    pinned=cached.get("pinned", False),
                     has_math=cached["has_math"],
                 )
                 if item.draft:
@@ -286,7 +290,7 @@ def load_posts(cfg: SiteConfig, engine: MarkdownEngine, cache: BuildCache | None
         if item.draft:
             continue
         items.append(item)
-    items.sort(key=lambda x: parse_date(x.date), reverse=True)
+    items.sort(key=lambda x: (0 if x.pinned else 1, -parse_date(x.date).toordinal()))
     return items
 
 
@@ -308,6 +312,7 @@ def load_pages(cfg: SiteConfig, engine: MarkdownEngine, cache: BuildCache | None
                     rel_url=cached["rel_url"],
                     out_dir=cached["out_dir"],
                     draft=cached["draft"],
+                    pinned=cached.get("pinned", False),
                     has_math=cached["has_math"],
                 )
                 continue
