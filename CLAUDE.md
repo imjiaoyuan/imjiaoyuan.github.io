@@ -29,6 +29,7 @@ python run.py -h                          # Show help
 - Content is authored in Markdown with YAML front matter, stored under `content/`.
 - Site configuration is a hardcoded Python dict in `src/config.py`, loaded dynamically via `importlib` by `src/config_loader.py`.
 - Output is static HTML written to `public/`, deployed to GitHub Pages.
+- `public/` and `.cache/` are gitignored — builds are always local, deployment happens via CI.
 
 ### Source Module Map
 
@@ -97,6 +98,7 @@ Post URLs are **not** derived from filenames. Each post gets a short hash-based 
 - On change: rebuilds the site, then notifies all connected browsers via Server-Sent Events.
 - Injects an `<script>` snippet before `</body>` that connects to `/__live_reload` EventSource.
 - HTML responses get `Cache-Control: no-store`; static assets get long cache lifetimes (images, fonts, CSS: 86400s).
+- **Development workflow**: run `python run.py -s`, open the browser, edit Markdown files in `content/` — the server rebuilds and pushes a refresh automatically. No manual rebuild needed.
 
 ### Key Conventions
 - **Front matter**: YAML-like, between `---` lines. Required: `title`, `date` (YYYY-MM-DD). Optional: `math: true` (enables KaTeX), `draft: true` (excludes from build).

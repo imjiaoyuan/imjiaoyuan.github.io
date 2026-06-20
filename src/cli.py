@@ -62,7 +62,7 @@ def _format_posts(root: Path) -> None:
             continue
         md.write_text(new_raw, encoding="utf-8")
         count += 1
-        print(f"  formatted: {folder.name}")
+        print(f"  formatted: {md.name}")
     print(f"Done. {count} files updated.")
 
 
@@ -70,7 +70,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="static site generator")
     parser.add_argument("-d", "--build", action="store_true", help="build static site to public/")
     parser.add_argument("-s", "--serve", action="store_true", help="build then serve public/ locally")
-    parser.add_argument("-n", "--new", metavar="NAME", help="create a new post folder at content/posts/NAME/")
+    parser.add_argument("-n", "--new", metavar="NAME", help="create a new post at content/posts/NAME.md")
     parser.add_argument("-f", "--format", action="store_true", help="format all posts (pangu spacing, trailing whitespace, blank lines)")
     parser.add_argument("-u", "--upload", nargs="+", metavar="FILE", help="upload images to R2 (auto-convert to webp)")
     parser.add_argument("-p", "--port", type=int, default=None, help="serve port")
