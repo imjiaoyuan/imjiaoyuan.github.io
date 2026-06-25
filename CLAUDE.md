@@ -46,7 +46,7 @@ python run.py -h                          # Show help
 | `src/asset_pipeline.py` | Copies static assets (CSS, favicon, vendor/) to `public/` |
 | `src/builder.py` | Orchestrates the full build: load → parse → copy → render → write |
 | `src/server.py` | HTTP server with file watcher, live-reload via SSE |
-| `src/rclone.py` | Image upload/remove pipeline: WebP conversion (ffmpeg) → xxHash32 naming → rclone to R2 |
+| `src/rclone.py` | Image upload/remove pipeline: WebP conversion (ImageMagick) → xxHash32 naming → rclone to R2 |
 | `src/date_utils.py` | Date parsing (`YYYY-MM-DD`) and Atom date formatting |
 | `src/templates/` | HTML fragments using `{{variable}}` syntax (shell, head, header, home, post, page, comment, 404, etc.) |
 
@@ -107,7 +107,7 @@ The `render_shell()` function assembles the final page by rendering `head.html` 
 
 ### Image Upload Pipeline (`src/rclone.py`)
 - Images are uploaded to Cloudflare R2, not stored in the repo.
-- Pipeline: input image → ffmpeg conversion to WebP (quality 85) → xxHash32 content hash for deduplicated naming → rclone copy to R2.
+- Pipeline: input image → ImageMagick conversion to WebP (quality 85) → xxHash32 content hash for deduplicated naming → rclone copy to R2.
 - Configurable via `r2_remote` and `r2_base_url` in `src/config.py`.
 - The CLI prints the resulting URL (e.g., `https://static.jiaoyuan.org/blog/images/a1b2c3d4.webp`).
 
@@ -143,4 +143,4 @@ The `render_shell()` function assembles the final page by rendering `head.html` 
 - No external Python dependencies — the generator uses only the standard library.
 - No test suite or linter is currently configured.
 - CI uses Python 3.12; source code targets Python 3.7+ (uses `from __future__ import annotations`).
-- Image upload requires `ffmpeg` and `rclone` to be installed and configured on the local machine.
+- Image upload requires `imagemagick` and `rclone` to be installed and configured on the local machine.
