@@ -19,7 +19,7 @@ python run.py -s -H 0.0.0.0               # Serve on a custom host
 python run.py -n "My Post Title"          # Create a new post at content/posts/my-post-title.md
 python run.py -f                          # Format all posts (pangu spacing, trailing whitespace, blank lines)
 python run.py -u image1.png image2.jpg    # Upload images to R2 (auto-convert to WebP, xxHash32 naming, prints URL)
-python run.py -r /path/to/project -d      # Build from a custom project root
+python run.py -r https://.../abc.webp     # Remove an image from R2 by URL or filename
 python run.py -h                          # Show help
 ```
 
@@ -46,7 +46,7 @@ python run.py -h                          # Show help
 | `src/asset_pipeline.py` | Copies static assets (CSS, favicon, vendor/) to `public/` |
 | `src/builder.py` | Orchestrates the full build: load → parse → copy → render → write |
 | `src/server.py` | HTTP server with file watcher, live-reload via SSE |
-| `src/upload.py` | Image upload pipeline: WebP conversion (ffmpeg) → xxHash32 naming → rclone upload to R2 |
+| `src/rclone.py` | Image upload/remove pipeline: WebP conversion (ffmpeg) → xxHash32 naming → rclone to R2 |
 | `src/date_utils.py` | Date parsing (`YYYY-MM-DD`) and Atom date formatting |
 | `src/templates/` | HTML fragments using `{{variable}}` syntax (shell, head, header, home, post, page, comment, 404, etc.) |
 
@@ -82,13 +82,30 @@ Post URLs are **not** derived from filenames. Each post gets a short hash-based 
 - A `render_shell()` helper wraps page content with the shared `<head>`, header, footer, theme toggle, and email modal.
 - Note: `atom.xml`, `sitemap.xml`, and `robots.txt` are generated inline in `src/builder.py` — they do **not** use the template system.
 
+**Template variable reference** — each template expects these context variables:
+
+| Template | Variables |
+|---|---|
+| `shell.html` | `{{head}}`, `{{header}}`, `{{main}}`, `{{year}}`, `{{top_button}}` |
+| `head.html` | `{{full_title}}`, `{{page_desc}}`, `{{page_url}}`, `{{og_type}}`, `{{site_title}}`, `{{icon}}`, `{{atom_url}}`, `{{math_block}}` |
+| `header.html` | `{{site_title}}`, `{{nav}}` (pre-rendered `<a>` links from `cfg.menu`) |
+| `home.html` | `{{intro}}`, `{{items}}` (pre-rendered `<li>` list), `{{scroll}}` (infinite scroll JS, only on page 1) |
+| `post_list_item.html` | `{{url}}`, `{{title}}`, `{{date}}` |
+| `home_scroll.html` | `{{total_pages}}` |
+| `post.html` | `{{title}}`, `{{date}}`, `{{body}}`, `{{comment_html}}` |
+| `page.html` | `{{title}}`, `{{body}}` |
+| `comment.html` | `{{giscus_repo}}`, `{{giscus_repo_id}}`, `{{giscus_category}}`, `{{giscus_category_id}}` |
+| `404.html`, `math_block.html`, `top_button.html` | No variables (static content) |
+
+The `render_shell()` function assembles the final page by rendering `head.html` and `header.html`, then wrapping everything in `shell.html`. Post pages additionally get a "back to top" button (`show_top=True`) and OpenGraph `og_type="article"`.
+
 ### Markdown Engine (`src/markdown_engine.py`)
 - Custom line-by-line parser. Supports: headings (with auto-generated `id` slugs), paragraphs, unordered/ordered lists (nested), blockquotes, tables (wrapped in `<div class="table-wrap">`), horizontal rules, inline formatting (bold, italic, **strikethrough**, code, links, images), **task lists** (`- [ ]` / `- [x]`), and **footnotes** (`[^id]`).
 - Fenced code blocks with syntax highlighting for: bash, python, c, r, html, css, c# (aliases: sh, shell, zsh, py, rscript, csharp). Unrecognized languages render as plain escaped text.
 - Inline HTML is passed through verbatim.
 - Math (`$...$` / `$$...$$`) is left as raw text; KaTeX is loaded client-side when `math: true` is set in front matter.
 
-### Image Upload Pipeline (`src/upload.py`)
+### Image Upload Pipeline (`src/rclone.py`)
 - Images are uploaded to Cloudflare R2, not stored in the repo.
 - Pipeline: input image → ffmpeg conversion to WebP (quality 85) → xxHash32 content hash for deduplicated naming → rclone copy to R2.
 - Configurable via `r2_remote` and `r2_base_url` in `src/config.py`.
@@ -103,11 +120,17 @@ Post URLs are **not** derived from filenames. Each post gets a short hash-based 
 
 ### Key Conventions
 - **Front matter**: A **custom parser** (not real YAML), between `---` lines. Supports: strings (optionally quoted), booleans (`true`/`false`), integers, floats, basic arrays (`[a, b]`), and list values (indented `- item` lines under a key with no initial value). Required fields: `title`, `date` (YYYY-MM-DD). Optional: `math: true` (enables KaTeX), `draft: true` (excludes from homepage), `pinned: true` (pin to top of homepage). New posts created via `-n` are drafts by default.
+  - **Parser limitations**: No nested/dict values, no multi-line strings (except indented lists). String values containing spaces that aren't meant to be arrays must be quoted (`title: "My Post Title"`). Lines starting with `#` in front matter are treated as comments and ignored. Bare words like `true`/`false`/`123`/`3.14` are auto-typed; everything else is a string.
 - **Post sort order**: Posts on the homepage are sorted by pinned status first (pinned posts at top), then by date descending (most recent first). This is implemented in `src/content_loader.py:load_posts()`.
 - **Formatting**: The `-f` command runs pangu formatting (adds a space between CJK characters and Latin letters/digits), strips trailing whitespace, collapses 4+ consecutive blank lines to 3, and right-strips the body. Code blocks and inline code are preserved during pangu formatting.
 - **Image references**: Images are uploaded to R2 via `python run.py -u`. In posts, reference them by their full R2 URL (`https://static.jiaoyuan.org/blog/images/<hash>.webp`).
 - **Comments**: Giscus-powered, configured via `theme_options.giscus` in `src/config.py` (`repo`, `repo_id`, `category`, `category_id`). The `repo_id` and `category_id` are obtained from https://giscus.app.
 - **Theme**: Dark/light toggle in the shell template. Stores preference in `localStorage` under `site-theme`, applies via `data-theme` attribute on `<html>`. Respects `prefers-color-scheme` when no explicit preference is saved. Dispatches a `site:theme-change` custom event on toggle — Giscus listens for this to sync its theme. CSS lives in `src/assets/style.css`.
+- **CSS**: All styles are in a single file: `src/assets/style.css`. It uses CSS custom properties (variables) for theming — light and dark color schemes are defined via `:root` and `[data-theme="dark"]` selectors.
+- **Client-side JS**: All JavaScript is inline in templates (no external `.js` files):
+  - `shell.html`: Theme toggle button, email modal (intercepts `mailto:` links), back-to-top button.
+  - `home_scroll.html`: Infinite scroll via IntersectionObserver — fetches `/page/N/` and appends `.post-list` children.
+  - `head.html`: Inline script before CSS to apply saved theme (blocks flash of wrong theme).
 - **Math rendering**: KaTeX is vendored in `src/assets/vendor/katex/`. It is only copied to the output when at least one post or page has `math: true` (or contains `$` math delimiters in the body — `has_math` is auto-detected via regex).
 - **Homepage pagination**: Configurable via `home_limit` in `src/config.py` (default 30). Page 1 is at `/`, subsequent pages at `/page/N/`. The homepage uses infinite scroll: an IntersectionObserver fetches the next page's post list and appends it.
 
