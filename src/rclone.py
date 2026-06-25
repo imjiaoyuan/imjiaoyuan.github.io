@@ -1,17 +1,18 @@
-import secrets
 import shutil
-import string
 import struct
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
+from urllib.parse import urlparse
 
 PRIME1 = 0x9E3779B1
 PRIME2 = 0x85EBCA77
 PRIME3 = 0xC2B2AE3D
 PRIME4 = 0x27D4EB2F
 PRIME5 = 0x165667B1
+
+_IMAGE_EXTS = frozenset({".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg", ".bmp", ".ico", ".avif"})
 
 
 def xxh32(data: bytes, seed: int = 0) -> int:
@@ -88,24 +89,63 @@ def _to_webp(filepath: Path) -> Path:
     return out
 
 
+def _resolve_remote_path(identifier: str, remote: str, base_url: str) -> str:
+    if identifier.startswith("http://") or identifier.startswith("https://"):
+        parsed = urlparse(identifier)
+        url_path = parsed.path.lstrip("/")
+        base_path = urlparse(base_url).path.lstrip("/")
+        if base_path and url_path.startswith(base_path + "/"):
+            rel = url_path[len(base_path) + 1:]
+        elif base_path and url_path == base_path:
+            rel = ""
+        else:
+            rel = Path(parsed.path).name
+    else:
+        rel = identifier.lstrip("/")
+    if not rel:
+        raise ValueError(f"Cannot resolve remote path from: {identifier}")
+    return f"{remote}/{rel}"
+
+
 def upload(filepath: Path, remote: str, base_url: str) -> str:
-    webp = _to_webp(filepath)
-    data = webp.read_bytes()
-    name = f"{xxh32(data):08x}"
+    ext = filepath.suffix.lower()
 
-    tmp = Path(tempfile.gettempdir()) / f"{name}.webp"
-    shutil.copy2(webp, tmp)
+    if ext in _IMAGE_EXTS:
+        webp = _to_webp(filepath)
+        data = webp.read_bytes()
+        name = f"{xxh32(data):08x}.webp"
+        remote_path = f"{remote}/images/{name}"
+        url = f"{base_url.rstrip('/')}/images/{name}"
+    else:
+        webp = filepath
+        data = filepath.read_bytes()
+        name = f"{xxh32(data):08x}{ext}"
+        remote_path = f"{remote}/{name}"
+        url = f"{base_url.rstrip('/')}/{name}"
 
+    tmp = Path(tempfile.gettempdir()) / name
+    try:
+        shutil.copy(webp, tmp)
+        subprocess.run(
+            ["rclone", "copyto", str(tmp), remote_path],
+            check=True,
+        )
+    finally:
+        if tmp.exists():
+            tmp.unlink()
+        if webp != filepath and webp.exists():
+            webp.unlink()
+
+    return url
+
+
+def delete(identifier: str, remote: str, base_url: str) -> str:
+    remote_path = _resolve_remote_path(identifier, remote, base_url)
     subprocess.run(
-        ["rclone", "copyto", str(tmp), f"{remote}/{tmp.name}"],
+        ["rclone", "delete", remote_path],
         check=True,
     )
-
-    tmp.unlink()
-    if webp != filepath:
-        webp.unlink()
-
-    return f"{base_url}/{tmp.name}"
+    return remote_path
 
 
 def main() -> None:
