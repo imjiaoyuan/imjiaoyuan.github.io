@@ -134,7 +134,8 @@ def upload(filepath: Path, remote: str, base_url: str) -> str:
     try:
         shutil.copy(webp, tmp)
         subprocess.run(
-            ["rclone", "copyto", str(tmp), remote_path],
+            ["rclone", "copyto", str(tmp), remote_path,
+             "--header-upload", "Cache-Control: public, max-age=31536000, immutable"],
             check=True,
         )
     finally:
