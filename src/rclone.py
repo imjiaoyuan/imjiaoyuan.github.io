@@ -76,12 +76,18 @@ def xxh32(data: bytes, seed: int = 0) -> int:
     return h32
 
 
+def _check_cmd(name: str) -> None:
+    if shutil.which(name) is None:
+        sys.exit(f"Error: '{name}' is required but not found. Please install it first.")
+
+
 def _to_webp(filepath: Path) -> Path:
     if filepath.suffix.lower() == ".webp":
         return filepath
+    _check_cmd("magick")
     out = filepath.with_suffix(".webp")
     subprocess.run(
-        ["ffmpeg", "-y", "-i", str(filepath), "-q:v", "85", str(out)],
+        ["magick", str(filepath), "-quality", "85", str(out)],
         check=True,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
@@ -108,6 +114,7 @@ def _resolve_remote_path(identifier: str, remote: str, base_url: str) -> str:
 
 
 def upload(filepath: Path, remote: str, base_url: str) -> str:
+    _check_cmd("rclone")
     ext = filepath.suffix.lower()
 
     if ext in _IMAGE_EXTS:
@@ -140,6 +147,7 @@ def upload(filepath: Path, remote: str, base_url: str) -> str:
 
 
 def delete(identifier: str, remote: str, base_url: str) -> str:
+    _check_cmd("rclone")
     remote_path = _resolve_remote_path(identifier, remote, base_url)
     subprocess.run(
         ["rclone", "delete", remote_path],
