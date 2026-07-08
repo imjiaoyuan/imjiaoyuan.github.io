@@ -46,17 +46,17 @@ python run.py -h                          # Show help
 | `src/asset_pipeline.py` | Copies static assets (CSS, favicon, vendor/) to `public/` |
 | `src/builder.py` | Orchestrates the full build: load → parse → copy → render → write |
 | `src/server.py` | HTTP server with file watcher, live-reload via SSE |
-| `src/rclone.py` | Image upload/remove pipeline: WebP conversion (ImageMagick) → xxHash32 naming → rclone to R2 |
-| `src/date_utils.py` | Date parsing (`YYYY-MM-DD`) and Atom date formatting |
+| `src/rclone.py` | Image upload/remove pipeline: WebP conversion (ImageMagick) → custom xxHash32 naming → rclone to R2 |
+| `src/date_utils.py` | Date parsing (`YYYY-MM-DD`) and Atom date formatting (RFC 3339) |
 | `src/templates/` | HTML fragments using `{{variable}}` syntax (shell, head, header, home, post, page, comment, 404, etc.) |
 
 ### Content Organization
 - **Posts**: Flat `.md` files directly under `content/posts/` (e.g., `content/posts/2024-03-20-arch-install.md`). No subdirectories — the structure was flattened from Hugo-style leaf bundles.
 - **Pages**: Any `.md` file directly under `content/` (e.g., `content/readme.md`) becomes a standalone page at `/<stem>/`.
-- **Drafts**: New posts created via `-n` default to `draft: true` (hidden from homepage). Delete the `draft` line in front matter to publish.
+- **Drafts**: New posts created via `-n` default to `draft: true`. Drafts are parsed and cached but excluded from all output (homepage, Atom feed, sitemap). Delete the `draft` line in front matter to publish.
 
 ### Slug Hashing
-Post URLs are **not** derived from filenames. Each post gets a short hash-based slug computed via CRC24 → base62 (`src/content_loader.py:_slug_hash()`). This means the URL is opaque (e.g., `/3ab7f/`) and does not change when a post file is renamed. Reserved slugs (`assets`, `logs`, `readme`, `page`, `atom`, `posts`) are avoided, and collisions get a numeric suffix.
+Post URLs are **not** derived from filenames. Each post gets a short hash-based slug computed via CRC24 → base36 (`src/content_loader.py:_slug_hash()`). This means the URL is opaque (e.g., `/3ab7f/`) and does not change when a post file is renamed. Reserved slugs (`assets`, `logs`, `readme`, `page`, `atom`, `posts`) are avoided, and collisions get a numeric suffix.
 
 ### Build Pipeline (`src/builder.py`)
 1. Load site config → `SiteConfig` dataclass.
@@ -119,7 +119,7 @@ The `render_shell()` function assembles the final page by rendering `head.html` 
 - **Development workflow**: run `python run.py -s`, open the browser, edit Markdown files in `content/` — the server rebuilds and pushes a refresh automatically. No manual rebuild needed.
 
 ### Key Conventions
-- **Front matter**: A **custom parser** (not real YAML), between `---` lines. Supports: strings (optionally quoted), booleans (`true`/`false`), integers, floats, basic arrays (`[a, b]`), and list values (indented `- item` lines under a key with no initial value). Required fields: `title`, `date` (YYYY-MM-DD). Optional: `math: true` (enables KaTeX), `draft: true` (excludes from homepage), `pinned: true` (pin to top of homepage). New posts created via `-n` are drafts by default.
+- **Front matter**: A **custom parser** (not real YAML), between `---` lines. Supports: strings (optionally quoted), booleans (`true`/`false`), integers, floats, basic arrays (`[a, b]`), and list values (indented `- item` lines under a key with no initial value — this is a stateful parse: when a key like `tags:` appears with an empty value, the parser enters list-collection mode and subsequent `  - value` lines are appended to that key). Required fields: `title`, `date` (YYYY-MM-DD). Optional: `math: true` (enables KaTeX), `draft: true` (excludes from homepage), `pinned: true` (pin to top of homepage). New posts created via `-n` are drafts by default.
   - **Parser limitations**: No nested/dict values, no multi-line strings (except indented lists). String values containing spaces that aren't meant to be arrays must be quoted (`title: "My Post Title"`). Lines starting with `#` in front matter are treated as comments and ignored. Bare words like `true`/`false`/`123`/`3.14` are auto-typed; everything else is a string.
 - **Post sort order**: Posts on the homepage are sorted by pinned status first (pinned posts at top), then by date descending (most recent first). This is implemented in `src/content_loader.py:load_posts()`.
 - **Formatting**: The `-f` command runs pangu formatting (adds a space between CJK characters and Latin letters/digits), strips trailing whitespace, collapses 4+ consecutive blank lines to 3, and right-strips the body. Code blocks and inline code are preserved during pangu formatting.
@@ -144,3 +144,4 @@ The `render_shell()` function assembles the final page by rendering `head.html` 
 - No test suite or linter is currently configured.
 - CI uses Python 3.12; source code targets Python 3.7+ (uses `from __future__ import annotations`).
 - Image upload requires `imagemagick` and `rclone` to be installed and configured on the local machine.
+- **Date parsing silently falls back to 1970-01-01** for invalid or unparseable date strings in front matter (`src/date_utils.py:parse_date()`). A malformed date won't cause a build error — double-check post dates if sort order looks wrong.
