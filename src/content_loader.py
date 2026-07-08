@@ -125,7 +125,7 @@ from models import ContentItem, SiteConfig
 
 MATH_RE = re.compile(r"\$\$.*?\$\$|\$[^$\n]+\$", re.DOTALL)
 
-BASE62 = "0123456789abcdefghijklmnopqrstuvwxyz"
+BASE36 = "0123456789abcdefghijklmnopqrstuvwxyz"
 
 RESERVED_SLUGS = frozenset({"assets", "logs", "readme", "page", "atom", "posts"})
 
@@ -145,8 +145,8 @@ def _slug_hash(name: str) -> str:
     val = _crc24(name.encode())
     result = []
     while val > 0:
-        result.append(BASE62[val % len(BASE62)])
-        val //= len(BASE62)
+        result.append(BASE36[val % len(BASE36)])
+        val //= len(BASE36)
     return "".join(reversed(result)).rjust(5, "0")
 
 
