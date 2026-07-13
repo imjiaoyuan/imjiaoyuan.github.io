@@ -12,8 +12,6 @@ scoop 整体感觉是不错的，但是还有一些问题：
 - scoop 的命令似乎对 git bash 的支持并不好，比如我要通过 bash 更新所有软件`scoop update -k *`，它会先检查 buckets 的更新，然后目标定向为当前目录下的所有文件夹 ...
 - 有些软件自己会更新，容易导致和 scoop 版本不匹配
 
-![](https://static.jiaoyuan.org/blog/images/69e0a93c.webp)
-
 而且，bash 在 Windows Terminal 里很美观，但在 VSCode 里体验不太好。
 
 所以，我用 scoop 安装一些开源软件（如 Telegram、Zotero），开发环境仍在 WSL2。以前 WSL2 上装的是 Debian，但是软件包经常不更新，版本容易落后，所以换成了 Arch，舒服多了，Debian 上装 R 包经常容易出现缺库的现象，我本以为 Arch 也一样的，但是没有，居然很少缺库，只需要装几个重要的包就基本足够了，实在是舒服啊~
@@ -67,8 +65,6 @@ autoMemoryReclaim=dropcache
 ```
 
 但是现在发现好像不需要了，最新版的 WSL2 据说可以自动回收内存了，我也感受到了，在经历了编译时占用 CPU 98%和 15 GB 内存后，编译结束 CPU 立刻降下去了，内存也降到 4GB 一直停着了，也算是可以了。
-
-![](https://static.jiaoyuan.org/blog/images/df2e219a.webp)
 
 WSL2 主要还可以用 pymol、gromacs、deeptools 等等的软件，Windows 就不行，超算又不方便，所以自己的还是好一些。于是一切又熟悉又舒适了，游戏也删掉了~ 至于性能损失，损失就损失了吧 ...
 

@@ -18,8 +18,6 @@ python run.py -s -p 8080                  # Serve on a custom port
 python run.py -s -H 0.0.0.0               # Serve on a custom host
 python run.py -n "My Post Title"          # Create a new post at content/posts/my-post-title.md
 python run.py -f                          # Format all posts (pangu spacing, trailing whitespace, blank lines)
-python run.py -u image1.png image2.jpg    # Upload images to R2 (auto-convert to WebP, xxHash32 naming, prints URL)
-python run.py -r https://.../abc.webp     # Remove an image from R2 by URL or filename
 python run.py -h                          # Show help
 ```
 
@@ -123,7 +121,8 @@ The `render_shell()` function assembles the final page by rendering `head.html` 
   - **Parser limitations**: No nested/dict values, no multi-line strings (except indented lists). String values containing spaces that aren't meant to be arrays must be quoted (`title: "My Post Title"`). Lines starting with `#` in front matter are treated as comments and ignored. Bare words like `true`/`false`/`123`/`3.14` are auto-typed; everything else is a string.
 - **Post sort order**: Posts on the homepage are sorted by pinned status first (pinned posts at top), then by date descending (most recent first). This is implemented in `src/content_loader.py:load_posts()`.
 - **Formatting**: The `-f` command runs pangu formatting (adds a space between CJK characters and Latin letters/digits), strips trailing whitespace, collapses 4+ consecutive blank lines to 3, and right-strips the body. Code blocks and inline code are preserved during pangu formatting.
-- **Image references**: Images are uploaded to R2 via `python run.py -u`. In posts, reference them by their full R2 URL (`https://static.jiaoyuan.org/blog/images/<hash>.webp`).
+- **Image references**: Images are stored locally in `static/images/` (committed to git). In posts, reference them as `../../static/images/<hash>.webp` — this relative path works both in editor markdown previews and on the deployed site. The builder copies `static/` into `public/static/` during the build. R2 upload (`-u`) is still available for external hosting but no longer the default.
+- **Image compression**: Use ImageMagick to keep images lightweight: `convert <input> -resize '1200x1200>' -quality 70 <output>.webp`. The 1200px max width and quality 70 keep most images under 200KB while maintaining reasonable quality.
 - **Comments**: Giscus-powered, configured via `theme_options.giscus` in `src/config.py` (`repo`, `repo_id`, `category`, `category_id`). The `repo_id` and `category_id` are obtained from https://giscus.app.
 - **Theme**: Dark/light toggle in the shell template. Stores preference in `localStorage` under `site-theme`, applies via `data-theme` attribute on `<html>`. Respects `prefers-color-scheme` when no explicit preference is saved. Dispatches a `site:theme-change` custom event on toggle — Giscus listens for this to sync its theme. CSS lives in `src/assets/style.css`.
 - **CSS**: All styles are in a single file: `src/assets/style.css`. It uses CSS custom properties (variables) for theming — light and dark color schemes are defined via `:root` and `[data-theme="dark"]` selectors.
@@ -143,5 +142,21 @@ The `render_shell()` function assembles the final page by rendering `head.html` 
 - No external Python dependencies — the generator uses only the standard library.
 - No test suite or linter is currently configured.
 - CI uses Python 3.12; source code targets Python 3.7+ (uses `from __future__ import annotations`).
-- Image upload requires `imagemagick` and `rclone` to be installed and configured on the local machine.
+- Image compression requires `imagemagick`.
 - **Date parsing silently falls back to 1970-01-01** for invalid or unparseable date strings in front matter (`src/date_utils.py:parse_date()`). A malformed date won't cause a build error — double-check post dates if sort order looks wrong.
+
+## Codebase Quirks
+
+These are non-obvious behaviors worth knowing before making changes:
+
+- **Import ordering in `content_loader.py`**: Local module imports (`from date_utils import parse_date`, `from markdown_engine import MarkdownEngine`, `from models import ContentItem, SiteConfig`) appear mid-file after the `BuildCache` class (line 121), not at the top. This is deliberate — `BuildCache` has no local dependencies, while the functions below need those modules.
+
+- **Dead code — `_safe_date()`**: `content_loader.py` defines `_safe_date()` (line 208) which is never called. The functionally identical `parse_date()` from `date_utils.py` is imported and used instead. If you need to change date-fallback behavior, `parse_date()` in `date_utils.py` is the one that matters.
+
+- **Vestigial `is_log` parameter**: `_load_markdown_file()` accepts `is_log: bool` but both callers (`load_posts` and `load_pages`) pass `False`. The parameter only affects the fallback date value (uses `path.stem` when true). This is a leftover from the Hugo-to-custom-generator migration.
+
+- **`_write()` is idempotent**: The builder's `_write()` function (line 26 of `builder.py`) reads the existing output file and skips writing if the new HTML is identical. This means editing a post and rebuilding won't update the output file's mtime unless the rendered HTML actually changed — relevant if you're checking timestamps for deployment.
+
+- **Config loaded via `importlib`**: `src/config_loader.py` uses `importlib.util` to dynamically load `src/config.py` as a module. Each call to `load_site_config()` re-executes the file, so config changes are picked up on the next build without restarting the server. This also means `src/config.py` must be valid Python (not just a data file) and any import-side effects will re-run on every build.
+
+- **Server watcher covers `content/` and `src/`**: The live-reload watcher (`src/server.py:_scan_source_mtimes()`) scans both directories for changes. Editing templates, CSS, config, or Python source all trigger a full rebuild + browser reload — not just Markdown content changes.
