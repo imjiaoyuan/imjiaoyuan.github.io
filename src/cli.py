@@ -9,7 +9,6 @@ from builder import build
 from config_loader import load_site_config
 from content_loader import format_content
 from server import serve
-from rclone import delete, upload
 
 
 def _create_post(root: Path, name: str) -> None:
@@ -73,13 +72,11 @@ def main() -> None:
     parser.add_argument("-s", "--serve", action="store_true", help="build then serve public/ locally")
     parser.add_argument("-n", "--new", metavar="NAME", help="create a new post at content/posts/NAME.md")
     parser.add_argument("-f", "--format", action="store_true", help="format all posts (pangu spacing, trailing whitespace, blank lines)")
-    parser.add_argument("-u", "--upload", nargs="+", metavar="FILE", help="upload images to R2 (auto-convert to webp)")
-    parser.add_argument("-r", "--remove", nargs="+", metavar="URL", help="remove images from R2 by URL or filename")
     parser.add_argument("-p", "--port", type=int, default=None, help="serve port")
     parser.add_argument("-H", "--host", default=None, help="serve host")
     args = parser.parse_args()
 
-    if not args.build and not args.serve and not args.new and not args.format and not args.upload and not args.remove:
+    if not args.build and not args.serve and not args.new and not args.format:
         parser.print_help()
         return
 
@@ -89,18 +86,6 @@ def main() -> None:
         return
     if args.format:
         _format_posts(root)
-        return
-    if args.upload:
-        cfg = load_site_config(root)
-        for fp in args.upload:
-            url = upload(Path(fp).resolve(), cfg.r2_remote, cfg.r2_base_url)
-            print(url)
-        return
-    if args.remove:
-        cfg = load_site_config(root)
-        for identifier in args.remove:
-            filename = delete(identifier, cfg.r2_remote, cfg.r2_base_url)
-            print(f"Removed: {filename}")
         return
 
     try:

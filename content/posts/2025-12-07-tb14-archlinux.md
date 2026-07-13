@@ -5,7 +5,7 @@ date: 2025-12-07
 
 最近还是把笔记本刷了 Arch，感觉就是爽，滚起来不讲道理。之前其实装过几次，但是总有大大小小的问题无法解决，所以用 Windows 先凑合着，这次边用边查，解决了不少以前的问题。现在不用 X11+cinnamon 了，换成 Wayland+plasma 了，整数倍缩放很流畅。这里需要注意，逻辑像素和物理像素需要是简单整数比，不然很多应用动画会有问题。
 
-![](https://static.jiaoyuan.org/blog/images/4b0f4f0b.webp)
+![](../../static/images/4b0f4f0b.webp)
 
 安装的总体过程和之前写的 [Arch 安装记录](/9h1rh/) 基本上一致，不过我作了一些调整。
 

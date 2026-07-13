@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import shutil
 from pathlib import Path
 from urllib.parse import urljoin
 from xml.sax.saxutils import escape as xml_escape
@@ -148,6 +149,14 @@ def build(root: Path) -> None:
     except (PermissionError, OSError) as e:
         print(f"Error: Failed to copy static files: {e}")
         raise RuntimeError("Failed to copy static assets. Check file permissions.") from e
+
+    # Copy static/images into public/ so that ../../static/images/ paths resolve
+    static_dir = root / "static"
+    if static_dir.exists():
+        dst = cfg.public_dir / "static"
+        if dst.exists():
+            shutil.rmtree(dst)
+        shutil.copytree(static_dir, dst)
 
     needs_math = any(p.has_math for p in posts) or any(p.has_math for p in pages.values())
 
