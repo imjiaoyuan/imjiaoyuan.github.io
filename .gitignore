@@ -5,7 +5,6 @@ __pycache__/
 .venv/
 .python-version
 .cache/
-static/
 .mypy_cache/
 .pytest_cache/
 .ruff_cache/

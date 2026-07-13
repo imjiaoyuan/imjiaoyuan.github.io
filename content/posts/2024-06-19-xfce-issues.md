@@ -47,8 +47,6 @@ yay -S xfce4-pulseaudio-plugin
 
 VScode+httpgd 出图还是很丝滑。
 
-![](https://static.jiaoyuan.org/blog/images/0afc7d0b.webp)
-
 整体感觉还算可以。
 
-![](https://static.jiaoyuan.org/blog/images/c433a4ab.webp)
+![](../../static/images/c433a4ab.webp)
