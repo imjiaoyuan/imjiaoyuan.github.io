@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import datetime as dt
+import json
+import re
 import shutil
 from pathlib import Path
 from urllib.parse import urljoin
@@ -11,7 +13,7 @@ from config_loader import load_site_config
 from content_loader import BuildCache, _compute_cache_version, load_pages, load_posts
 from date_utils import to_atom_date
 from markdown_engine import MarkdownEngine
-from template_runtime import render_404, render_home, render_page, render_post
+from template_runtime import render_404, render_home, render_page, render_post, render_search
 
 
 def _write(public_dir: Path, rel_out_dir: str, html_text: str) -> None:
@@ -158,6 +160,25 @@ def build(root: Path) -> None:
             shutil.rmtree(dst)
         shutil.copytree(static_dir, dst)
 
+    if cfg.search:
+        search_index = []
+        for p in posts:
+            text_only = re.sub(r"<[^>]+>", "", p.body_html)
+            search_index.append({
+                "title": p.title,
+                "date": p.date,
+                "url": p.rel_url,
+                "text": text_only,
+            })
+        try:
+            (cfg.public_dir / "search_index.json").write_text(
+                json.dumps(search_index, ensure_ascii=False, separators=(",", ":")),
+                encoding="utf-8",
+            )
+        except (PermissionError, OSError) as e:
+            print(f"Error: Cannot write search_index.json: {e}")
+            raise
+
     needs_math = any(p.has_math for p in posts) or any(p.has_math for p in pages.values())
 
     try:
@@ -204,6 +225,13 @@ def build(root: Path) -> None:
     except (PermissionError, OSError) as e:
         print(f"Error: Cannot write 404.html: {e}")
         raise
+
+    if cfg.search:
+        try:
+            _write(cfg.public_dir, "search", render_search(cfg))
+        except (PermissionError, OSError) as e:
+            print(f"Error: Cannot write search page: {e}")
+            raise
 
     build_cache.save()
 
