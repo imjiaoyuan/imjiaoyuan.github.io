@@ -128,5 +128,5 @@ def render_home(cfg: SiteConfig, posts: list[ContentItem]) -> str:
         )
         for p in posts
     )
-    body = _render_template("home.html", {"intro": intro, "items": items, "scroll": ""})
+    body = _render_template("home.html", {"intro": intro, "items": items})
     return render_shell(cfg, "", body, has_math=False, show_top=False)

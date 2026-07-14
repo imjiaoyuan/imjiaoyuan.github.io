@@ -14,7 +14,5 @@ SITE = {
         {"name": "RSS", "url": "/atom.xml"},
     ],
     "theme_options": {},
-    "r2_remote": "r2:static/blog",
-    "r2_base_url": "https://static.jiaoyuan.org/blog",
     "server": {"host": "127.0.0.1", "port": 1313},
 }

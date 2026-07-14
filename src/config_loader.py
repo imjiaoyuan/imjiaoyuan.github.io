@@ -34,8 +34,6 @@ def load_site_config(root: Path) -> SiteConfig:
         public_dir=root / site.get("public_dir", "public"),
         menu=menu,
         theme_options=site.get("theme_options", {}),
-        r2_remote=site.get("r2_remote", ""),
-        r2_base_url=site.get("r2_base_url", ""),
         server=site.get("server", {"host": "127.0.0.1", "port": 1313}),
         root=root,
     )
