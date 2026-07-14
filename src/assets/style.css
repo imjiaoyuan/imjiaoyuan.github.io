@@ -436,24 +436,6 @@ h3 { font-size: 1.05em; }
   padding-top: 8px;
 }
 
-.comment-btn {
-  display: inline-block;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 5px 12px;
-  background: var(--bg);
-  color: var(--fg);
-  font: inherit;
-  font-size: 13px;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.comment-btn:hover,
-.comment-btn:focus-visible {
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
 
 .site-footer {
   max-width: 720px;

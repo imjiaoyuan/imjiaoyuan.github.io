@@ -27,6 +27,7 @@ def load_site_config(root: Path) -> SiteConfig:
         domain=site.get("domain", "/"),
         description=site.get("description", ""),
         icon=site.get("icon", "/favicon.ico"),
+        email=site.get("email", ""),
 
         content_dir=root / site.get("content_dir", "content"),
         static_dir=root / site.get("static_dir", "src/assets"),
