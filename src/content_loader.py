@@ -42,26 +42,17 @@ def format_content(text: str) -> str:
 
 
 def _compute_cache_version(root: Path) -> int:
-    """Compute a version from template/config/engine file contents.
-    When any of these change, the entire build cache is invalidated."""
     v = 0
     templates_dir = root / "src" / "templates"
     if templates_dir.exists():
         for f in sorted(templates_dir.iterdir()):
-            try:
-                v ^= int.from_bytes(hashlib.sha256(f.read_bytes()).digest()[:8], 'big')
-            except OSError:
-                pass
+            v ^= int.from_bytes(hashlib.sha256(f.read_bytes()).digest()[:8], 'big')
     for rel in ["src/config.py", "src/markdown_engine.py", "src/template_runtime.py"]:
-        try:
-            v ^= int.from_bytes(hashlib.sha256((root / rel).read_bytes()).digest()[:8], 'big')
-        except OSError:
-            pass
+        v ^= int.from_bytes(hashlib.sha256((root / rel).read_bytes()).digest()[:8], 'big')
     return v
 
 
 class BuildCache:
-    """Mtime-based cache for parsed ContentItem data, persisted as JSON."""
 
     def __init__(self, cache_path: Path, version: int):
         self._path = cache_path
@@ -82,18 +73,12 @@ class BuildCache:
         entry = self._data.get(str(source))
         if not entry:
             return None
-        try:
-            if source.stat().st_mtime_ns != entry.get("mtime"):
-                return None
-        except OSError:
+        if source.stat().st_mtime_ns != entry.get("mtime"):
             return None
         return entry.get("data")
 
     def set(self, source: Path, item: ContentItem) -> None:
-        try:
-            mtime = source.stat().st_mtime_ns
-        except OSError:
-            return
+        mtime = source.stat().st_mtime_ns
         self._data[str(source)] = {
             "mtime": mtime,
             "data": {
@@ -207,28 +192,13 @@ def _parse_scalar(val: str):
 
 
 
-def _load_markdown_file(path: Path, rel_url: str, out_dir: str, is_log: bool, engine: MarkdownEngine) -> ContentItem:
-    try:
-        raw = path.read_text(encoding="utf-8")
-    except UnicodeDecodeError as e:
-        print(f"Warning: Failed to decode {path} as UTF-8, using error replacement.")
-        try:
-            raw = path.read_text(encoding="utf-8", errors="replace")
-        except Exception as e2:
-            print(f"Error: Cannot read {path}: {e2}")
-            raise RuntimeError(f"Failed to read {path}. Ensure the file is readable and properly encoded.") from e2
-    except FileNotFoundError:
-        print(f"Error: File not found: {path}")
-        raise RuntimeError(f"Content file missing: {path}. Check that the file exists.") from None
-    except PermissionError:
-        print(f"Error: Permission denied: {path}")
-        raise RuntimeError(f"Cannot read {path}. Check file permissions.") from None
+def _load_markdown_file(path: Path, rel_url: str, out_dir: str, engine: MarkdownEngine) -> ContentItem:
+    raw = path.read_text(encoding="utf-8")
 
     meta, body = _parse_front_matter(raw)
     body = pangu_format(body)
     title = str(meta.get("title", path.stem))
-    fallback_date = path.stem if is_log else ""
-    date = str(meta.get("date", fallback_date))
+    date = str(meta.get("date", ""))
     draft = bool(meta.get("draft"))
     pinned = bool(meta.get("pinned"))
     has_math = bool(MATH_RE.search(body)) or bool(meta.get("math"))
@@ -279,7 +249,7 @@ def load_posts(cfg: SiteConfig, engine: MarkdownEngine, cache: BuildCache | None
                 items.append(item)
                 continue
 
-        item = _load_markdown_file(md, f"/{slug}/", slug, False, engine)
+        item = _load_markdown_file(md, f"/{slug}/", slug, engine)
         if cache is not None:
             cache.set(md, item)
         if item.draft:
@@ -312,7 +282,7 @@ def load_pages(cfg: SiteConfig, engine: MarkdownEngine, cache: BuildCache | None
                 )
                 continue
 
-        item = _load_markdown_file(md, f"/{slug}/", slug, False, engine)
+        item = _load_markdown_file(md, f"/{slug}/", slug, engine)
         if cache is not None:
             cache.set(md, item)
         out[slug] = item

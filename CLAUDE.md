@@ -86,7 +86,7 @@ Post URLs are **not** derived from filenames. Each post gets a short hash-based 
 | `shell.html` | `{{head}}`, `{{header}}`, `{{main}}`, `{{year}}`, `{{top_button}}` |
 | `head.html` | `{{full_title}}`, `{{page_desc}}`, `{{page_url}}`, `{{og_type}}`, `{{site_title}}`, `{{icon}}`, `{{atom_url}}`, `{{math_block}}` |
 | `header.html` | `{{site_title}}`, `{{nav}}` (pre-rendered `<a>` links from `cfg.menu`) |
-| `home.html` | `{{intro}}`, `{{items}}` (pre-rendered `<li>` list), `{{scroll}}` (reserved, always empty) |
+| `home.html` | `{{intro}}`, `{{items}}` (pre-rendered `<li>` list) |
 | `post_list_item.html` | `{{url}}`, `{{title}}`, `{{date}}` |
 | `post.html` | `{{title}}`, `{{date}}`, `{{body}}`, `{{comment_html}}` |
 | `page.html` | `{{title}}`, `{{body}}` |
@@ -128,7 +128,7 @@ The `render_shell()` function assembles the final page by rendering `head.html` 
 - **Theme**: Dark/light toggle in the shell template. Stores preference in `localStorage` under `site-theme`, applies via `data-theme` attribute on `<html>`. Respects `prefers-color-scheme` when no explicit preference is saved. CSS lives in `src/assets/style.css`.
 - **CSS**: All styles are in a single file: `src/assets/style.css`. It uses CSS custom properties (variables) for theming — light and dark color schemes are defined via `:root` and `[data-theme="dark"]` selectors.
 - **Client-side JS**: All JavaScript is inline in templates (no external `.js` files):
-  - `shell.html`: Theme toggle button, back-to-top button. (Also has an email modal JS, but no `mailto:` link exists on the page — inert unless a mailto link is added to the header/menu.)
+  - `shell.html`: Theme toggle button, back-to-top button.
   - `head.html`: Inline script before CSS to apply saved theme (blocks flash of wrong theme).
 - **Math rendering**: KaTeX is vendored in `src/assets/vendor/katex/`. It is only copied to the output when at least one post or page has `math: true` (or contains `$` math delimiters in the body — `has_math` is auto-detected via regex).
 - **Homepage**: All posts are rendered on a single page at `/`. No pagination, no lazy loading.
@@ -138,7 +138,6 @@ The `render_shell()` function assembles the final page by rendering `head.html` 
 - Builds with Python 3.12 + `python run.py -d`, deploys `public/` via `actions/deploy-pages`.
 
 ## Notes
-- The `.github/copilot-instructions.md` file is outdated (describes a Hugo‑based setup). Ignore its content.
 - No external Python dependencies — the generator uses only the standard library.
 - No test suite or linter is currently configured.
 - CI uses Python 3.12; source code targets Python 3.7+ (uses `from __future__ import annotations`).
@@ -150,8 +149,6 @@ The `render_shell()` function assembles the final page by rendering `head.html` 
 These are non-obvious behaviors worth knowing before making changes:
 
 - **Import ordering in `content_loader.py`**: Local module imports (`from date_utils import parse_date`, `from markdown_engine import MarkdownEngine`, `from models import ContentItem, SiteConfig`) appear mid-file after the `BuildCache` class, not at the top. This is deliberate — `BuildCache` has no local dependencies, while the functions below need those modules.
-
-- **Vestigial `is_log` parameter**: `_load_markdown_file()` accepts `is_log: bool` but both callers (`load_posts` and `load_pages`) pass `False`. The parameter only affects the fallback date value (uses `path.stem` when true). This is a leftover from the Hugo-to-custom-generator migration.
 
 - **`_write()` is idempotent**: The builder's `_write()` function reads the existing output file and skips writing if the new HTML is identical. This means editing a post and rebuilding won't update the output file's mtime unless the rendered HTML actually changed — relevant if you're checking timestamps for deployment.
 

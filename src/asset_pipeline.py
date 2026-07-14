@@ -3,23 +3,10 @@ from __future__ import annotations
 import shutil
 from pathlib import Path
 
-from models import ContentItem, SiteConfig
-
-
-def _copy_dir(src: Path, dst: Path) -> None:
-    if not src.exists():
-        return
-    if dst.exists():
-        shutil.rmtree(dst)
-    shutil.copytree(src, dst)
+from models import SiteConfig
 
 
 def copy_static(cfg: SiteConfig) -> None:
-    """Copy top-level static files (favicon, etc.) from src/assets/ to public/.
-
-    style.css and vendor/ are skipped — copy_site_assets handles those under
-    public/assets/site/ where the templates actually reference them.
-    """
     if not cfg.static_dir.exists():
         return
     SKIP = {"style.css", "vendor"}
@@ -39,16 +26,20 @@ def copy_static(cfg: SiteConfig) -> None:
 
 
 def copy_site_assets(cfg: SiteConfig, needs_math: bool = True) -> None:
-    """Copy style.css and optionally KaTeX vendor files to public/assets/site/."""
     src = Path(__file__).resolve().parent / "assets"
     dst = cfg.public_dir / "assets" / "site"
-    if dst.exists():
-        shutil.rmtree(dst)
     dst.mkdir(parents=True, exist_ok=True)
-    style = src / "style.css"
-    if style.exists():
-        shutil.copy2(style, dst / "style.css")
-    if needs_math:
-        vendor = src / "vendor"
-        if vendor.exists():
-            shutil.copytree(vendor, dst / "vendor")
+
+    style_src = src / "style.css"
+    style_dst = dst / "style.css"
+    if style_src.exists():
+        if not style_dst.exists() or style_src.read_bytes() != style_dst.read_bytes():
+            shutil.copy2(style_src, style_dst)
+
+    vendor_src = src / "vendor"
+    vendor_dst = dst / "vendor"
+    if needs_math and vendor_src.exists():
+        if not vendor_dst.exists():
+            shutil.copytree(vendor_src, vendor_dst)
+    elif not needs_math and vendor_dst.exists():
+        shutil.rmtree(vendor_dst)
