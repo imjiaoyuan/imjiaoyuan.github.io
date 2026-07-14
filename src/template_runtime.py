@@ -9,6 +9,7 @@ from models import ContentItem, SiteConfig
 
 _TEMPLATE_DIR = Path(__file__).parent / "templates"
 _TEMPLATE_CACHE: dict[str, str] = {}
+_STRIP_HTML_RE = re.compile(r"<[^>]+>")
 _PLACEHOLDER_RE = re.compile(r"{{\s*([a-zA-Z0-9_]+)\s*}}")
 
 
@@ -96,7 +97,7 @@ def render_post(cfg: SiteConfig, item: ContentItem) -> str:
             "comment_html": comment_html,
         },
     )
-    text_only = re.sub(r"<[^>]+>", "", item.body_html)
+    text_only = _STRIP_HTML_RE.sub("", item.body_html)
     description = text_only[:160].strip() + ("..." if len(text_only) > 160 else "")
     return render_shell(cfg, item.title, body, has_math=item.has_math, show_top=True, description=description, url=item.rel_url, og_type="article")
 

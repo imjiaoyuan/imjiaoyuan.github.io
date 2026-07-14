@@ -95,8 +95,6 @@ def serve(public_dir: Path, host: str, port: int, root: Path) -> None:
         def __init__(self, *args, **kwargs):
             super().__init__(*args, directory=str(public_dir), **kwargs)
 
-        _CACHE_FOR = {"image/": 86400, "font/": 86400, "text/css": 86400, "application/javascript": 86400}
-
         def _resolved_html_path(self) -> Path | None:
             req_path = urlsplit(self.path).path
             fs_path = Path(self.translate_path(req_path))
@@ -134,11 +132,10 @@ def serve(public_dir: Path, host: str, port: int, root: Path) -> None:
             self.send_response(200)
             self.send_header("Content-Type", mime + "; charset=utf-8" if mime.startswith("text/") else mime)
             self.send_header("Content-Length", str(len(payload)))
-            cache_age = next((v for k, v in self._CACHE_FOR.items() if mime.startswith(k)), None)
             if mime == "text/html":
                 self.send_header("Cache-Control", "no-store")
-            elif cache_age:
-                self.send_header("Cache-Control", f"public, max-age={cache_age}")
+            elif mime.startswith("image/") or mime.startswith("font/"):
+                self.send_header("Cache-Control", "public, max-age=86400")
             self.end_headers()
             self.wfile.write(payload)
 

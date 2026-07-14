@@ -24,7 +24,7 @@ class MarkdownEngine:
         lines = text.replace("\r\n", "\n").split("\n")
         out: list[str] = []
         para: list[str] = []
-        list_stack: list[tuple[int, str]] = []  # (indent, mode)
+        list_stack: list[tuple[int, str]] = []
         in_code = False
         code_lang = ""
         code_lines: list[str] = []
@@ -389,7 +389,6 @@ class MarkdownEngine:
         s = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)
         s = re.sub(r"\*([^*]+)\*", r"<em>\1</em>", s)
 
-        # Footnotes.
         def replace_fn(match: re.Match[str]) -> str:
             fid = match.group(1).strip()
             self._fn_ids[fid] = None

@@ -17,7 +17,6 @@ class SiteConfig:
     static_dir: Path
     public_dir: Path
     menu: list[dict[str, Any]]
-    theme_options: dict[str, Any]
     server: dict[str, Any]
     root: Path
     search: bool = True
