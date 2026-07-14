@@ -11,7 +11,6 @@ class SiteConfig:
     domain: str
     description: str
     icon: str
-    home_limit: int
 
     content_dir: Path
     static_dir: Path

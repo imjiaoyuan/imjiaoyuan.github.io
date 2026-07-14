@@ -124,7 +124,7 @@ def render_404(cfg: SiteConfig) -> str:
     return render_shell(cfg, "404", body, has_math=False, show_top=False, description="Page not found", url="/404.html")
 
 
-def render_home(cfg: SiteConfig, posts: list[ContentItem], page_no: int, total_pages: int) -> str:
+def render_home(cfg: SiteConfig, posts: list[ContentItem]) -> str:
     intro = html.escape(cfg.description)
     items = "".join(
         _render_template(
@@ -137,8 +137,5 @@ def render_home(cfg: SiteConfig, posts: list[ContentItem], page_no: int, total_p
         )
         for p in posts
     )
-    scroll = ""
-    if page_no == 1 and total_pages > 1:
-        scroll = _render_template("home_scroll.html", {"total_pages": str(total_pages)})
-    body = _render_template("home.html", {"intro": intro, "items": items, "scroll": scroll})
+    body = _render_template("home.html", {"intro": intro, "items": items, "scroll": ""})
     return render_shell(cfg, "", body, has_math=False, show_top=False)

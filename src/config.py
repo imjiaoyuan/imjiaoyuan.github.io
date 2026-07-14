@@ -3,7 +3,6 @@ SITE = {
     "domain": "https://jiaoyuan.org",
     "description": "Master's student in Bioinformatics at Sichuan University.",
     "icon": "/favicon.ico",
-    "home_limit": 30,
 
     "content_dir": "content",
     "static_dir": "src/assets",

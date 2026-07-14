@@ -38,7 +38,7 @@ def _write(public_dir: Path, rel_out_dir: str, html_text: str) -> None:
 
 def _render_atom(cfg, posts) -> str:
     base = cfg.domain.rstrip("/") + "/"
-    updated = to_atom_date(posts[0].date) if posts else dt.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    updated = to_atom_date(posts[0].date) if posts else dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     site_title = xml_escape(cfg.title)
     site_desc = xml_escape(cfg.description)
     site_link = xml_escape(base)
@@ -178,14 +178,8 @@ def build(root: Path) -> None:
             continue
         _write(cfg.public_dir, slug, render_page(cfg, p))
 
-    pager_size = max(1, cfg.home_limit)
-    total_pages = max(1, (len(posts) + pager_size - 1) // pager_size)
-    for i in range(total_pages):
-        page_no = i + 1
-        chunk = posts[i * pager_size : (i + 1) * pager_size]
-        html = render_home(cfg, chunk, page_no=page_no, total_pages=total_pages)
-        out_dir = "" if page_no == 1 else f"page/{page_no}"
-        _write(cfg.public_dir, out_dir, html)
+    html = render_home(cfg, posts)
+    _write(cfg.public_dir, "", html)
 
     try:
         (cfg.public_dir / "atom.xml").write_text(_render_atom(cfg, posts), encoding="utf-8")
