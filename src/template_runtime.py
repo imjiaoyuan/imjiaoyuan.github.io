@@ -84,16 +84,7 @@ def render_shell(
 
 
 def render_post(cfg: SiteConfig, item: ContentItem) -> str:
-    giscus = cfg.theme_options.get("giscus", {}) if cfg.theme_options else {}
-    comment_html = _render_template(
-        "comment.html",
-        {
-            "giscus_repo": str(giscus.get("repo", "")),
-            "giscus_repo_id": str(giscus.get("repo_id", "")),
-            "giscus_category": str(giscus.get("category", "")),
-            "giscus_category_id": str(giscus.get("category_id", "")),
-        },
-    )
+    comment_html = _render_template("comment.html", {"email": html.escape(cfg.email)})
     body = _render_template(
         "post.html",
         {

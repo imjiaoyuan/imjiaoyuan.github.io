@@ -11,6 +11,7 @@ class SiteConfig:
     domain: str
     description: str
     icon: str
+    email: str
 
     content_dir: Path
     static_dir: Path

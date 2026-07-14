@@ -35,13 +35,13 @@ python run.py -h                          # Show help
 |---|---|
 | `run.py` | Entry point — adds `src/` to path, delegates to `cli.main()` |
 | `src/cli.py` | Argument parsing, post creation, formatting, image upload, orchestration |
-| `src/config.py` | Hardcoded `SITE` dict (title, domain, menu, `home_limit` (unused), server defaults, R2 config) |
+| `src/config.py` | Hardcoded `SITE` dict (title, domain, menu, server defaults, R2 config) |
 | `src/config_loader.py` | Loads `src/config.py` via `importlib`, returns a `SiteConfig` dataclass |
 | `src/models.py` | `SiteConfig` and `ContentItem` dataclasses |
 | `src/content_loader.py` | Parses front matter, loads posts/pages, pangu formatting, slug hashing, incremental build cache |
 | `src/markdown_engine.py` | Custom Markdown-to-HTML parser with syntax highlighting |
 | `src/template_runtime.py` | HTML rendering via `{{placeholder}}` template substitution |
-| `src/asset_pipeline.py` | Copies static assets (CSS, favicon, vendor/) to `public/` |
+| `src/asset_pipeline.py` | Copies static assets: `copy_static` → top-level files (favicon, etc.) to `public/`; `copy_site_assets` → CSS and KaTeX vendor to `public/assets/site/` |
 | `src/builder.py` | Orchestrates the full build: load → parse → copy → render → write |
 | `src/server.py` | HTTP server with file watcher, live-reload via SSE |
 | `src/rclone.py` | Image upload/remove pipeline: WebP conversion (ImageMagick) → custom xxHash32 naming → rclone to R2 |
@@ -59,7 +59,7 @@ Post URLs are **not** derived from filenames. Each post gets a short hash-based 
 ### Build Pipeline (`src/builder.py`)
 1. Load site config → `SiteConfig` dataclass.
 2. Parse all posts and pages (front matter + Markdown → HTML), using incremental cache when unchanged.
-3. Copy static files: `src/assets/` contents (favicon, CSS, vendor/) go to `public/assets/site/`.
+3. Copy static files: `copy_static` copies top-level assets (favicon, etc.) to `public/` (skipping `style.css` and `vendor/`); `copy_site_assets` copies CSS and KaTeX vendor to `public/assets/site/`.
 4. Conditionally copy KaTeX vendor files only when at least one post/page has math.
 5. Render HTML pages:
    - Home page with full post list (no pagination).
@@ -89,10 +89,9 @@ Post URLs are **not** derived from filenames. Each post gets a short hash-based 
 | `header.html` | `{{site_title}}`, `{{nav}}` (pre-rendered `<a>` links from `cfg.menu`) |
 | `home.html` | `{{intro}}`, `{{items}}` (pre-rendered `<li>` list), `{{scroll}}` (reserved, always empty) |
 | `post_list_item.html` | `{{url}}`, `{{title}}`, `{{date}}` |
-| `home_scroll.html` | `{{total_pages}}` (dead code — pagination removed; template no longer rendered) |
 | `post.html` | `{{title}}`, `{{date}}`, `{{body}}`, `{{comment_html}}` |
 | `page.html` | `{{title}}`, `{{body}}` |
-| `comment.html` | `{{giscus_repo}}`, `{{giscus_repo_id}}`, `{{giscus_category}}`, `{{giscus_category_id}}` |
+| `comment.html` | `{{email}}` |
 | `404.html`, `math_block.html`, `top_button.html` | No variables (static content) |
 
 The `render_shell()` function assembles the final page by rendering `head.html` and `header.html`, then wrapping everything in `shell.html`. Post pages additionally get a "back to top" button (`show_top=True`) and OpenGraph `og_type="article"`.
@@ -123,12 +122,11 @@ The `render_shell()` function assembles the final page by rendering `head.html` 
 - **Formatting**: The `-f` command runs pangu formatting (adds a space between CJK characters and Latin letters/digits), strips trailing whitespace, collapses 4+ consecutive blank lines to 3, and right-strips the body. Code blocks and inline code are preserved during pangu formatting.
 - **Image references**: Images are stored locally in `static/images/` (committed to git). In posts, reference them as `../../static/images/<hash>.webp` — this relative path works both in editor markdown previews and on the deployed site. The builder copies `static/` into `public/static/` during the build. R2 upload (`-u`) is still available for external hosting but no longer the default.
 - **Image compression**: Use ImageMagick to keep images lightweight: `convert <input> -resize '1200x1200>' -quality 70 <output>.webp`. The 1200px max width and quality 70 keep most images under 200KB while maintaining reasonable quality.
-- **Comments**: Giscus-powered, configured via `theme_options.giscus` in `src/config.py` (`repo`, `repo_id`, `category`, `category_id`). The `repo_id` and `category_id` are obtained from https://giscus.app.
-- **Theme**: Dark/light toggle in the shell template. Stores preference in `localStorage` under `site-theme`, applies via `data-theme` attribute on `<html>`. Respects `prefers-color-scheme` when no explicit preference is saved. Dispatches a `site:theme-change` custom event on toggle — Giscus listens for this to sync its theme. CSS lives in `src/assets/style.css`.
+- **Contact**: Each post page shows a contact line with the email configured via `email` in `src/config.py`.
+- **Theme**: Dark/light toggle in the shell template. Stores preference in `localStorage` under `site-theme`, applies via `data-theme` attribute on `<html>`. Respects `prefers-color-scheme` when no explicit preference is saved. CSS lives in `src/assets/style.css`.
 - **CSS**: All styles are in a single file: `src/assets/style.css`. It uses CSS custom properties (variables) for theming — light and dark color schemes are defined via `:root` and `[data-theme="dark"]` selectors.
 - **Client-side JS**: All JavaScript is inline in templates (no external `.js` files):
-  - `shell.html`: Theme toggle button, email modal (intercepts `mailto:` links), back-to-top button.
-  - `home_scroll.html`: (Dead code) Formerly infinite scroll via IntersectionObserver — pagination is removed, this template is no longer rendered.
+  - `shell.html`: Theme toggle button, back-to-top button. (Also has an email modal JS, but no `mailto:` link exists on the page — inert unless a mailto link is added to the header/menu.)
   - `head.html`: Inline script before CSS to apply saved theme (blocks flash of wrong theme).
 - **Math rendering**: KaTeX is vendored in `src/assets/vendor/katex/`. It is only copied to the output when at least one post or page has `math: true` (or contains `$` math delimiters in the body — `has_math` is auto-detected via regex).
 - **Homepage**: All posts are rendered on a single page at `/`. No pagination, no lazy loading.
@@ -149,16 +147,16 @@ The `render_shell()` function assembles the final page by rendering `head.html` 
 
 These are non-obvious behaviors worth knowing before making changes:
 
-- **Import ordering in `content_loader.py`**: Local module imports (`from date_utils import parse_date`, `from markdown_engine import MarkdownEngine`, `from models import ContentItem, SiteConfig`) appear mid-file after the `BuildCache` class (line 121), not at the top. This is deliberate — `BuildCache` has no local dependencies, while the functions below need those modules.
-
-- **Dead code — `_safe_date()`**: `content_loader.py` defines `_safe_date()` (line 208) which is never called. The functionally identical `parse_date()` from `date_utils.py` is imported and used instead. If you need to change date-fallback behavior, `parse_date()` in `date_utils.py` is the one that matters.
+- **Import ordering in `content_loader.py`**: Local module imports (`from date_utils import parse_date`, `from markdown_engine import MarkdownEngine`, `from models import ContentItem, SiteConfig`) appear mid-file after the `BuildCache` class, not at the top. This is deliberate — `BuildCache` has no local dependencies, while the functions below need those modules.
 
 - **Vestigial `is_log` parameter**: `_load_markdown_file()` accepts `is_log: bool` but both callers (`load_posts` and `load_pages`) pass `False`. The parameter only affects the fallback date value (uses `path.stem` when true). This is a leftover from the Hugo-to-custom-generator migration.
 
-- **`_write()` is idempotent**: The builder's `_write()` function (line 26 of `builder.py`) reads the existing output file and skips writing if the new HTML is identical. This means editing a post and rebuilding won't update the output file's mtime unless the rendered HTML actually changed — relevant if you're checking timestamps for deployment.
+- **`_write()` is idempotent**: The builder's `_write()` function reads the existing output file and skips writing if the new HTML is identical. This means editing a post and rebuilding won't update the output file's mtime unless the rendered HTML actually changed — relevant if you're checking timestamps for deployment.
+
+- **Asset copy is split across two functions**: `copy_static` handles top-level files (favicon, etc.) directly in `public/`, but explicitly skips `style.css` and `vendor/`. `copy_site_assets` handles those, placing them under `public/assets/site/` where templates reference them. When adding new static assets, check which function (and output path) is appropriate.
 
 - **Config loaded via `importlib`**: `src/config_loader.py` uses `importlib.util` to dynamically load `src/config.py` as a module. Each call to `load_site_config()` re-executes the file, so config changes are picked up on the next build without restarting the server. This also means `src/config.py` must be valid Python (not just a data file) and any import-side effects will re-run on every build.
 
 - **Server watcher covers `content/` and `src/`**: The live-reload watcher (`src/server.py:_scan_source_mtimes()`) scans both directories for changes. Editing templates, CSS, config, or Python source all trigger a full rebuild + browser reload — not just Markdown content changes.
 
-- **Dead code — `home_scroll.html` and pagination**: Pagination was removed — all posts now render on a single page. The `home_scroll.html` template (infinite scroll JS) is no longer rendered (`scroll` is always empty string in `render_home()`). `home_limit` in `config.py` is dead config, `render_home()`'s `page_no`/`total_pages` params are vestigial (always 1, 1), and `/page/N/` routes are no longer generated. If re-adding pagination, restore the `home_scroll` rendering in `render_home()` and the page loop in `builder.py`.
+- **Pagination was removed**: All posts render on a single page at `/`. The old `home_scroll.html` template, `home_limit` config, and `/page/N/` routes are gone. If re-adding pagination: add `home_limit` back to config/models/config_loader, restore the page loop in `builder.py`, recreate the infinite-scroll template, and add `page_no`/`total_pages` params back to `render_home()`.
