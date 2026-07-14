@@ -541,7 +541,3 @@ pkg install openssh
 ```
 
 这样以后我们就可以使用手机 ssh 连接服务器，然后控制 agent 去给我们提交任务了~
-
-<div style="text-align: center;">
-  <img src="/images/232bf8d0.webp" alt="termux 手机端截图" style="max-width: 360px; width: 100%;" />
-</div>
