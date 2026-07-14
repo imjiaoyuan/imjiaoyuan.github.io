@@ -35,7 +35,7 @@ python run.py -h                          # Show help
 |---|---|
 | `run.py` | Entry point — adds `src/` to path, delegates to `cli.main()` |
 | `src/cli.py` | Argument parsing, post creation, formatting, image upload, orchestration |
-| `src/config.py` | Hardcoded `SITE` dict (title, domain, menu, server defaults, R2 config) |
+| `src/config.py` | Hardcoded `SITE` dict (title, domain, email, menu, server defaults) |
 | `src/config_loader.py` | Loads `src/config.py` via `importlib`, returns a `SiteConfig` dataclass |
 | `src/models.py` | `SiteConfig` and `ContentItem` dataclasses |
 | `src/content_loader.py` | Parses front matter, loads posts/pages, pangu formatting, slug hashing, incremental build cache |
@@ -44,7 +44,6 @@ python run.py -h                          # Show help
 | `src/asset_pipeline.py` | Copies static assets: `copy_static` → top-level files (favicon, etc.) to `public/`; `copy_site_assets` → CSS and KaTeX vendor to `public/assets/site/` |
 | `src/builder.py` | Orchestrates the full build: load → parse → copy → render → write |
 | `src/server.py` | HTTP server with file watcher, live-reload via SSE |
-| `src/rclone.py` | Image upload/remove pipeline: WebP conversion (ImageMagick) → custom xxHash32 naming → rclone to R2 |
 | `src/date_utils.py` | Date parsing (`YYYY-MM-DD`) and Atom date formatting (RFC 3339) |
 | `src/templates/` | HTML fragments using `{{variable}}` syntax (shell, head, header, home, post, page, comment, 404, etc.) |
 
@@ -102,12 +101,6 @@ The `render_shell()` function assembles the final page by rendering `head.html` 
 - Inline HTML is passed through verbatim.
 - Math (`$...$` / `$$...$$`) is left as raw text; KaTeX is loaded client-side when `math: true` is set in front matter.
 
-### Image Upload Pipeline (`src/rclone.py`)
-- Images are uploaded to Cloudflare R2, not stored in the repo.
-- Pipeline: input image → ImageMagick conversion to WebP (quality 85) → xxHash32 content hash for deduplicated naming → rclone copy to R2.
-- Configurable via `r2_remote` and `r2_base_url` in `src/config.py`.
-- The CLI prints the resulting URL (e.g., `https://static.jiaoyuan.org/blog/images/a1b2c3d4.webp`).
-
 ### Live Reload Server (`src/server.py`)
 - Watches `content/` and `src/` for file changes (polling every 0.8s, comparing mtimes).
 - On change: rebuilds the site, then notifies all connected browsers via Server-Sent Events.
@@ -120,7 +113,7 @@ The `render_shell()` function assembles the final page by rendering `head.html` 
   - **Parser limitations**: No nested/dict values, no multi-line strings (except indented lists). String values containing spaces that aren't meant to be arrays must be quoted (`title: "My Post Title"`). Lines starting with `#` in front matter are treated as comments and ignored. Bare words like `true`/`false`/`123`/`3.14` are auto-typed; everything else is a string.
 - **Post sort order**: Posts on the homepage are sorted by pinned status first (pinned posts at top), then by date descending (most recent first). This is implemented in `src/content_loader.py:load_posts()`.
 - **Formatting**: The `-f` command runs pangu formatting (adds a space between CJK characters and Latin letters/digits), strips trailing whitespace, collapses 4+ consecutive blank lines to 3, and right-strips the body. Code blocks and inline code are preserved during pangu formatting.
-- **Image references**: Images are stored locally in `static/images/` (committed to git). In posts, reference them as `../../static/images/<hash>.webp` — this relative path works both in editor markdown previews and on the deployed site. The builder copies `static/` into `public/static/` during the build. R2 upload (`-u`) is still available for external hosting but no longer the default.
+- **Image references**: Images are stored locally in `static/images/` (committed to git). In posts, reference them as `../../static/images/<hash>.webp` — this relative path works both in editor markdown previews and on the deployed site. The builder copies `static/` into `public/static/` during the build.
 - **Image compression**: Use ImageMagick to keep images lightweight: `convert <input> -resize '1200x1200>' -quality 70 <output>.webp`. The 1200px max width and quality 70 keep most images under 200KB while maintaining reasonable quality.
 - **Contact**: Each post page shows a contact line with the email configured via `email` in `src/config.py`.
 - **Theme**: Dark/light toggle in the shell template. Stores preference in `localStorage` under `site-theme`, applies via `data-theme` attribute on `<html>`. Respects `prefers-color-scheme` when no explicit preference is saved. CSS lives in `src/assets/style.css`.

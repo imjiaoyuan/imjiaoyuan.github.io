@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -48,12 +49,12 @@ def _compute_cache_version(root: Path) -> int:
     if templates_dir.exists():
         for f in sorted(templates_dir.iterdir()):
             try:
-                v ^= hash(f.read_bytes())
+                v ^= int.from_bytes(hashlib.sha256(f.read_bytes()).digest()[:8], 'big')
             except OSError:
                 pass
     for rel in ["src/config.py", "src/markdown_engine.py", "src/template_runtime.py"]:
         try:
-            v ^= hash((root / rel).read_bytes())
+            v ^= int.from_bytes(hashlib.sha256((root / rel).read_bytes()).digest()[:8], 'big')
         except OSError:
             pass
     return v

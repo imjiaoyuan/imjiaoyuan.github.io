@@ -341,26 +341,59 @@ class MarkdownEngine:
         return [c.strip().replace("\x00", "|") for c in s.split("|")]
 
     def _inline(self, text: str) -> str:
-        s = html.escape(text)
+        code: list[str] = []
 
-        def replace_image(match):
-            alt = match.group(1)
-            src = match.group(2).strip()
-            title = match.group(3)
-            title_attr = f' title="{title}"' if title else ''
-            return f'<img alt="{alt}" src="{src}" loading="lazy" decoding="async"{title_attr}>'
+        def _save_code(m: re.Match[str]) -> str:
+            code.append(m.group(1))
+            return f"\x01{len(code) - 1}\x01"
 
-        s = re.sub(r'!\[([^\]]*)\]\((\S+)(?:\s+"([^"]*)")?\)', replace_image, s)
-        s = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', s)
-        s = re.sub(r'`([^`]+)`', r'<code>\1</code>', s)
-        s = re.sub(r'~~([^~]+)~~', r'<del>\1</del>', s)
-        s = re.sub(r'\*\*([^*]+)\*\*', r'<strong>\1</strong>', s)
-        s = re.sub(r'\*([^*]+)\*', r'<em>\1</em>', s)
+        s = re.sub(r"`([^`]+)`", _save_code, text)
 
-        def replace_fn(match):
+        imgs: list[tuple[str, str, str]] = []
+
+        def _save_img(m: re.Match[str]) -> str:
+            imgs.append((m.group(1), m.group(2).strip(), m.group(3) or ""))
+            return f"\x02{len(imgs) - 1}\x02"
+
+        s = re.sub(r'!\[([^\]]*)\]\((\S+)(?:\s+"([^"]*)")?\)', _save_img, s)
+
+        links: list[tuple[str, str]] = []
+
+        def _save_link(m: re.Match[str]) -> str:
+            links.append((m.group(1), m.group(2)))
+            return f"\x03{len(links) - 1}\x03"
+
+        s = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", _save_link, s)
+
+        s = html.escape(s)
+
+        def _restore_link(m: re.Match[str]) -> str:
+            txt, url = links[int(m.group(1))]
+            return f'<a href="{url}">{html.escape(txt)}</a>'
+
+        s = re.sub(r"\x03(\d+)\x03", _restore_link, s)
+
+        def _restore_img(m: re.Match[str]) -> str:
+            alt, src, title = imgs[int(m.group(1))]
+            ta = f' title="{html.escape(title)}"' if title else ""
+            return f'<img alt="{html.escape(alt)}" src="{src}" loading="lazy" decoding="async"{ta}>'
+
+        s = re.sub(r"\x02(\d+)\x02", _restore_img, s)
+
+        def _restore_code(m: re.Match[str]) -> str:
+            return f"<code>{html.escape(code[int(m.group(1))])}</code>"
+
+        s = re.sub(r"\x01(\d+)\x01", _restore_code, s)
+
+        s = re.sub(r"~~([^~]+)~~", r"<del>\1</del>", s)
+        s = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)
+        s = re.sub(r"\*([^*]+)\*", r"<em>\1</em>", s)
+
+        # Footnotes.
+        def replace_fn(match: re.Match[str]) -> str:
             fid = match.group(1).strip()
             self._fn_ids[fid] = None
             return f'<sup><a href="#fn-{fid}" id="fnref-{fid}">[{fid}]</a></sup>'
 
-        s = re.sub(r'\[\^([^\]]+)\]', replace_fn, s)
+        s = re.sub(r"\[\^([^\]]+)\]", replace_fn, s)
         return s
