@@ -13,6 +13,7 @@ SITE = {
         {"name": "GitHub", "url": "https://github.com/imjiaoyuan"},
         {"name": "RSS", "url": "/atom.xml"},
     ],
+    "search": True,
     "theme_options": {},
     "server": {"host": "127.0.0.1", "port": 1313},
 }

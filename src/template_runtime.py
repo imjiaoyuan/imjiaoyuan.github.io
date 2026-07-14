@@ -57,6 +57,8 @@ def _header(cfg: SiteConfig) -> str:
         f'<a href="{html.escape(str(item.get("url", "#")))}">{html.escape(str(item.get("name", "")))}</a>'
         for item in cfg.menu
     )
+    if cfg.search:
+        nav += '<a href="/search/">Search</a>'
     return _render_template("header.html", {"site_title": html.escape(cfg.title), "nav": nav})
 
 
@@ -108,6 +110,11 @@ def render_page(cfg: SiteConfig, item: ContentItem) -> str:
         },
     )
     return render_shell(cfg, item.title, body, has_math=item.has_math, show_top=False)
+
+
+def render_search(cfg: SiteConfig) -> str:
+    body = _load_template("search_page.html")
+    return render_shell(cfg, "Search", body, has_math=False, show_top=False, description="Search posts", url="/search/")
 
 
 def render_404(cfg: SiteConfig) -> str:

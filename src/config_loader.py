@@ -35,5 +35,6 @@ def load_site_config(root: Path) -> SiteConfig:
         menu=menu,
         theme_options=site.get("theme_options", {}),
         server=site.get("server", {"host": "127.0.0.1", "port": 1313}),
+        search=site.get("search", True),
         root=root,
     )
