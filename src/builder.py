@@ -15,27 +15,21 @@ from date_utils import to_atom_date
 from markdown_engine import MarkdownEngine
 from template_runtime import render_404, render_home, render_page, render_post, render_search
 
+_STRIP_HTML_RE = re.compile(r"<[^>]+>")
+
 
 def _write(public_dir: Path, rel_out_dir: str, html_text: str) -> None:
     out = public_dir / rel_out_dir
-    try:
-        out.mkdir(parents=True, exist_ok=True)
-    except (PermissionError, OSError) as e:
-        print(f"Error: Cannot create directory {out}: {e}")
-        raise
+    out.mkdir(parents=True, exist_ok=True)
 
     out_path = out / "index.html"
     try:
         if out_path.read_text(encoding="utf-8") == html_text:
             return
-    except (FileNotFoundError, OSError):
+    except FileNotFoundError:
         pass
 
-    try:
-        out_path.write_text(html_text, encoding="utf-8")
-    except (PermissionError, OSError) as e:
-        print(f"Error: Cannot write file {out_path}: {e}")
-        raise
+    out_path.write_text(html_text, encoding="utf-8")
 
 
 def _render_atom(cfg, posts) -> str:
@@ -120,12 +114,7 @@ Sitemap: {sitemap_url}
 
 
 def build(root: Path) -> None:
-    try:
-        cfg = load_site_config(root)
-    except Exception as e:
-        print(f"Error: Failed to load configuration: {e}")
-        raise RuntimeError("Configuration error. Check src/config.py for syntax errors.") from e
-
+    cfg = load_site_config(root)
     engine = MarkdownEngine()
 
     cache_dir = root / ".cache"
@@ -133,26 +122,13 @@ def build(root: Path) -> None:
     cache_version = _compute_cache_version(root)
     build_cache = BuildCache(cache_path, cache_version)
 
-    try:
-        posts = load_posts(cfg, engine, build_cache)
-        pages = load_pages(cfg, engine, build_cache)
-    except Exception as e:
-        print(f"Error: Failed to load content: {e}")
-        raise RuntimeError("Content loading failed. Check markdown files for errors.") from e
+    posts = load_posts(cfg, engine, build_cache)
+    pages = load_pages(cfg, engine, build_cache)
 
-    try:
-        cfg.public_dir.mkdir(parents=True, exist_ok=True)
-    except (PermissionError, OSError) as e:
-        print(f"Error: Cannot create public directory {cfg.public_dir}: {e}")
-        raise RuntimeError(f"Cannot create output directory. Check permissions.") from e
+    cfg.public_dir.mkdir(parents=True, exist_ok=True)
 
-    try:
-        copy_static(cfg)
-    except (PermissionError, OSError) as e:
-        print(f"Error: Failed to copy static files: {e}")
-        raise RuntimeError("Failed to copy static assets. Check file permissions.") from e
+    copy_static(cfg)
 
-    # Copy static/images into public/ so that ../../static/images/ paths resolve
     static_dir = root / "static"
     if static_dir.exists():
         dst = cfg.public_dir / "static"
@@ -163,29 +139,25 @@ def build(root: Path) -> None:
     if cfg.search:
         search_index = []
         for p in posts:
-            text_only = re.sub(r"<[^>]+>", "", p.body_html)
+            text_only = _STRIP_HTML_RE.sub("", p.body_html)
             search_index.append({
                 "title": p.title,
                 "date": p.date,
                 "url": p.rel_url,
                 "text": text_only,
             })
-        try:
-            (cfg.public_dir / "search_index.json").write_text(
-                json.dumps(search_index, ensure_ascii=False, separators=(",", ":")),
-                encoding="utf-8",
-            )
-        except (PermissionError, OSError) as e:
-            print(f"Error: Cannot write search_index.json: {e}")
-            raise
+        (cfg.public_dir / "search_index.json").write_text(
+            json.dumps(search_index, ensure_ascii=False, separators=(",", ":")),
+            encoding="utf-8",
+        )
+    else:
+        stale_index = cfg.public_dir / "search_index.json"
+        if stale_index.exists():
+            stale_index.unlink()
 
     needs_math = any(p.has_math for p in posts) or any(p.has_math for p in pages.values())
 
-    try:
-        copy_site_assets(cfg, needs_math)
-    except (PermissionError, OSError) as e:
-        print(f"Error: Failed to copy assets: {e}")
-        raise RuntimeError("Failed to copy assets. Check file permissions and disk space.") from e
+    copy_site_assets(cfg, needs_math)
 
     for p in posts:
         _write(cfg.public_dir, p.out_dir, render_post(cfg, p))
@@ -202,36 +174,20 @@ def build(root: Path) -> None:
     html = render_home(cfg, posts)
     _write(cfg.public_dir, "", html)
 
-    try:
-        (cfg.public_dir / "atom.xml").write_text(_render_atom(cfg, posts), encoding="utf-8")
-    except (PermissionError, OSError) as e:
-        print(f"Error: Cannot write atom.xml: {e}")
-        raise
+    (cfg.public_dir / "atom.xml").write_text(_render_atom(cfg, posts), encoding="utf-8")
 
-    try:
-        (cfg.public_dir / "sitemap.xml").write_text(_render_sitemap(cfg, posts, pages), encoding="utf-8")
-    except (PermissionError, OSError) as e:
-        print(f"Error: Cannot write sitemap.xml: {e}")
-        raise
+    (cfg.public_dir / "sitemap.xml").write_text(_render_sitemap(cfg, posts, pages), encoding="utf-8")
 
-    try:
-        (cfg.public_dir / "robots.txt").write_text(_render_robots_txt(cfg), encoding="utf-8")
-    except (PermissionError, OSError) as e:
-        print(f"Error: Cannot write robots.txt: {e}")
-        raise
- 
-    try:
-        (cfg.public_dir / "404.html").write_text(render_404(cfg), encoding="utf-8")
-    except (PermissionError, OSError) as e:
-        print(f"Error: Cannot write 404.html: {e}")
-        raise
+    (cfg.public_dir / "robots.txt").write_text(_render_robots_txt(cfg), encoding="utf-8")
+
+    (cfg.public_dir / "404.html").write_text(render_404(cfg), encoding="utf-8")
 
     if cfg.search:
-        try:
-            _write(cfg.public_dir, "search", render_search(cfg))
-        except (PermissionError, OSError) as e:
-            print(f"Error: Cannot write search page: {e}")
-            raise
+        _write(cfg.public_dir, "search", render_search(cfg))
+    else:
+        stale_search_dir = cfg.public_dir / "search"
+        if stale_search_dir.exists():
+            shutil.rmtree(stale_search_dir)
 
     build_cache.save()
 
