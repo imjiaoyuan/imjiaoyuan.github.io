@@ -205,12 +205,6 @@ def _parse_scalar(val: str):
     return val
 
 
-def _safe_date(date_str: str) -> dt.date:
-    try:
-        return dt.date.fromisoformat(str(date_str)[:10])
-    except (ValueError, TypeError):
-        return dt.date(1970, 1, 1)
-
 
 def _load_markdown_file(path: Path, rel_url: str, out_dir: str, is_log: bool, engine: MarkdownEngine) -> ContentItem:
     try:
