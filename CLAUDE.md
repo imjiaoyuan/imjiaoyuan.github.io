@@ -35,7 +35,7 @@ python run.py -h                          # Show help
 |---|---|
 | `run.py` | Entry point — adds `src/` to path, delegates to `cli.main()` |
 | `src/cli.py` | Argument parsing, post creation, formatting, image upload, orchestration |
-| `src/config.py` | Hardcoded `SITE` dict (title, domain, menu, pagination limits, server defaults, R2 config) |
+| `src/config.py` | Hardcoded `SITE` dict (title, domain, menu, `home_limit` (unused), server defaults, R2 config) |
 | `src/config_loader.py` | Loads `src/config.py` via `importlib`, returns a `SiteConfig` dataclass |
 | `src/models.py` | `SiteConfig` and `ContentItem` dataclasses |
 | `src/content_loader.py` | Parses front matter, loads posts/pages, pangu formatting, slug hashing, incremental build cache |
@@ -62,7 +62,7 @@ Post URLs are **not** derived from filenames. Each post gets a short hash-based 
 3. Copy static files: `src/assets/` contents (favicon, CSS, vendor/) go to `public/assets/site/`.
 4. Conditionally copy KaTeX vendor files only when at least one post/page has math.
 5. Render HTML pages:
-   - Home page with paginated post list (infinite scroll via IntersectionObserver for subsequent pages).
+   - Home page with full post list (no pagination).
    - Individual post pages with comment integration.
    - Standalone pages (the `readme` page gets special treatment — it's rendered first at a fixed `/readme/` path, then skipped in the general pages loop).
    - `404.html`, `atom.xml`, `sitemap.xml`, `robots.txt`.
@@ -87,9 +87,9 @@ Post URLs are **not** derived from filenames. Each post gets a short hash-based 
 | `shell.html` | `{{head}}`, `{{header}}`, `{{main}}`, `{{year}}`, `{{top_button}}` |
 | `head.html` | `{{full_title}}`, `{{page_desc}}`, `{{page_url}}`, `{{og_type}}`, `{{site_title}}`, `{{icon}}`, `{{atom_url}}`, `{{math_block}}` |
 | `header.html` | `{{site_title}}`, `{{nav}}` (pre-rendered `<a>` links from `cfg.menu`) |
-| `home.html` | `{{intro}}`, `{{items}}` (pre-rendered `<li>` list), `{{scroll}}` (infinite scroll JS, only on page 1) |
+| `home.html` | `{{intro}}`, `{{items}}` (pre-rendered `<li>` list), `{{scroll}}` (reserved, always empty) |
 | `post_list_item.html` | `{{url}}`, `{{title}}`, `{{date}}` |
-| `home_scroll.html` | `{{total_pages}}` |
+| `home_scroll.html` | `{{total_pages}}` (dead code — pagination removed; template no longer rendered) |
 | `post.html` | `{{title}}`, `{{date}}`, `{{body}}`, `{{comment_html}}` |
 | `page.html` | `{{title}}`, `{{body}}` |
 | `comment.html` | `{{giscus_repo}}`, `{{giscus_repo_id}}`, `{{giscus_category}}`, `{{giscus_category_id}}` |
@@ -128,10 +128,10 @@ The `render_shell()` function assembles the final page by rendering `head.html` 
 - **CSS**: All styles are in a single file: `src/assets/style.css`. It uses CSS custom properties (variables) for theming — light and dark color schemes are defined via `:root` and `[data-theme="dark"]` selectors.
 - **Client-side JS**: All JavaScript is inline in templates (no external `.js` files):
   - `shell.html`: Theme toggle button, email modal (intercepts `mailto:` links), back-to-top button.
-  - `home_scroll.html`: Infinite scroll via IntersectionObserver — fetches `/page/N/` and appends `.post-list` children.
+  - `home_scroll.html`: (Dead code) Formerly infinite scroll via IntersectionObserver — pagination is removed, this template is no longer rendered.
   - `head.html`: Inline script before CSS to apply saved theme (blocks flash of wrong theme).
 - **Math rendering**: KaTeX is vendored in `src/assets/vendor/katex/`. It is only copied to the output when at least one post or page has `math: true` (or contains `$` math delimiters in the body — `has_math` is auto-detected via regex).
-- **Homepage pagination**: Configurable via `home_limit` in `src/config.py` (default 30). Page 1 is at `/`, subsequent pages at `/page/N/`. The homepage uses infinite scroll: an IntersectionObserver fetches the next page's post list and appends it.
+- **Homepage**: All posts are rendered on a single page at `/`. No pagination, no lazy loading.
 
 ### Deployment
 - GitHub Actions workflow (`.github/workflows/deploy.yml`) triggers on push to `main`.
@@ -160,3 +160,5 @@ These are non-obvious behaviors worth knowing before making changes:
 - **Config loaded via `importlib`**: `src/config_loader.py` uses `importlib.util` to dynamically load `src/config.py` as a module. Each call to `load_site_config()` re-executes the file, so config changes are picked up on the next build without restarting the server. This also means `src/config.py` must be valid Python (not just a data file) and any import-side effects will re-run on every build.
 
 - **Server watcher covers `content/` and `src/`**: The live-reload watcher (`src/server.py:_scan_source_mtimes()`) scans both directories for changes. Editing templates, CSS, config, or Python source all trigger a full rebuild + browser reload — not just Markdown content changes.
+
+- **Dead code — `home_scroll.html` and pagination**: Pagination was removed — all posts now render on a single page. The `home_scroll.html` template (infinite scroll JS) is no longer rendered (`scroll` is always empty string in `render_home()`). `home_limit` in `config.py` is dead config, `render_home()`'s `page_no`/`total_pages` params are vestigial (always 1, 1), and `/page/N/` routes are no longer generated. If re-adding pagination, restore the `home_scroll` rendering in `render_home()` and the page loop in `builder.py`.

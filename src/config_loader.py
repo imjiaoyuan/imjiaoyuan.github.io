@@ -27,7 +27,6 @@ def load_site_config(root: Path) -> SiteConfig:
         domain=site.get("domain", "/"),
         description=site.get("description", ""),
         icon=site.get("icon", "/favicon.ico"),
-        home_limit=int(site.get("home_limit", 20)),
 
         content_dir=root / site.get("content_dir", "content"),
         static_dir=root / site.get("static_dir", "src/assets"),

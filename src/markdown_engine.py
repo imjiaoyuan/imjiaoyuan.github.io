@@ -19,7 +19,7 @@ class MarkdownEngine:
     }
 
     def render(self, text: str) -> str:
-        self._fn_ids: set[str] = set()
+        self._fn_ids: dict[str, None] = {}
         self._fn_defs: dict[str, str] = {}
         lines = text.replace("\r\n", "\n").split("\n")
         out: list[str] = []
@@ -222,7 +222,7 @@ class MarkdownEngine:
 
         if self._fn_defs:
             fn_items = []
-            for fid in sorted(self._fn_ids, key=lambda x: (len(x), x)):
+            for fid in self._fn_ids:
                 if fid in self._fn_defs:
                     fn_items.append(
                         f'<li id="fn-{fid}"><p>{self._fn_defs[fid]} '
@@ -337,7 +337,8 @@ class MarkdownEngine:
             s = s[1:]
         if s.endswith("|"):
             s = s[:-1]
-        return [c.strip() for c in s.split("|")]
+        s = s.replace("\\|", "\x00")
+        return [c.strip().replace("\x00", "|") for c in s.split("|")]
 
     def _inline(self, text: str) -> str:
         s = html.escape(text)
@@ -358,7 +359,7 @@ class MarkdownEngine:
 
         def replace_fn(match):
             fid = match.group(1).strip()
-            self._fn_ids.add(fid)
+            self._fn_ids[fid] = None
             return f'<sup><a href="#fn-{fid}" id="fnref-{fid}">[{fid}]</a></sup>'
 
         s = re.sub(r'\[\^([^\]]+)\]', replace_fn, s)

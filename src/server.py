@@ -167,6 +167,19 @@ def serve(public_dir: Path, host: str, port: int, root: Path) -> None:
             self._send_404()
 
         def _send_404(self) -> None:
+            fs_path = Path(self.translate_path("/404.html"))
+            if fs_path.exists():
+                try:
+                    payload = _inject_live_reload(fs_path.read_text(encoding="utf-8")).encode("utf-8")
+                    self.send_response(404)
+                    self.send_header("Content-Type", "text/html; charset=utf-8")
+                    self.send_header("Content-Length", str(len(payload)))
+                    self.send_header("Cache-Control", "no-store")
+                    self.end_headers()
+                    self.wfile.write(payload)
+                    return
+                except OSError:
+                    pass
             self.send_response(404)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.send_header("Content-Length", "0")
