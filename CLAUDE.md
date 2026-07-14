@@ -45,7 +45,7 @@ python run.py -h                          # Show help
 | `src/builder.py` | Orchestrates the full build: load → parse → copy → render → write |
 | `src/server.py` | HTTP server with file watcher, live-reload via SSE |
 | `src/date_utils.py` | Date parsing (`YYYY-MM-DD`) and Atom date formatting (RFC 3339) |
-| `src/templates/` | HTML fragments using `{{variable}}` syntax (shell, head, header, home, post, page, comment, 404, etc.) |
+| `src/templates/` | HTML fragments using `{{variable}}` syntax (shell, head, header, home, post, page, comment, search_page, 404, etc.) |
 
 ### Content Organization
 - **Posts**: Flat `.md` files directly under `content/posts/` (e.g., `content/posts/2024-03-20-arch-install.md`). No subdirectories — the structure was flattened from Hugo-style leaf bundles.
@@ -91,6 +91,7 @@ Post URLs are **not** derived from filenames. Each post gets a short hash-based 
 | `post.html` | `{{title}}`, `{{date}}`, `{{body}}`, `{{comment_html}}` |
 | `page.html` | `{{title}}`, `{{body}}` |
 | `comment.html` | `{{email}}` |
+| `search_page.html` | No variables (static content with inline JS) |
 | `404.html`, `math_block.html`, `top_button.html` | No variables (static content) |
 
 The `render_shell()` function assembles the final page by rendering `head.html` and `header.html`, then wrapping everything in `shell.html`. Post pages additionally get a "back to top" button (`show_top=True`) and OpenGraph `og_type="article"`.
@@ -107,6 +108,14 @@ The `render_shell()` function assembles the final page by rendering `head.html` 
 - Injects an `<script>` snippet before `</body>` that connects to `/__live_reload` EventSource.
 - HTML responses get `Cache-Control: no-store`; static assets get long cache lifetimes (images, fonts, CSS: 86400s).
 - **Development workflow**: run `python run.py -s`, open the browser, edit Markdown files in `content/` — the server rebuilds and pushes a refresh automatically. No manual rebuild needed.
+
+### Search
+- Opt-in via `"search": True` in `src/config.py`. When enabled:
+  - A "Search" link appears in the header nav (rightmost item).
+  - `search_index.json` is generated at build time — a JSON array with `title`, `date`, `url`, and full plain-text `text` for every published post.
+  - A `/search/` page is built with a search input and client-side filtering JS.
+- Matching is **term-based**: the query is split on whitespace, every term must match either the title or body text (case-insensitive). Title matches score higher than body matches. No external search dependency.
+- When `search: false` or omitted, no search link, page, or index is emitted.
 
 ### Key Conventions
 - **Front matter**: A **custom parser** (not real YAML), between `---` lines. Supports: strings (optionally quoted), booleans (`true`/`false`), integers, floats, basic arrays (`[a, b]`), and list values (indented `- item` lines under a key with no initial value — this is a stateful parse: when a key like `tags:` appears with an empty value, the parser enters list-collection mode and subsequent `  - value` lines are appended to that key). Required fields: `title`, `date` (YYYY-MM-DD). Optional: `math: true` (enables KaTeX), `draft: true` (excludes from homepage), `pinned: true` (pin to top of homepage). New posts created via `-n` are drafts by default.

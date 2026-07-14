@@ -1,0 +1,70 @@
+<div class="search-page">
+  <input type="text" id="search-input" class="search-page-input" placeholder="Search posts..." autocomplete="off" spellcheck="false" autofocus>
+  <div class="search-page-results" id="search-results">
+    <div class="search-hint" id="search-hint">Type to search posts</div>
+  </div>
+</div>
+<script>
+(()=>{
+    const input=document.getElementById("search-input");
+    const results=document.getElementById("search-results");
+    let index=null;
+
+    fetch("/search_index.json").then(r=>r.json()).then(data=>{index=data;}).catch(()=>{
+        results.innerHTML='<div class="search-empty">Failed to load search index</div>';
+    });
+
+    function match(query,item){
+        const q=query.toLowerCase();
+        const ti=item.title.toLowerCase();
+        const tx=item.text.toLowerCase();
+        const terms=q.split(/\s+/).filter(Boolean);
+        if(!terms.length)return 0;
+        const allMatch=terms.every(t=>ti.includes(t)||tx.includes(t));
+        if(!allMatch)return -1;
+        let score=0;
+        for(const t of terms){
+            if(ti.includes(t))score+=20;
+            if(tx.includes(t))score+=1;
+        }
+        return score;
+    }
+
+    function render(items){
+        results.innerHTML="";
+        if(!items.length){
+            results.innerHTML='<div class="search-empty">No results found</div>';
+            return;
+        }
+        const ul=document.createElement("ul");
+        ul.className="search-list";
+        items.forEach(item=>{
+            const li=document.createElement("li");
+            li.className="search-item";
+            li.innerHTML='<a href="'+escapeHtml(item.url)+'">'+escapeHtml(item.title)+'</a><span class="search-date">'+escapeHtml(item.date)+'</span>';
+            ul.appendChild(li);
+        });
+        results.appendChild(ul);
+    }
+
+    function escapeHtml(s){
+        const d=document.createElement("div");
+        d.textContent=s;
+        return d.innerHTML;
+    }
+
+    input.addEventListener("input",(()=>{
+        let timer;
+        return ()=>{clearTimeout(timer);timer=setTimeout(doSearch,150);};
+    })());
+
+    function doSearch(){
+        const q=input.value.trim();
+        if(!index)return;
+        if(!q){results.innerHTML='<div class="search-hint">Type to search posts</div>';return;}
+        const scored=index.map(item=>({item,score:match(q,item)})).filter(x=>x.score>=0);
+        scored.sort((a,b)=>b.score-a.score);
+        render(scored.map(x=>x.item));
+    }
+})();
+</script>

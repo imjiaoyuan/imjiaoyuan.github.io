@@ -20,6 +20,7 @@ class SiteConfig:
     theme_options: dict[str, Any]
     server: dict[str, Any]
     root: Path
+    search: bool = True
 
 
 @dataclass
