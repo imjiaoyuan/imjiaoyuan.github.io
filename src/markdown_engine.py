@@ -285,12 +285,11 @@ class MarkdownEngine:
                 "function", "if", "else", "for", "while", "repeat", "in", "next", "break", "return", "TRUE", "FALSE",
                 "NULL", "library",
             },
-            "html": set(),
             "css": {
                 "@media", "@keyframes", "@supports", "display", "position", "color", "background", "font-size",
                 "padding", "margin", "border", "width", "height", "grid", "flex", "overflow",
             },
-        }[lang]
+        }.get(lang, set())
         comment_re = {
             "bash": r"#[^\n]*",
             "python": r"#[^\n]*",

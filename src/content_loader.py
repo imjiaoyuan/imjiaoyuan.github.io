@@ -1,9 +1,12 @@
 from __future__ import annotations
 
-import hashlib
 import json
 import re
 from pathlib import Path
+
+from date_utils import parse_date
+from markdown_engine import MarkdownEngine
+from models import ContentItem, SiteConfig
 
 _CJK = r"一-鿿㐀-䶿豈-﫿"
 
@@ -39,17 +42,6 @@ def format_content(text: str) -> str:
     if fm:
         return f"---\n{fm}---\n{body}"
     return body
-
-
-def _compute_cache_version(root: Path) -> int:
-    v = 0
-    templates_dir = root / "src" / "templates"
-    if templates_dir.exists():
-        for f in sorted(templates_dir.iterdir()):
-            v ^= int.from_bytes(hashlib.sha256(f.read_bytes()).digest()[:8], 'big')
-    for rel in ["src/config.py", "src/markdown_engine.py", "src/template_runtime.py"]:
-        v ^= int.from_bytes(hashlib.sha256((root / rel).read_bytes()).digest()[:8], 'big')
-    return v
 
 
 class BuildCache:
@@ -103,11 +95,6 @@ class BuildCache:
         tmp.write_text(json.dumps(payload, separators=(",", ":")), encoding="utf-8")
         tmp.replace(self._path)
         self._dirty = False
-
-from date_utils import parse_date
-from markdown_engine import MarkdownEngine
-from models import ContentItem, SiteConfig
-
 
 MATH_RE = re.compile(r"\$\$.*?\$\$|\$[^$\n]+\$", re.DOTALL)
 
