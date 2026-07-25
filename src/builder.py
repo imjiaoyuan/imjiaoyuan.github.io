@@ -1,17 +1,29 @@
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
 import shutil
 from pathlib import Path
 from urllib.parse import urljoin
 from xml.sax.saxutils import escape as xml_escape
 
-from asset_pipeline import copy_site_assets, copy_static
+from asset_pipeline import copy_assets
 from config_loader import load_site_config
-from content_loader import BuildCache, _compute_cache_version, load_pages, load_posts
+from content_loader import BuildCache, load_pages, load_posts
 from date_utils import to_atom_date
 from markdown_engine import MarkdownEngine
 from template_runtime import render_404, render_home, render_page, render_post, render_posts_list
+
+
+def _compute_cache_version(root: Path) -> int:
+    v = 0
+    templates_dir = root / "src" / "templates"
+    if templates_dir.exists():
+        for f in sorted(templates_dir.iterdir()):
+            v ^= int.from_bytes(hashlib.sha256(f.read_bytes()).digest()[:8], 'big')
+    for rel in ["src/config.py", "src/markdown_engine.py", "src/template_runtime.py"]:
+        v ^= int.from_bytes(hashlib.sha256((root / rel).read_bytes()).digest()[:8], 'big')
+    return v
 
 
 def _write(public_dir: Path, rel_out_dir: str, html_text: str) -> None:
@@ -122,7 +134,8 @@ def build(root: Path) -> None:
 
     cfg.public_dir.mkdir(parents=True, exist_ok=True)
 
-    copy_static(cfg)
+    needs_math = any(p.has_math for p in posts) or any(p.has_math for p in pages.values())
+    copy_assets(cfg, needs_math)
 
     static_dir = root / "static"
     if static_dir.exists():
@@ -130,9 +143,6 @@ def build(root: Path) -> None:
         if dst.exists():
             shutil.rmtree(dst)
         shutil.copytree(static_dir, dst)
-
-    needs_math = any(p.has_math for p in posts) or any(p.has_math for p in pages.values())
-    copy_site_assets(cfg, needs_math)
 
     for p in posts:
         _write(cfg.public_dir, p.out_dir, render_post(cfg, p))
