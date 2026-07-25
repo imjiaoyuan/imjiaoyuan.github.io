@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import datetime as dt
 import json
-import re
 import shutil
 from pathlib import Path
 from urllib.parse import urljoin
@@ -13,9 +12,7 @@ from config_loader import load_site_config
 from content_loader import BuildCache, _compute_cache_version, load_pages, load_posts
 from date_utils import to_atom_date
 from markdown_engine import MarkdownEngine
-from template_runtime import render_404, render_home, render_page, render_post, render_search
-
-_STRIP_HTML_RE = re.compile(r"<[^>]+>")
+from template_runtime import _STRIP_HTML_RE, render_404, render_home, render_page, render_post, render_search
 
 
 def _write(public_dir: Path, rel_out_dir: str, html_text: str) -> None:
