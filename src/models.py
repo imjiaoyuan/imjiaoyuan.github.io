@@ -18,7 +18,7 @@ class SiteConfig:
     public_dir: Path
     menu: list[dict[str, Any]]
     server: dict[str, Any]
-    search: bool = True
+    home_page: str = ""
 
 
 @dataclass

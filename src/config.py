@@ -1,18 +1,16 @@
 SITE = {
-    "title": "JiaoYuan's blog",
+    "title": "JiaoYuan",
     "domain": "https://jiaoyuan.org",
-    "description": "Master's student in Bioinformatics at Sichuan University.",
     "icon": "/favicon.ico",
     "email": "imjiaoyuan@gmail.com",
 
     "content_dir": "content",
     "static_dir": "src/assets",
     "public_dir": "public",
+    "home_page": "index.md",
     "menu": [
-        {"name": "Readme", "url": "/readme"},
-        {"name": "GitHub", "url": "https://github.com/imjiaoyuan"},
+        {"name": "Posts", "url": "/posts/"},
         {"name": "RSS", "url": "/atom.xml"},
     ],
-    "search": True,
     "server": {"host": "127.0.0.1", "port": 1313},
 }
