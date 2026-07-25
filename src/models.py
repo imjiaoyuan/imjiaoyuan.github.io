@@ -18,7 +18,6 @@ class SiteConfig:
     public_dir: Path
     menu: list[dict[str, Any]]
     server: dict[str, Any]
-    root: Path
     search: bool = True
 
 
