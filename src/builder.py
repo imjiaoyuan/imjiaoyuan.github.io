@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import datetime as dt
-import json
 import shutil
 from pathlib import Path
 from urllib.parse import urljoin
@@ -12,7 +11,7 @@ from config_loader import load_site_config
 from content_loader import BuildCache, _compute_cache_version, load_pages, load_posts
 from date_utils import to_atom_date
 from markdown_engine import MarkdownEngine
-from template_runtime import _STRIP_HTML_RE, render_404, render_home, render_page, render_post, render_search
+from template_runtime import render_404, render_home, render_page, render_post, render_posts_list
 
 
 def _write(public_dir: Path, rel_out_dir: str, html_text: str) -> None:
@@ -109,7 +108,6 @@ Sitemap: {sitemap_url}
 """
 
 
-
 def build(root: Path) -> None:
     cfg = load_site_config(root)
     engine = MarkdownEngine()
@@ -133,43 +131,23 @@ def build(root: Path) -> None:
             shutil.rmtree(dst)
         shutil.copytree(static_dir, dst)
 
-    if cfg.search:
-        search_index = []
-        for p in posts:
-            text_only = _STRIP_HTML_RE.sub("", p.body_html)
-            search_index.append({
-                "title": p.title,
-                "date": p.date,
-                "url": p.rel_url,
-                "text": text_only,
-            })
-        (cfg.public_dir / "search_index.json").write_text(
-            json.dumps(search_index, ensure_ascii=False, separators=(",", ":")),
-            encoding="utf-8",
-        )
-    else:
-        stale_index = cfg.public_dir / "search_index.json"
-        if stale_index.exists():
-            stale_index.unlink()
-
     needs_math = any(p.has_math for p in posts) or any(p.has_math for p in pages.values())
-
     copy_site_assets(cfg, needs_math)
 
     for p in posts:
         _write(cfg.public_dir, p.out_dir, render_post(cfg, p))
 
-    if "readme" in pages:
-        p = pages["readme"]
-        _write(cfg.public_dir, "readme", render_page(cfg, p))
-
+    home_slug = cfg.home_page.removesuffix(".md") if cfg.home_page else ""
     for slug, p in pages.items():
-        if slug == "readme":
+        if slug == home_slug:
             continue
         _write(cfg.public_dir, slug, render_page(cfg, p))
 
-    html = render_home(cfg, posts)
+    home_page = pages.get(home_slug) if home_slug else None
+    html = render_home(cfg, home_page)
     _write(cfg.public_dir, "", html)
+
+    _write(cfg.public_dir, "posts", render_posts_list(cfg, posts))
 
     (cfg.public_dir / "atom.xml").write_text(_render_atom(cfg, posts), encoding="utf-8")
 
@@ -178,13 +156,6 @@ def build(root: Path) -> None:
     (cfg.public_dir / "robots.txt").write_text(_render_robots_txt(cfg), encoding="utf-8")
 
     (cfg.public_dir / "404.html").write_text(render_404(cfg), encoding="utf-8")
-
-    if cfg.search:
-        _write(cfg.public_dir, "search", render_search(cfg))
-    else:
-        stale_search_dir = cfg.public_dir / "search"
-        if stale_search_dir.exists():
-            shutil.rmtree(stale_search_dir)
 
     build_cache.save()
 

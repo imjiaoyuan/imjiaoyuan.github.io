@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import queue
+import traceback
 from pathlib import Path
 from threading import Event, Lock, Thread
 from urllib.parse import urlsplit
@@ -77,7 +78,6 @@ def _watch_and_rebuild(root: Path, hub: _LiveReloadHub, stop: Event) -> None:
         try:
             build(root)
         except Exception as exc:
-            import traceback
             print(f"Rebuild failed: {exc}")
             print(f"Traceback:\n{traceback.format_exc()}")
             continue
