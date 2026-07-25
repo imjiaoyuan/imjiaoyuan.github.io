@@ -66,6 +66,13 @@ def _format_posts(root: Path) -> None:
     print(f"Done. {count} files updated.")
 
 
+_BUILD_ERRORS = {
+    FileNotFoundError: ("File not found", "Check that all content files exist and paths are correct."),
+    PermissionError: ("Permission denied", "Check file permissions or try running with appropriate privileges."),
+    UnicodeDecodeError: ("Encoding error", "Ensure all content files are saved as UTF-8."),
+}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="static site generator")
     parser.add_argument("-d", "--build", action="store_true", help="build static site to public/")
@@ -91,20 +98,11 @@ def main() -> None:
     try:
         build(root)
         print("Build completed successfully")
-    except FileNotFoundError as e:
-        print(f"\nBuild failed: File not found", file=sys.stderr)
+    except tuple(_BUILD_ERRORS) as e:
+        label, suggestion = _BUILD_ERRORS[type(e)]
+        print(f"\nBuild failed: {label}", file=sys.stderr)
         print(f"  {e}", file=sys.stderr)
-        print(f"\nSuggestion: Check that all content files exist and paths are correct.", file=sys.stderr)
-        sys.exit(1)
-    except PermissionError as e:
-        print(f"\nBuild failed: Permission denied", file=sys.stderr)
-        print(f"  {e}", file=sys.stderr)
-        print(f"\nSuggestion: Check file permissions or try running with appropriate privileges.", file=sys.stderr)
-        sys.exit(1)
-    except UnicodeDecodeError as e:
-        print(f"\nBuild failed: Encoding error", file=sys.stderr)
-        print(f"  {e}", file=sys.stderr)
-        print(f"\nSuggestion: Ensure all content files are saved as UTF-8.", file=sys.stderr)
+        print(f"\nSuggestion: {suggestion}", file=sys.stderr)
         sys.exit(1)
     except Exception as e:
         print(f"\nBuild failed: {type(e).__name__}", file=sys.stderr)
