@@ -48,9 +48,7 @@
   --tok-n: #ffa657;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -58,7 +56,7 @@ body {
   overflow-x: hidden;
   background: var(--bg);
   color: var(--fg);
-  font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -77,7 +75,7 @@ body {
 }
 
 .top {
-  max-width: 720px;
+  max-width: 760px;
   margin: 0 auto;
   padding: 12px 16px;
   display: flex;
@@ -98,7 +96,7 @@ nav {
   gap: 13px;
 }
 
-nav a {
+nav a, nav a:visited {
   color: var(--fg);
   text-decoration: none;
   font-size: 16px;
@@ -114,7 +112,7 @@ nav a:focus-visible {
 }
 
 main {
-  max-width: 720px;
+  max-width: 760px;
   margin: 0 auto;
   padding: 14px 16px 16px;
 }
@@ -134,45 +132,10 @@ h3 { font-size: 1.05em; }
   margin-bottom: 10px;
 }
 
-.home-intro {
-  margin-bottom: 14px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--line);
-}
-
-.home-intro p {
-  margin: 0;
-  color: var(--muted);
-}
-
-.post-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.post-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
-  padding: 6px 0;
-  border-bottom: 1px solid var(--line);
-  content-visibility: auto;
-  contain-intrinsic-size: 28px;
-}
-
-.post-list a {
-  color: var(--accent);
-  text-decoration: none;
-  line-height: 1.45;
-}
-
-.post-list time {
-  color: var(--muted);
-  white-space: nowrap;
-  font-size: 14px;
-}
+.post-list a { color: var(--accent); text-decoration: none; }
+.post-list time { color: var(--muted); }
+.post-list time::before { content: " ("; }
+.post-list time::after { content: ")"; }
 
 @media (max-width: 640px) {
   .top {
@@ -186,12 +149,6 @@ h3 { font-size: 1.05em; }
   .site-footer {
     padding-left: 12px;
     padding-right: 12px;
-  }
-
-  .post-list li {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
   }
 
   .content pre,
@@ -221,7 +178,7 @@ h3 { font-size: 1.05em; }
   margin: 0 0 6px;
 }
 
-.content a {
+.content a, .content a:visited {
   color: var(--accent);
   overflow-wrap: break-word;
   word-break: break-word;
@@ -415,21 +372,6 @@ h3 { font-size: 1.05em; }
   vertical-align: middle;
 }
 
-.pager {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 16px;
-}
-
-.pager a {
-  color: var(--fg);
-  text-decoration: none;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 4px 10px;
-  font-size: 14px;
-}
-
 .comments {
   margin-top: 20px;
   border-top: 1px solid var(--line);
@@ -438,7 +380,7 @@ h3 { font-size: 1.05em; }
 
 
 .site-footer {
-  max-width: 720px;
+  max-width: 760px;
   margin: 0 auto 10px;
   padding: 2px 16px 0;
   color: var(--muted);
@@ -473,69 +415,3 @@ h3 { font-size: 1.05em; }
   text-underline-offset: 2px;
 }
 
-.search-page {
-  max-width: 720px;
-  margin: 0 auto;
-}
-
-.search-page-input {
-  width: 100%;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--bg);
-  color: var(--fg);
-  font: inherit;
-  font-size: 15px;
-  padding: 6px 10px;
-  outline: 0;
-  transition: border-color .15s, box-shadow .15s;
-}
-
-.search-page-input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
-}
-
-.search-page-input::placeholder {
-  color: var(--muted);
-}
-
-.search-list {
-  list-style: none;
-  margin: 12px 0 0;
-  padding: 0;
-}
-
-.search-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
-  padding: 6px 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.search-item:last-child {
-  border-bottom: 0;
-}
-
-.search-item a {
-  color: var(--accent);
-  text-decoration: none;
-  line-height: 1.45;
-}
-
-.search-date {
-  color: var(--muted);
-  white-space: nowrap;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-
-.search-hint,
-.search-empty {
-  text-align: center;
-  padding: 30vh 0 0;
-  color: var(--muted);
-  font-size: 15px;
-}

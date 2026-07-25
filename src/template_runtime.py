@@ -58,8 +58,6 @@ def _header(cfg: SiteConfig) -> str:
         f'<a href="{html.escape(str(item.get("url", "#")))}">{html.escape(str(item.get("name", "")))}</a>'
         for item in cfg.menu
     )
-    if cfg.search:
-        nav += '<a href="/search/">Search</a>'
     return _render_template("header.html", {"site_title": html.escape(cfg.title), "nav": nav})
 
 
@@ -113,28 +111,25 @@ def render_page(cfg: SiteConfig, item: ContentItem) -> str:
     return render_shell(cfg, item.title, body, has_math=item.has_math, show_top=False)
 
 
-def render_search(cfg: SiteConfig) -> str:
-    body = _load_template("search_page.html")
-    return render_shell(cfg, "Search", body, has_math=False, show_top=False, description="Search posts", url="/search/")
-
-
 def render_404(cfg: SiteConfig) -> str:
     body = _load_template("404.html")
     return render_shell(cfg, "404", body, has_math=False, show_top=False, description="Page not found", url="/404.html")
 
 
-def render_home(cfg: SiteConfig, posts: list[ContentItem]) -> str:
-    intro = html.escape(cfg.description)
-    items = "".join(
-        _render_template(
-            "post_list_item.html",
-            {
-                "url": p.rel_url,
-                "title": html.escape(p.title),
-                "date": html.escape(p.date),
-            },
-        )
+def render_home(cfg: SiteConfig, page: ContentItem | None = None) -> str:
+    if page is None:
+        body = ""
+        has_math = False
+    else:
+        body = f'<div class="content">{page.body_html}</div>'
+        has_math = page.has_math
+    return render_shell(cfg, "", body, has_math=has_math, show_top=False)
+
+
+def render_posts_list(cfg: SiteConfig, posts: list[ContentItem]) -> str:
+    items = "\n".join(
+        f'<li><a href="{p.rel_url}">{html.escape(p.title)}</a><time>{html.escape(p.date)}</time></li>'
         for p in posts
     )
-    body = _render_template("home.html", {"intro": intro, "items": items})
-    return render_shell(cfg, "", body, has_math=False, show_top=False)
+    body = f"<h1>Posts</h1>\n<ul class=\"post-list\">\n{items}\n</ul>"
+    return render_shell(cfg, "Posts", body, has_math=False, show_top=False)

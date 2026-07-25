@@ -113,7 +113,7 @@ MATH_RE = re.compile(r"\$\$.*?\$\$|\$[^$\n]+\$", re.DOTALL)
 
 BASE36 = "0123456789abcdefghijklmnopqrstuvwxyz"
 
-RESERVED_SLUGS = frozenset({"assets", "logs", "readme", "page", "atom", "posts"})
+RESERVED_SLUGS = frozenset({"assets", "logs", "index", "page", "atom", "posts"})
 
 
 def _crc24(data: bytes) -> int:
