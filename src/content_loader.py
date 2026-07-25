@@ -191,7 +191,6 @@ def _parse_scalar(val: str):
     return val
 
 
-
 def _load_markdown_file(path: Path, rel_url: str, out_dir: str, engine: MarkdownEngine) -> ContentItem:
     raw = path.read_text(encoding="utf-8")
 
