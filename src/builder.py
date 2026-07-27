@@ -157,7 +157,7 @@ def build(root: Path) -> None:
     html = render_home(cfg, home_page)
     _write(cfg.public_dir, "", html)
 
-    _write(cfg.public_dir, "posts", render_posts_list(cfg, posts))
+    _write(cfg.public_dir, "blog", render_posts_list(cfg, posts))
 
     (cfg.public_dir / "atom.xml").write_text(_render_atom(cfg, posts), encoding="utf-8")
 
