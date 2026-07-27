@@ -71,6 +71,22 @@ class MarkdownEngine:
                 i += 1
                 continue
 
+            html_block = re.match(r"\s*<(style|script)([^>]*)>\s*$", line)
+            if html_block:
+                tag = html_block.group(1)
+                close_tag = f"</{tag}>"
+                flush_para()
+                close_list()
+                block_lines = [line]
+                i += 1
+                while i < len(lines):
+                    block_lines.append(lines[i])
+                    i += 1
+                    if close_tag in lines[i - 1]:
+                        break
+                out.extend(block_lines)
+                continue
+
             if line.lstrip().startswith("<"):
                 flush_para()
                 close_list()
