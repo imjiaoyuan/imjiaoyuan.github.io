@@ -130,5 +130,5 @@ def render_posts_list(cfg: SiteConfig, posts: list[ContentItem]) -> str:
         f'<li><a href="{p.rel_url}">{html.escape(p.title)}</a><time>{html.escape(p.date)}</time></li>'
         for p in posts
     )
-    body = f"<h1>Posts</h1>\n<ul class=\"post-list\">\n{items}\n</ul>"
-    return render_shell(cfg, "Posts", body, has_math=False, show_top=False)
+    body = f"<h1>Blog</h1>\n<ul class=\"post-list\">\n{items}\n</ul>"
+    return render_shell(cfg, "Blog", body, has_math=False, show_top=False)

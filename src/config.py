@@ -9,7 +9,7 @@ SITE = {
     "public_dir": "public",
     "home_page": "index.md",
     "menu": [
-        {"name": "Posts", "url": "/posts/"},
+        {"name": "Blog", "url": "/blog/"},
         {"name": "RSS", "url": "/atom.xml"},
     ],
     "server": {"host": "127.0.0.1", "port": 1313},
