@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import datetime as dt
-import hashlib
 import shutil
 from pathlib import Path
 from urllib.parse import urljoin
@@ -9,21 +8,10 @@ from xml.sax.saxutils import escape as xml_escape
 
 from asset_pipeline import copy_assets
 from config_loader import load_site_config
-from content_loader import BuildCache, load_pages, load_posts
+from content_loader import load_pages, load_posts
 from date_utils import to_atom_date
 from markdown_engine import MarkdownEngine
 from template_runtime import render_404, render_home, render_page, render_post, render_posts_list
-
-
-def _compute_cache_version(root: Path) -> int:
-    v = 0
-    templates_dir = root / "src" / "templates"
-    if templates_dir.exists():
-        for f in sorted(templates_dir.iterdir()):
-            v ^= int.from_bytes(hashlib.sha256(f.read_bytes()).digest()[:8], 'big')
-    for rel in ["src/config.py", "src/markdown_engine.py", "src/template_runtime.py"]:
-        v ^= int.from_bytes(hashlib.sha256((root / rel).read_bytes()).digest()[:8], 'big')
-    return v
 
 
 def _write(public_dir: Path, rel_out_dir: str, html_text: str) -> None:
@@ -94,7 +82,10 @@ def _render_sitemap(cfg, posts, pages) -> str:
     <priority>0.8</priority>
   </url>""")
 
+    home_slug = cfg.home_page.removesuffix(".md") if cfg.home_page else ""
     for slug, page in pages.items():
+        if slug == home_slug:
+            continue
         page_url = urljoin(base, page.rel_url.lstrip("/"))
         urls.append(f"""  <url>
     <loc>{xml_escape(page_url)}</loc>
@@ -124,13 +115,8 @@ def build(root: Path) -> None:
     cfg = load_site_config(root)
     engine = MarkdownEngine()
 
-    cache_dir = root / ".cache"
-    cache_path = cache_dir / "build_cache.json"
-    cache_version = _compute_cache_version(root)
-    build_cache = BuildCache(cache_path, cache_version)
-
-    posts = load_posts(cfg, engine, build_cache)
-    pages = load_pages(cfg, engine, build_cache)
+    posts = load_posts(cfg, engine)
+    pages = load_pages(cfg, engine)
 
     cfg.public_dir.mkdir(parents=True, exist_ok=True)
 
@@ -166,7 +152,5 @@ def build(root: Path) -> None:
     (cfg.public_dir / "robots.txt").write_text(_render_robots_txt(cfg), encoding="utf-8")
 
     (cfg.public_dir / "404.html").write_text(render_404(cfg), encoding="utf-8")
-
-    build_cache.save()
 
     print(f"Built {len(posts)} posts -> {cfg.public_dir}")

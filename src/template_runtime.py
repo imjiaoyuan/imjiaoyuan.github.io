@@ -25,7 +25,11 @@ def _render_template(name: str, context: dict[str, str]) -> str:
     def replace(match: re.Match[str]) -> str:
         key = match.group(1)
         if key not in context:
-            raise KeyError(f"Missing template value: {key} in {name}")
+            available = ", ".join(sorted(context.keys()))
+            raise KeyError(
+                f"Missing template value: '{key}' in '{name}'. "
+                f"Available: {available if available else '(none)'}"
+            )
         return context[key]
 
     return _PLACEHOLDER_RE.sub(replace, template)
