@@ -4,7 +4,7 @@ import html
 import re
 from urllib.parse import quote
 
-_URL_RE = re.compile(r'^(https?://|mailto:|/)')
+_URL_RE = re.compile(r'^(https?://|mailto:|/|\.\./|\./)')
 
 class MarkdownEngine:
     _TABLE_ALIGN_RE = re.compile(r"^\s*\|?[\s:-]+\|[\s|:-]*\|?\s*$")
@@ -333,14 +333,13 @@ class MarkdownEngine:
         string_re = r'"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\''
         number_re = r"\b\d+(?:\.\d+)?\b"
 
-        cache_key = lang
-        if cache_key not in self._TOKEN_RE_CACHE:
-            self._TOKEN_RE_CACHE[cache_key] = re.compile(
+        if lang not in self._TOKEN_RE_CACHE:
+            self._TOKEN_RE_CACHE[lang] = re.compile(
                 rf"(?P<comment>{comment_re})|(?P<tag>{tag_re})|(?P<atrule>{atrule_re})|"
                 rf"(?P<string>{string_re})|(?P<keyword>{kw_re})|(?P<number>{number_re})",
                 re.MULTILINE,
             )
-        token_re = self._TOKEN_RE_CACHE[cache_key]
+        token_re = self._TOKEN_RE_CACHE[lang]
 
         out: list[str] = []
         pos = 0
