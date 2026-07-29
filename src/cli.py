@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+import traceback
 from datetime import date
 from pathlib import Path
 
@@ -14,7 +15,7 @@ from server import serve
 def _create_post(root: Path, name: str) -> None:
     try:
         cfg = load_site_config(root)
-    except Exception as e:
+    except (FileNotFoundError, ValueError, RuntimeError) as e:
         print(f"Error: Failed to load site configuration: {e}", file=sys.stderr)
         print("Suggestion: Check that src/config.py exists and is valid Python.", file=sys.stderr)
         sys.exit(1)
@@ -43,7 +44,7 @@ def _create_post(root: Path, name: str) -> None:
         )
         print(f"Created {post_file}")
         print(f"  Edit the file and add your content, then run: python run.py -s")
-    except (PermissionError, OSError) as e:
+    except OSError as e:
         print(f"Error: Failed to create post: {e}", file=sys.stderr)
         print("Suggestion: Check file permissions and disk space.", file=sys.stderr)
         sys.exit(1)
@@ -70,6 +71,8 @@ _BUILD_ERRORS = {
     FileNotFoundError: ("File not found", "Check that all content files exist and paths are correct."),
     PermissionError: ("Permission denied", "Check file permissions or try running with appropriate privileges."),
     UnicodeDecodeError: ("Encoding error", "Ensure all content files are saved as UTF-8."),
+    ValueError: ("Invalid value", "Check front matter syntax and config values."),
+    KeyError: ("Missing expected data", "This is likely a bug in the markdown engine."),
 }
 
 
@@ -103,14 +106,8 @@ def main() -> None:
         print(f"\nBuild failed: {label}", file=sys.stderr)
         print(f"  {e}", file=sys.stderr)
         print(f"\nSuggestion: {suggestion}", file=sys.stderr)
-        sys.exit(1)
-    except Exception as e:
-        print(f"\nBuild failed: {type(e).__name__}", file=sys.stderr)
-        print(f"  {e}", file=sys.stderr)
-        print(f"\nSuggestion: Check the error message above for details.", file=sys.stderr)
-        print(f"  - Verify front matter syntax in your markdown files", file=sys.stderr)
-        print(f"  - Check that src/config.py is valid", file=sys.stderr)
-        print(f"  - Ensure content/ directory structure is correct", file=sys.stderr)
+        if isinstance(e, KeyError):
+            traceback.print_exc(file=sys.stderr)
         sys.exit(1)
 
     if args.serve:
@@ -121,7 +118,7 @@ def main() -> None:
             serve(cfg.public_dir, host, port, root)
         except KeyboardInterrupt:
             print("\nServer stopped")
-        except Exception as e:
+        except OSError as e:
             print(f"\nServer failed: {e}", file=sys.stderr)
             print(f"Suggestion: Check that the port is not already in use.", file=sys.stderr)
             sys.exit(1)

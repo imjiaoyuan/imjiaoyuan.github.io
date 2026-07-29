@@ -4,19 +4,57 @@ import html
 import re
 from urllib.parse import quote
 
+_URL_RE = re.compile(r'^(https?://|mailto:|/)')
 
 class MarkdownEngine:
     _TABLE_ALIGN_RE = re.compile(r"^\s*\|?[\s:-]+\|[\s|:-]*\|?\s*$")
     _SUPPORTED_LANGS = {"bash", "python", "c", "r", "html", "css", "cs"}
     _LANG_ALIAS = {
-        "sh": "bash",
-        "shell": "bash",
-        "zsh": "bash",
-        "py": "python",
-        "rscript": "r",
-        "c#": "cs",
-        "csharp": "cs",
+        "sh": "bash", "shell": "bash", "zsh": "bash",
+        "py": "python", "rscript": "r",
+        "c#": "cs", "csharp": "cs",
     }
+    _KEYWORDS: dict[str, set[str]] = {
+        "bash": {
+            "if", "then", "else", "fi", "for", "while", "do", "done", "case", "esac",
+            "function", "in", "echo", "export", "sudo", "cd", "cat", "grep", "sed",
+            "awk", "systemctl", "pacman", "curl",
+        },
+        "python": {
+            "def", "class", "if", "elif", "else", "for", "while", "try", "except",
+            "finally", "return", "import", "from", "as", "with", "pass", "break",
+            "continue", "lambda", "True", "False", "None",
+        },
+        "c": {
+            "int", "long", "short", "float", "double", "char", "void", "const",
+            "static", "struct", "enum", "if", "else", "for", "while", "switch",
+            "case", "break", "continue", "return", "typedef", "sizeof",
+        },
+        "cs": {
+            "using", "namespace", "class", "public", "private", "protected", "static",
+            "void", "int", "string", "bool", "if", "else", "for", "while", "switch",
+            "case", "break", "continue", "return", "new", "null", "true", "false",
+        },
+        "r": {
+            "function", "if", "else", "for", "while", "repeat", "in", "next",
+            "break", "return", "TRUE", "FALSE", "NULL", "library",
+        },
+        "css": {
+            "@media", "@keyframes", "@supports", "display", "position", "color",
+            "background", "font-size", "padding", "margin", "border", "width",
+            "height", "grid", "flex", "overflow",
+        },
+    }
+    _COMMENT_PATTERNS: dict[str, str] = {
+        "bash": r"#[^\n]*",
+        "python": r"#[^\n]*",
+        "r": r"#[^\n]*",
+        "c": r"//[^\n]*|/\*[\s\S]*?\*/",
+        "cs": r"//[^\n]*|/\*[\s\S]*?\*/",
+        "css": r"/\*[\s\S]*?\*/",
+        "html": r"<!--[\s\S]*?-->",
+    }
+    _TOKEN_RE_CACHE: dict[str, re.Pattern] = {}
 
     def render(self, text: str) -> str:
         self._fn_ids: dict[str, None] = {}
@@ -108,7 +146,8 @@ class MarkdownEngine:
                 flush_para()
                 close_list()
                 lvl = len(head.group(1))
-                out.append(f"<h{lvl} id=\"{self._slugify(head.group(2).strip())}\">{self._inline(head.group(2).strip())}</h{lvl}>")
+                text = head.group(2).strip()
+                out.append(f"<h{lvl} id=\"{self._slugify(text)}\">{self._inline(text)}</h{lvl}>")
                 i += 1
                 continue
 
@@ -258,13 +297,20 @@ class MarkdownEngine:
     def _slugify(self, text: str) -> str:
         plain = re.sub(r"<[^>]+>", "", text).strip().lower()
         plain = re.sub(r"\s+", "-", plain)
-        result: list[str] = []
+        parts: list[str] = []
+        buf: list[str] = []
         for ch in plain:
             if ch.isascii() and (ch.isalnum() or ch in "-_."):
-                result.append(ch)
-            elif not ch.isascii():
-                result.append(quote(ch))
-        return "".join(result)
+                buf.append(ch)
+            else:
+                if buf:
+                    parts.append("".join(buf))
+                    buf.clear()
+                if not ch.isascii():
+                    parts.append(quote(ch))
+        if buf:
+            parts.append("".join(buf))
+        return "".join(parts)
 
     def _normalize_lang(self, raw: str) -> str:
         lang = raw.strip().lower()
@@ -279,52 +325,23 @@ class MarkdownEngine:
         return f'<pre><code class="nohighlight">{html.escape(code)}</code></pre>'
 
     def _highlight_source(self, code: str, lang: str) -> str:
-        kw = {
-            "bash": {
-                "if", "then", "else", "fi", "for", "while", "do", "done", "case", "esac", "function", "in", "echo",
-                "export", "sudo", "cd", "cat", "grep", "sed", "awk", "systemctl", "pacman", "curl",
-            },
-            "python": {
-                "def", "class", "if", "elif", "else", "for", "while", "try", "except", "finally", "return", "import",
-                "from", "as", "with", "pass", "break", "continue", "lambda", "True", "False", "None",
-            },
-            "c": {
-                "int", "long", "short", "float", "double", "char", "void", "const", "static", "struct", "enum", "if",
-                "else", "for", "while", "switch", "case", "break", "continue", "return", "typedef", "sizeof",
-            },
-            "cs": {
-                "using", "namespace", "class", "public", "private", "protected", "static", "void", "int", "string",
-                "bool", "if", "else", "for", "while", "switch", "case", "break", "continue", "return", "new", "null",
-                "true", "false",
-            },
-            "r": {
-                "function", "if", "else", "for", "while", "repeat", "in", "next", "break", "return", "TRUE", "FALSE",
-                "NULL", "library",
-            },
-            "css": {
-                "@media", "@keyframes", "@supports", "display", "position", "color", "background", "font-size",
-                "padding", "margin", "border", "width", "height", "grid", "flex", "overflow",
-            },
-        }.get(lang, set())
-        comment_re = {
-            "bash": r"#[^\n]*",
-            "python": r"#[^\n]*",
-            "r": r"#[^\n]*",
-            "c": r"//[^\n]*|/\*[\s\S]*?\*/",
-            "cs": r"//[^\n]*|/\*[\s\S]*?\*/",
-            "css": r"/\*[\s\S]*?\*/",
-            "html": r"<!--[\s\S]*?-->",
-        }[lang]
+        kw = self._KEYWORDS.get(lang, set())
+        comment_re = self._COMMENT_PATTERNS.get(lang, r"$^")
         tag_re = r"</?[a-zA-Z][^>]*?>" if lang == "html" else r"$^"
         atrule_re = r"@[a-zA-Z_-]+" if lang == "css" else r"$^"
         kw_re = r"\b(?:%s)\b" % "|".join(sorted(re.escape(x) for x in kw if not x.startswith("@"))) if kw else r"$^"
         string_re = r'"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\''
         number_re = r"\b\d+(?:\.\d+)?\b"
-        token_re = re.compile(
-            rf"(?P<comment>{comment_re})|(?P<tag>{tag_re})|(?P<atrule>{atrule_re})|(?P<string>{string_re})|"
-            rf"(?P<keyword>{kw_re})|(?P<number>{number_re})",
-            re.MULTILINE,
-        )
+
+        cache_key = lang
+        if cache_key not in self._TOKEN_RE_CACHE:
+            self._TOKEN_RE_CACHE[cache_key] = re.compile(
+                rf"(?P<comment>{comment_re})|(?P<tag>{tag_re})|(?P<atrule>{atrule_re})|"
+                rf"(?P<string>{string_re})|(?P<keyword>{kw_re})|(?P<number>{number_re})",
+                re.MULTILINE,
+            )
+        token_re = self._TOKEN_RE_CACHE[cache_key]
+
         out: list[str] = []
         pos = 0
         for m in token_re.finditer(code):
@@ -384,14 +401,16 @@ class MarkdownEngine:
 
         def _restore_link(m: re.Match[str]) -> str:
             txt, url = links[int(m.group(1))]
-            return f'<a href="{url}">{html.escape(txt)}</a>'
+            safe_url = html.escape(url) if _URL_RE.match(url) else ""
+            return f'<a href="{safe_url}">{html.escape(txt)}</a>'
 
         s = re.sub(r"\x03(\d+)\x03", _restore_link, s)
 
         def _restore_img(m: re.Match[str]) -> str:
             alt, src, title = imgs[int(m.group(1))]
+            safe_src = html.escape(src) if _URL_RE.match(src) else ""
             ta = f' title="{html.escape(title)}"' if title else ""
-            return f'<img alt="{html.escape(alt)}" src="{src}" loading="lazy" decoding="async"{ta}>'
+            return f'<img alt="{html.escape(alt)}" src="{safe_src}" loading="lazy" decoding="async"{ta}>'
 
         s = re.sub(r"\x02(\d+)\x02", _restore_img, s)
 

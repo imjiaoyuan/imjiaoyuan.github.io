@@ -184,11 +184,15 @@ def serve(public_dir: Path, host: str, port: int, root: Path) -> None:
 
         def _serve_live_reload(self) -> None:
             q = hub.subscribe()
-            self.send_response(200)
-            self.send_header("Content-Type", "text/event-stream")
-            self.send_header("Cache-Control", "no-cache")
-            self.send_header("Connection", "keep-alive")
-            self.end_headers()
+            try:
+                self.send_response(200)
+                self.send_header("Content-Type", "text/event-stream")
+                self.send_header("Cache-Control", "no-cache")
+                self.send_header("Connection", "keep-alive")
+                self.end_headers()
+            except (BrokenPipeError, ConnectionResetError, ConnectionAbortedError, OSError):
+                hub.unsubscribe(q)
+                return
             try:
                 while not stop.is_set():
                     try:
@@ -197,7 +201,7 @@ def serve(public_dir: Path, host: str, port: int, root: Path) -> None:
                     except queue.Empty:
                         self.wfile.write(b": keepalive\n\n")
                     self.wfile.flush()
-            except (BrokenPipeError, ConnectionResetError):
+            except (BrokenPipeError, ConnectionResetError, ConnectionAbortedError):
                 pass
             finally:
                 hub.unsubscribe(q)
