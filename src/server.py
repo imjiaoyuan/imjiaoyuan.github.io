@@ -77,7 +77,7 @@ def _watch_and_rebuild(root: Path, hub: _LiveReloadHub, stop: Event) -> None:
         last = current
         try:
             build(root)
-        except Exception as exc:
+        except (FileNotFoundError, PermissionError, UnicodeDecodeError, ValueError, KeyError, OSError) as exc:
             print(f"Rebuild failed: {exc}")
             print(f"Traceback:\n{traceback.format_exc()}")
             continue
