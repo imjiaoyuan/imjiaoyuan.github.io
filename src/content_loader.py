@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import re
 from pathlib import Path
 
@@ -44,58 +43,6 @@ def format_content(text: str) -> str:
     return body
 
 
-class BuildCache:
-
-    def __init__(self, cache_path: Path, version: int):
-        self._path = cache_path
-        self._version = version
-        self._data: dict[str, dict] = {}
-        self._dirty = False
-        if cache_path.exists():
-            try:
-                raw = json.loads(cache_path.read_text(encoding="utf-8"))
-                if raw.get("_version") == version:
-                    self._data = raw.get("items", {})
-                else:
-                    self._dirty = True
-            except (json.JSONDecodeError, OSError):
-                pass
-
-    def get(self, source: Path) -> dict | None:
-        entry = self._data.get(str(source))
-        if not entry:
-            return None
-        if source.stat().st_mtime_ns != entry.get("mtime"):
-            return None
-        return entry.get("data")
-
-    def set(self, source: Path, item: ContentItem) -> None:
-        mtime = source.stat().st_mtime_ns
-        self._data[str(source)] = {
-            "mtime": mtime,
-            "data": {
-                "title": item.title,
-                "date": item.date,
-                "body_html": item.body_html,
-                "rel_url": item.rel_url,
-                "out_dir": item.out_dir,
-                "draft": item.draft,
-                "pinned": item.pinned,
-                "has_math": item.has_math,
-            },
-        }
-        self._dirty = True
-
-    def save(self) -> None:
-        if not self._dirty:
-            return
-        self._path.parent.mkdir(parents=True, exist_ok=True)
-        payload = {"_version": self._version, "items": self._data}
-        tmp = self._path.with_suffix(".tmp")
-        tmp.write_text(json.dumps(payload, separators=(",", ":")), encoding="utf-8")
-        tmp.replace(self._path)
-        self._dirty = False
-
 MATH_RE = re.compile(r"\$\$.*?\$\$|\$[^$\n]+\$", re.DOTALL)
 
 BASE36 = "0123456789abcdefghijklmnopqrstuvwxyz"
@@ -135,7 +82,7 @@ def _parse_front_matter(text: str) -> tuple[dict, str]:
     if end_idx is None:
         return {}, text
     fm = "\n".join(lines[1:end_idx])
-    body = "\n".join(lines[end_idx + 1 :])
+    body = "\n".join(lines[end_idx + 1:])
     meta: dict = {}
     current_key: str | None = None
     for raw_line in fm.splitlines():
@@ -201,7 +148,7 @@ def _load_markdown_file(path: Path, rel_url: str, out_dir: str, engine: Markdown
     )
 
 
-def load_posts(cfg: SiteConfig, engine: MarkdownEngine, cache: BuildCache | None = None) -> list[ContentItem]:
+def load_posts(cfg: SiteConfig, engine: MarkdownEngine) -> list[ContentItem]:
     items: list[ContentItem] = []
     posts_dir = cfg.content_dir / "posts"
     if not posts_dir.exists():
@@ -216,28 +163,7 @@ def load_posts(cfg: SiteConfig, engine: MarkdownEngine, cache: BuildCache | None
             slug = f"{slug}-{i}"
         used.add(slug)
 
-        if cache is not None:
-            cached = cache.get(md)
-            if cached is not None and cached.get("out_dir") == slug:
-                item = ContentItem(
-                    source=md,
-                    title=cached["title"],
-                    date=cached["date"],
-                    body_html=cached["body_html"],
-                    rel_url=cached["rel_url"],
-                    out_dir=cached["out_dir"],
-                    draft=cached["draft"],
-                    pinned=cached.get("pinned", False),
-                    has_math=cached["has_math"],
-                )
-                if item.draft:
-                    continue
-                items.append(item)
-                continue
-
         item = _load_markdown_file(md, f"/{slug}/", slug, engine)
-        if cache is not None:
-            cache.set(md, item)
         if item.draft:
             continue
         items.append(item)
@@ -245,31 +171,12 @@ def load_posts(cfg: SiteConfig, engine: MarkdownEngine, cache: BuildCache | None
     return items
 
 
-def load_pages(cfg: SiteConfig, engine: MarkdownEngine, cache: BuildCache | None = None) -> dict[str, ContentItem]:
+def load_pages(cfg: SiteConfig, engine: MarkdownEngine) -> dict[str, ContentItem]:
     out: dict[str, ContentItem] = {}
     if not cfg.content_dir.exists():
         return out
     for md in sorted(cfg.content_dir.glob("*.md")):
         slug = md.stem
-
-        if cache is not None:
-            cached = cache.get(md)
-            if cached is not None and cached.get("out_dir") == slug:
-                out[slug] = ContentItem(
-                    source=md,
-                    title=cached["title"],
-                    date=cached["date"],
-                    body_html=cached["body_html"],
-                    rel_url=cached["rel_url"],
-                    out_dir=cached["out_dir"],
-                    draft=cached["draft"],
-                    pinned=cached.get("pinned", False),
-                    has_math=cached["has_math"],
-                )
-                continue
-
         item = _load_markdown_file(md, f"/{slug}/", slug, engine)
-        if cache is not None:
-            cache.set(md, item)
         out[slug] = item
     return out

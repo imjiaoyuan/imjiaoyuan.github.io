@@ -21,10 +21,16 @@ def load_site_config(root: Path) -> SiteConfig:
     if not isinstance(site, dict):
         raise ValueError("src/config.py must define a SITE dictionary")
 
+    domain = site.get("domain", "/")
+    if not domain or domain == "/":
+        import sys
+        print("Warning: SITE['domain'] is not set. Atom feed and sitemap will use relative URLs.",
+              file=sys.stderr)
+
     menu = list(site.get("menu", []))
     return SiteConfig(
         title=site.get("title", "Site"),
-        domain=site.get("domain", "/"),
+        domain=domain,
         description=site.get("description", ""),
         icon=site.get("icon", "/favicon.ico"),
         email=site.get("email", ""),
