@@ -37,6 +37,12 @@ class MarkdownEngine:
                     _, mode = list_stack.pop()
                     out.append(f"</{mode}>")
 
+        def _make_p(lines: list[str]) -> str:
+            result = "<p>" + "<br>".join(self._inline(x) for x in lines) + "</p>"
+            if "$$" in result:
+                result = self._fix_math_newlines(result)
+            return result
+
         while i < len(lines):
             line = lines[i]
 
@@ -148,11 +154,6 @@ class MarkdownEngine:
                         break
                     bq_lines.append(cur.group(1).strip())
                     i += 1
-                def _make_p(lines: list[str]) -> str:
-                    result = "<p>" + "<br>".join(self._inline(x) for x in lines) + "</p>"
-                    if "$$" in result:
-                        result = self._fix_math_newlines(result)
-                    return result
 
                 bq_parts: list[str] = []
                 para_lines: list[str] = []
@@ -283,27 +284,7 @@ class MarkdownEngine:
 
     @staticmethod
     def _fix_math_newlines(html_str: str) -> str:
-        parts: list[str] = []
-        in_math = False
-        i = 0
-        while i < len(html_str):
-            if not in_math and html_str[i:i+2] == "$$":
-                in_math = True
-                parts.append("$$")
-                i += 2
-                continue
-            if in_math and html_str[i:i+2] == "$$":
-                in_math = False
-                parts.append("$$")
-                i += 2
-                continue
-            if in_math and html_str[i:i+4] == "<br>":
-                parts.append("\n")
-                i += 4
-                continue
-            parts.append(html_str[i])
-            i += 1
-        return "".join(parts)
+        return re.sub(r"\$\$.*?\$\$", lambda m: m.group(0).replace("<br>", "\n"), html_str, flags=re.DOTALL)
 
     def _inline(self, text: str) -> str:
         code: list[str] = []
