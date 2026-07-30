@@ -71,7 +71,10 @@ class MarkdownEngine:
         def flush_para() -> None:
             nonlocal para
             if para:
-                out.append("<p>" + "<br>".join(self._inline(line) for line in para) + "</p>")
+                result = "<p>" + "<br>".join(self._inline(line) for line in para) + "</p>"
+                if "$$" in result:
+                    result = self._fix_math_newlines(result)
+                out.append(result)
                 para = []
 
         def close_list() -> None:
@@ -194,6 +197,12 @@ class MarkdownEngine:
                         break
                     bq_lines.append(cur.group(1).strip())
                     i += 1
+                def _make_p(lines: list[str]) -> str:
+                    result = "<p>" + "<br>".join(self._inline(x) for x in lines) + "</p>"
+                    if "$$" in result:
+                        result = self._fix_math_newlines(result)
+                    return result
+
                 bq_parts: list[str] = []
                 para_lines: list[str] = []
                 for ql in bq_lines:
@@ -201,10 +210,10 @@ class MarkdownEngine:
                         para_lines.append(ql)
                         continue
                     if para_lines:
-                        bq_parts.append("<p>" + "<br>".join(self._inline(x) for x in para_lines) + "</p>")
+                        bq_parts.append(_make_p(para_lines))
                         para_lines = []
                 if para_lines:
-                    bq_parts.append("<p>" + "<br>".join(self._inline(x) for x in para_lines) + "</p>")
+                    bq_parts.append(_make_p(para_lines))
                 out.append(f"<blockquote>{''.join(bq_parts) if bq_parts else '<p></p>'}</blockquote>")
                 continue
 
@@ -370,6 +379,31 @@ class MarkdownEngine:
             s = s[:-1]
         s = s.replace("\\|", "\x00")
         return [c.strip().replace("\x00", "|") for c in s.split("|")]
+
+    @staticmethod
+    def _fix_math_newlines(html_str: str) -> str:
+        """Replace &lt;br&gt; with \n inside $$...$$ blocks so KaTeX can render multi-line math."""
+        parts: list[str] = []
+        in_math = False
+        i = 0
+        while i < len(html_str):
+            if not in_math and html_str[i:i+2] == "$$":
+                in_math = True
+                parts.append("$$")
+                i += 2
+                continue
+            if in_math and html_str[i:i+2] == "$$":
+                in_math = False
+                parts.append("$$")
+                i += 2
+                continue
+            if in_math and html_str[i:i+4] == "<br>":
+                parts.append("\n")
+                i += 4
+                continue
+            parts.append(html_str[i])
+            i += 1
+        return "".join(parts)
 
     def _inline(self, text: str) -> str:
         code: list[str] = []
