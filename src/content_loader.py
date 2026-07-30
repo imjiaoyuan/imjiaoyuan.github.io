@@ -47,7 +47,7 @@ MATH_RE = re.compile(r"\$\$.*?\$\$|\$[^$\n]+\$", re.DOTALL)
 
 BASE36 = "0123456789abcdefghijklmnopqrstuvwxyz"
 
-RESERVED_SLUGS = frozenset({"assets", "logs", "index", "page", "atom", "posts"})
+RESERVED_SLUGS = frozenset({"assets", "index", "page", "atom", "posts"})
 
 
 def _crc24(data: bytes) -> int:
@@ -117,8 +117,6 @@ def _parse_scalar(val: str):
         return low == "true"
     if re.fullmatch(r"-?\d+", val):
         return int(val)
-    if re.fullmatch(r"-?\d+\.\d+", val):
-        return float(val)
     if val.startswith("[") and val.endswith("]"):
         parts = [x.strip() for x in val[1:-1].split(",") if x.strip()]
         return [_parse_scalar(x) for x in parts]
