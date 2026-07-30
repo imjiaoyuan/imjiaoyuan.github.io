@@ -2,46 +2,7 @@
 <html lang="en" dir="auto">
 {{head}}
 <body>
-<div class="page-wrap">
 {{header}}
 <main>{{main}}</main>
-<footer class="site-footer">© 2022 - {{year}} JiaoYuan · Built with Python.</footer>
-</div>
-<div class="floating-tools">
-{{top_button}}
-<button type="button" class="tool-btn" id="theme-toggle" aria-label="Toggle theme"></button>
-</div>
-<script>
-(()=>{
-    const root=document.documentElement;
-    const topBtn=document.getElementById("to-top");
-    const themeBtn=document.getElementById("theme-toggle");
-    const notifyThemeChange=(theme)=>window.dispatchEvent(new CustomEvent("site:theme-change",{detail:{theme}}));
-    const currentTheme=()=>{
-        const saved=root.getAttribute("data-theme");
-        if(saved==="light"||saved==="dark")return saved;
-        return window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
-    };
-    const syncThemeLabel=()=>{
-        if(!themeBtn)return;
-        const current=currentTheme();
-        themeBtn.textContent=current==="dark"?"Light":"Dark";
-    };
-    topBtn?.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));
-    themeBtn?.addEventListener("click",()=>{
-        const current=currentTheme();
-        const next=current==="dark"?"light":"dark";
-        root.setAttribute("data-theme",next);
-        localStorage.setItem("site-theme",next);
-        notifyThemeChange(next);
-        syncThemeLabel();
-    });
-    window.matchMedia?.("(prefers-color-scheme: dark)")?.addEventListener?.("change",()=>{
-        const saved=root.getAttribute("data-theme");
-        if(saved==="light"||saved==="dark")return;
-        notifyThemeChange(currentTheme());
-    });
-    syncThemeLabel();
-})();
-</script></body>
+</body>
 </html>
