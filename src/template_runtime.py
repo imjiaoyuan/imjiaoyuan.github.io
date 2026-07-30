@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import html
 import re
-from datetime import datetime
 from pathlib import Path
 
 from models import ContentItem, SiteConfig
@@ -69,20 +68,16 @@ def render_shell(
     page_title: str,
     main_html: str,
     has_math: bool,
-    show_top: bool = False,
     description: str = "",
     url: str = "",
     og_type: str = "website",
 ) -> str:
-    top_button = _load_template("top_button.html") if show_top else ""
     return _render_template(
         "shell.html",
         {
             "head": _head(cfg, page_title, has_math, description, url, og_type),
             "header": _header(cfg),
             "main": main_html,
-            "year": str(datetime.now().year),
-            "top_button": top_button,
         },
     )
 
@@ -100,7 +95,7 @@ def render_post(cfg: SiteConfig, item: ContentItem) -> str:
     )
     text_only = re.sub(r"<[^>]+>", "", item.body_html)
     description = text_only[:160].strip() + ("..." if len(text_only) > 160 else "")
-    return render_shell(cfg, item.title, body, has_math=item.has_math, show_top=True, description=description, url=item.rel_url, og_type="article")
+    return render_shell(cfg, item.title, body, has_math=item.has_math, description=description, url=item.rel_url, og_type="article")
 
 
 def render_page(cfg: SiteConfig, item: ContentItem) -> str:
@@ -111,12 +106,12 @@ def render_page(cfg: SiteConfig, item: ContentItem) -> str:
             "body": item.body_html,
         },
     )
-    return render_shell(cfg, item.title, body, has_math=item.has_math, show_top=False)
+    return render_shell(cfg, item.title, body, has_math=item.has_math)
 
 
 def render_404(cfg: SiteConfig) -> str:
     body = _load_template("404.html")
-    return render_shell(cfg, "404", body, has_math=False, show_top=False, description="Page not found", url="/404.html")
+    return render_shell(cfg, "404", body, has_math=False, description="Page not found", url="/404.html")
 
 
 def render_home(cfg: SiteConfig, page: ContentItem | None = None) -> str:
@@ -126,13 +121,13 @@ def render_home(cfg: SiteConfig, page: ContentItem | None = None) -> str:
     else:
         body = f'<div class="content">{page.body_html}</div>'
         has_math = page.has_math
-    return render_shell(cfg, "", body, has_math=has_math, show_top=False)
+    return render_shell(cfg, "", body, has_math=has_math)
 
 
 def render_posts_list(cfg: SiteConfig, posts: list[ContentItem]) -> str:
     items = "\n".join(
-        f'<li><a href="{p.rel_url}">{html.escape(p.title)}</a><time>{html.escape(p.date)}</time></li>'
+        f'<li><a href="{p.rel_url}">{html.escape(p.title)}</a> {html.escape(p.date)}</li>'
         for p in posts
     )
-    body = f"<h1>Blog</h1>\n<ul class=\"post-list\">\n{items}\n</ul>"
-    return render_shell(cfg, "Blog", body, has_math=False, show_top=False)
+    body = f"<h1>Blog</h1>\n<ul>\n{items}\n</ul>"
+    return render_shell(cfg, "Blog", body, has_math=False)
