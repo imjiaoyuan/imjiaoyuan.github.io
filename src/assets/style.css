@@ -53,19 +53,14 @@ h1 { font-size: 1.5em; margin: 0 0 0.6em; }
   overflow-x: auto;
   background: var(--code-bg);
   border: 1px solid var(--code-border);
-  border-radius: 6px;
 }
 
-.content pre, .content code {
-  font-family: monospace;
-  font-size: 0.95em;
-}
+.content pre, .content code { font-size: 0.95em; }
 
 .content :not(pre) > code {
   padding: 0.1em 0.3em;
   background: var(--code-bg);
   border: 1px solid var(--code-border);
-  border-radius: 4px;
 }
 
 .content table { border-collapse: collapse; }
@@ -76,8 +71,6 @@ hr { border: 0; border-top: 1px solid; height: 0; }
 .content .katex-display { overflow-x: auto; overflow-y: hidden; }
 
 .math-overflow { overflow-x: auto; }
-
-.footnotes { font-size: 0.9em; margin-top: 1.5em; }
 
 @media (max-width: 640px) {
   body { padding: 0.8em 14px 2em; }

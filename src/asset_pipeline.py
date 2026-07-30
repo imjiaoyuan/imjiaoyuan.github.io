@@ -7,7 +7,6 @@ from models import SiteConfig
 
 
 def copy_assets(cfg: SiteConfig, needs_math: bool = True) -> None:
-    """Copy all static assets from src/assets/ to public/."""
     src = cfg.static_dir
     if not src.exists():
         return

@@ -8,53 +8,6 @@ _URL_RE = re.compile(r'^(https?://|mailto:|/|\.\./|\./)')
 
 class MarkdownEngine:
     _TABLE_ALIGN_RE = re.compile(r"^\s*\|?[\s:-]+\|[\s|:-]*\|?\s*$")
-    _SUPPORTED_LANGS = {"bash", "python", "c", "r", "html", "css", "cs"}
-    _LANG_ALIAS = {
-        "sh": "bash", "shell": "bash", "zsh": "bash",
-        "py": "python", "rscript": "r",
-        "c#": "cs", "csharp": "cs",
-    }
-    _KEYWORDS: dict[str, set[str]] = {
-        "bash": {
-            "if", "then", "else", "fi", "for", "while", "do", "done", "case", "esac",
-            "function", "in", "echo", "export", "sudo", "cd", "cat", "grep", "sed",
-            "awk", "systemctl", "pacman", "curl",
-        },
-        "python": {
-            "def", "class", "if", "elif", "else", "for", "while", "try", "except",
-            "finally", "return", "import", "from", "as", "with", "pass", "break",
-            "continue", "lambda", "True", "False", "None",
-        },
-        "c": {
-            "int", "long", "short", "float", "double", "char", "void", "const",
-            "static", "struct", "enum", "if", "else", "for", "while", "switch",
-            "case", "break", "continue", "return", "typedef", "sizeof",
-        },
-        "cs": {
-            "using", "namespace", "class", "public", "private", "protected", "static",
-            "void", "int", "string", "bool", "if", "else", "for", "while", "switch",
-            "case", "break", "continue", "return", "new", "null", "true", "false",
-        },
-        "r": {
-            "function", "if", "else", "for", "while", "repeat", "in", "next",
-            "break", "return", "TRUE", "FALSE", "NULL", "library",
-        },
-        "css": {
-            "@media", "@keyframes", "@supports", "display", "position", "color",
-            "background", "font-size", "padding", "margin", "border", "width",
-            "height", "grid", "flex", "overflow",
-        },
-    }
-    _COMMENT_PATTERNS: dict[str, str] = {
-        "bash": r"#[^\n]*",
-        "python": r"#[^\n]*",
-        "r": r"#[^\n]*",
-        "c": r"//[^\n]*|/\*[\s\S]*?\*/",
-        "cs": r"//[^\n]*|/\*[\s\S]*?\*/",
-        "css": r"/\*[\s\S]*?\*/",
-        "html": r"<!--[\s\S]*?-->",
-    }
-    _TOKEN_RE_CACHE: dict[str, re.Pattern] = {}
 
     def render(self, text: str) -> str:
         self._fn_ids: dict[str, None] = {}
@@ -64,7 +17,6 @@ class MarkdownEngine:
         para: list[str] = []
         list_stack: list[tuple[int, str]] = []
         in_code = False
-        code_lang = ""
         code_lines: list[str] = []
         i = 0
 
@@ -93,11 +45,10 @@ class MarkdownEngine:
                 close_list()
                 if not in_code:
                     in_code = True
-                    code_lang = line[3:].strip()
                     code_lines = []
                 else:
                     in_code = False
-                    out.append(self._render_code_block(code_lang, code_lines))
+                    out.append(self._render_code_block(code_lines))
                 i += 1
                 continue
 
@@ -282,7 +233,7 @@ class MarkdownEngine:
         flush_para()
         close_list()
         if in_code:
-            out.append(self._render_code_block(code_lang, code_lines))
+            out.append(self._render_code_block(code_lines))
 
         if self._fn_defs:
             fn_items = []
@@ -298,10 +249,7 @@ class MarkdownEngine:
                 out.extend(fn_items)
                 out.append('</ol></section>')
 
-        result = "\n".join(out)
-        result = re.sub(r"<table>", '<div class="table-wrap"><table>', result)
-        result = re.sub(r"</table>", "</table></div>", result)
-        return result
+        return "\n".join(out)
 
     def _slugify(self, text: str) -> str:
         plain = re.sub(r"<[^>]+>", "", text).strip().lower()
@@ -321,55 +269,8 @@ class MarkdownEngine:
             parts.append("".join(buf))
         return "".join(parts)
 
-    def _normalize_lang(self, raw: str) -> str:
-        lang = raw.strip().lower()
-        return self._LANG_ALIAS.get(lang, lang)
-
-    def _render_code_block(self, raw_lang: str, lines: list[str]) -> str:
-        code = "\n".join(lines)
-        lang = self._normalize_lang(raw_lang)
-        if lang in self._SUPPORTED_LANGS:
-            highlighted = self._highlight_source(code, lang)
-            return f'<pre><code class="codehilite">{highlighted}</code></pre>'
-        return f'<pre><code class="nohighlight">{html.escape(code)}</code></pre>'
-
-    def _highlight_source(self, code: str, lang: str) -> str:
-        kw = self._KEYWORDS.get(lang, set())
-        comment_re = self._COMMENT_PATTERNS.get(lang, r"$^")
-        tag_re = r"</?[a-zA-Z][^>]*?>" if lang == "html" else r"$^"
-        atrule_re = r"@[a-zA-Z_-]+" if lang == "css" else r"$^"
-        kw_re = r"\b(?:%s)\b" % "|".join(sorted(re.escape(x) for x in kw if not x.startswith("@"))) if kw else r"$^"
-        string_re = r'"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\''
-        number_re = r"\b\d+(?:\.\d+)?\b"
-
-        if lang not in self._TOKEN_RE_CACHE:
-            self._TOKEN_RE_CACHE[lang] = re.compile(
-                rf"(?P<comment>{comment_re})|(?P<tag>{tag_re})|(?P<atrule>{atrule_re})|"
-                rf"(?P<string>{string_re})|(?P<keyword>{kw_re})|(?P<number>{number_re})",
-                re.MULTILINE,
-            )
-        token_re = self._TOKEN_RE_CACHE[lang]
-
-        out: list[str] = []
-        pos = 0
-        for m in token_re.finditer(code):
-            if m.start() > pos:
-                out.append(html.escape(code[pos:m.start()]))
-            text = html.escape(m.group(0))
-            if m.lastgroup == "comment":
-                out.append(f'<span class="tok-c">{text}</span>')
-            elif m.lastgroup in {"tag", "keyword", "atrule"}:
-                out.append(f'<span class="tok-k">{text}</span>')
-            elif m.lastgroup == "string":
-                out.append(f'<span class="tok-s">{text}</span>')
-            elif m.lastgroup == "number":
-                out.append(f'<span class="tok-n">{text}</span>')
-            else:
-                out.append(text)
-            pos = m.end()
-        if pos < len(code):
-            out.append(html.escape(code[pos:]))
-        return "".join(out)
+    def _render_code_block(self, lines: list[str]) -> str:
+        return f"<pre><code>{html.escape('\n'.join(lines))}</code></pre>"
 
     def _split_cells(self, line: str) -> list[str]:
         s = line.strip()
@@ -382,7 +283,6 @@ class MarkdownEngine:
 
     @staticmethod
     def _fix_math_newlines(html_str: str) -> str:
-        """Replace &lt;br&gt; with \n inside $$...$$ blocks so KaTeX can render multi-line math."""
         parts: list[str] = []
         in_math = False
         i = 0
