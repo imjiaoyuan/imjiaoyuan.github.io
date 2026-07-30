@@ -11,6 +11,10 @@ _TEMPLATE_CACHE: dict[str, str] = {}
 _PLACEHOLDER_RE = re.compile(r"{{\s*([a-zA-Z0-9_]+)\s*}}")
 
 
+def clear_cache() -> None:
+    _TEMPLATE_CACHE.clear()
+
+
 def _load_template(name: str) -> str:
     if name not in _TEMPLATE_CACHE:
         path = _TEMPLATE_DIR / name

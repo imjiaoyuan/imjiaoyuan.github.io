@@ -11,7 +11,7 @@ from config_loader import load_site_config
 from content_loader import load_pages, load_posts
 from date_utils import to_atom_date
 from markdown_engine import MarkdownEngine
-from template_runtime import render_404, render_home, render_page, render_post, render_posts_list
+from template_runtime import clear_cache, render_404, render_home, render_page, render_post, render_posts_list
 
 
 def _write(public_dir: Path, rel_out_dir: str, html_text: str) -> None:
@@ -112,6 +112,7 @@ Sitemap: {sitemap_url}
 
 
 def build(root: Path) -> None:
+    clear_cache()
     cfg = load_site_config(root)
     engine = MarkdownEngine()
 
