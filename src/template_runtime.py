@@ -11,6 +11,11 @@ _TEMPLATE_CACHE: dict[str, str] = {}
 _PLACEHOLDER_RE = re.compile(r"{{\s*([a-zA-Z0-9_]+)\s*}}")
 
 
+def _extract_description(body_html: str) -> str:
+    text_only = re.sub(r"<[^>]+>", "", body_html)
+    return text_only[:160].strip() + ("..." if len(text_only) > 160 else "")
+
+
 def clear_cache() -> None:
     _TEMPLATE_CACHE.clear()
 
@@ -61,7 +66,7 @@ def _head(cfg: SiteConfig, page_title: str, has_math: bool, description: str = "
 
 def _header(cfg: SiteConfig) -> str:
     nav = "".join(
-        f'<a href="{html.escape(str(item.get("url", "#")))}">{html.escape(str(item.get("name", "")))}</a>'
+        f'<a href="{html.escape(item.get("url", "#"))}">{html.escape(item.get("name", ""))}</a>'
         for item in cfg.menu
     )
     return _render_template("header.html", {"site_title": html.escape(cfg.title), "nav": nav})
@@ -97,8 +102,7 @@ def render_post(cfg: SiteConfig, item: ContentItem) -> str:
             "comment_html": comment_html,
         },
     )
-    text_only = re.sub(r"<[^>]+>", "", item.body_html)
-    description = text_only[:160].strip() + ("..." if len(text_only) > 160 else "")
+    description = _extract_description(item.body_html)
     return render_shell(cfg, item.title, body, has_math=item.has_math, description=description, url=item.rel_url, og_type="article")
 
 
@@ -110,7 +114,8 @@ def render_page(cfg: SiteConfig, item: ContentItem) -> str:
             "body": item.body_html,
         },
     )
-    return render_shell(cfg, item.title, body, has_math=item.has_math)
+    description = _extract_description(item.body_html)
+    return render_shell(cfg, item.title, body, has_math=item.has_math, description=description, url=item.rel_url, og_type="article")
 
 
 def render_404(cfg: SiteConfig) -> str:
@@ -122,10 +127,12 @@ def render_home(cfg: SiteConfig, page: ContentItem | None = None) -> str:
     if page is None:
         body = ""
         has_math = False
+        description = ""
     else:
         body = f'<div class="content">{page.body_html}</div>'
         has_math = page.has_math
-    return render_shell(cfg, "", body, has_math=has_math)
+        description = _extract_description(page.body_html)
+    return render_shell(cfg, "", body, has_math=has_math, description=description)
 
 
 def render_posts_list(cfg: SiteConfig, posts: list[ContentItem]) -> str:

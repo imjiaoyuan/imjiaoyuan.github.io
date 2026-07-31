@@ -32,7 +32,9 @@ a { color: LinkText; }
   text-decoration: none;
 }
 
-nav { display: flex; gap: 1em; }
+nav { display: flex; flex-wrap: wrap; gap: 0.5em 1em; }
+
+.date { opacity: 0.7; }
 
 h1 { font-size: 1.5em; margin: 0 0 0.6em; }
 
@@ -63,16 +65,14 @@ h1 { font-size: 1.5em; margin: 0 0 0.6em; }
   border: 1px solid var(--code-border);
 }
 
-.content table { border-collapse: collapse; }
+.content table { border-collapse: collapse; display: block; overflow-x: auto; }
 .content th, .content td { border: 1px solid; padding: 0.3em 0.6em; }
 
 hr { border: 0; border-top: 1px solid; height: 0; }
 
-.content .katex-display { overflow-x: auto; overflow-y: hidden; }
-
-.math-overflow { overflow-x: auto; }
+.content .katex-display { overflow-x: auto; }
 
 @media (max-width: 640px) {
   body { padding: 0.8em 14px 2em; }
-  .site-header { flex-direction: column; gap: 0.3em; }
+  .site-header { flex-wrap: wrap; gap: 0.3em 1em; }
 }
