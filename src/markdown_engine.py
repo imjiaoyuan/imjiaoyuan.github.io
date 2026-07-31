@@ -7,7 +7,7 @@ from urllib.parse import quote
 _URL_RE = re.compile(r'^(https?://|mailto:|/|\.\./|\./)')
 
 class MarkdownEngine:
-    _TABLE_ALIGN_RE = re.compile(r"^\s*\|?[\s:-]+\|[\s|:-]*\|?\s*$")
+    _TABLE_SEP_RE = re.compile(r"^\s*\|?[\s:-]+\|[\s|:-]*\|?\s*$")
 
     def render(self, text: str) -> str:
         self._fn_ids: dict[str, None] = {}
@@ -23,10 +23,7 @@ class MarkdownEngine:
         def flush_para() -> None:
             nonlocal para
             if para:
-                result = "<p>" + "<br>".join(self._inline(line) for line in para) + "</p>"
-                if "$$" in result:
-                    result = self._fix_math_newlines(result)
-                out.append(result)
+                out.append(_make_p(para))
                 para = []
 
         def close_list() -> None:
@@ -69,22 +66,6 @@ class MarkdownEngine:
                 i += 1
                 continue
 
-            html_block = re.match(r"\s*<(style|script)([^>]*)>\s*$", line)
-            if html_block:
-                tag = html_block.group(1)
-                close_tag = f"</{tag}>"
-                flush_para()
-                close_list()
-                block_lines = [line]
-                i += 1
-                while i < len(lines):
-                    block_lines.append(lines[i])
-                    i += 1
-                    if close_tag in lines[i - 1]:
-                        break
-                out.extend(block_lines)
-                continue
-
             if line.lstrip().startswith("<"):
                 flush_para()
                 close_list()
@@ -119,7 +100,7 @@ class MarkdownEngine:
                 i += 1
                 continue
 
-            if i + 1 < len(lines) and "|" in line and self._TABLE_ALIGN_RE.match(lines[i + 1] or ""):
+            if i + 1 < len(lines) and "|" in line and self._TABLE_SEP_RE.match(lines[i + 1] or ""):
                 flush_para()
                 close_list()
                 header = self._split_cells(line)

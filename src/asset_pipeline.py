@@ -6,7 +6,7 @@ from pathlib import Path
 from models import SiteConfig
 
 
-def copy_assets(cfg: SiteConfig, needs_math: bool = True) -> None:
+def copy_assets(cfg: SiteConfig, needs_math: bool = False) -> None:
     src = cfg.static_dir
     if not src.exists():
         return
