@@ -41,4 +41,5 @@ def load_site_config(root: Path) -> SiteConfig:
         menu=menu,
         server=site.get("server", {"host": "127.0.0.1", "port": 1313}),
         home_page=site.get("home_page", ""),
+        feed_months=site.get("feed_months", 12),
     )

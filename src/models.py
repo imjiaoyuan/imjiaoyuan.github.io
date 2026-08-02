@@ -19,6 +19,7 @@ class SiteConfig:
     menu: list[dict[str, Any]]
     server: dict[str, Any]
     home_page: str = ""
+    feed_months: int = 12
 
 
 @dataclass
