@@ -44,6 +44,7 @@ def format_content(text: str) -> str:
 
 
 MATH_RE = re.compile(r"\$\$.*?\$\$|\$[^$\n]+\$", re.DOTALL)
+_FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
 
 BASE36 = "0123456789abcdefghijklmnopqrstuvwxyz"
 
@@ -132,7 +133,7 @@ def _load_markdown_file(path: Path, rel_url: str, out_dir: str, engine: Markdown
     date = str(meta.get("date", ""))
     draft = bool(meta.get("draft"))
     pinned = bool(meta.get("pinned"))
-    has_math = bool(MATH_RE.search(body)) or bool(meta.get("math"))
+    has_math = bool(MATH_RE.search(_FENCE_RE.sub("", body))) or bool(meta.get("math"))
     return ContentItem(
         source=path,
         title=title,

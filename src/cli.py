@@ -72,7 +72,7 @@ _BUILD_ERRORS = {
     PermissionError: ("Permission denied", "Check file permissions or try running with appropriate privileges."),
     UnicodeDecodeError: ("Encoding error", "Ensure all content files are saved as UTF-8."),
     ValueError: ("Invalid value", "Check front matter syntax and config values."),
-    KeyError: ("Missing expected data", "This is likely a bug in the markdown engine."),
+    KeyError: ("Missing template value", "A template placeholder wasn't supplied."),
 }
 
 

@@ -25,7 +25,7 @@ def copy_assets(cfg: SiteConfig, needs_math: bool = False) -> None:
     if needs_math and vendor_src.exists():
         if not vendor_dst.exists():
             shutil.copytree(vendor_src, vendor_dst)
-    elif not needs_math and vendor_dst.exists():
+    elif vendor_dst.exists():
         shutil.rmtree(vendor_dst)
 
     for item in src.iterdir():
