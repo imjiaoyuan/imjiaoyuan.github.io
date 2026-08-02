@@ -40,7 +40,7 @@ src/templates/*.html ──→ template_runtime ({{ key }} engine) ──→ HTM
 
 - **`src/config_loader.py`** — Wraps `src/config.py` into a `SiteConfig` dataclass with resolved paths and defaults.
 - **`src/models.py`** — `SiteConfig` and `ContentItem` dataclasses. `ContentItem` holds parsed markdown: title, date, body_html, rel_url, out_dir, draft/pinned flags, has_math.
-- **`src/content_loader.py`** — Front matter parser (handles YAML-like scalars, lists, nested lists), markdown file loader. Post slugs are CRC24 hashes of the filename stem — renaming a `.md` file changes its URL. (The hash ensures short, collision-resistant URLs without exposing the original filename.) Also provides `pangu_format()` and `format_content()` for post formatting.
+- **`src/content_loader.py`** — Front matter parser (handles YAML-like scalars, lists, nested lists), markdown file loader. Post slugs are CRC24 hashes of the filename stem — renaming a `.md` file changes its URL. (The hash ensures short, collision-resistant URLs without exposing the original filename.) Slugs colliding with each other or with reserved names (`assets`, `index`, `page`, `atom`) get a `-N` suffix. Also provides `pangu_format()` and `format_content()` for post formatting.
 - **`src/markdown_engine.py`** — Custom markdown-to-HTML renderer. Supports: headings with slugged IDs, paragraphs, ordered/unordered/task lists with nesting, fenced code blocks (plain `<pre><code>`, no syntax highlighting), tables, blockquotes with nested paragraphs, footnotes, inline code/images/links, bold/italic/strikethrough. Math (`$$...$$` / `$...$`) is detected but rendered client-side by KaTeX. Inline links and images are only rendered when the URL matches an allowlist (`https?://`, `mailto:`, `/`, `./`, `../`).
 - **`src/template_runtime.py`** — Simple `{{ key }}` placeholder replacement. Templates live in `src/templates/`. Functions: `render_shell` (wraps all pages), `render_home`, `render_post`, `render_page`, `render_posts_list`, `render_404`. The shell template (`shell.html`) includes head, header with nav menu, main content, footer, and a dark/light theme toggle. Posts include a `comment.html` footer with the site email for replies.
 - **`src/builder.py`** — Orchestrates the build: loads config → loads posts/pages → copies static assets → writes HTML for each post/page → writes homepage → writes `/blog/` list page → generates `atom.xml`, `sitemap.xml`, `robots.txt`, `404.html`. Also copies a root `static/` directory to `public/static/` if it exists (for user files outside the asset pipeline).
@@ -61,6 +61,7 @@ Two paths for static files, with different behaviors:
 - **Pages** live in `content/*.md` (top-level only). The page matching `home_page` in config (e.g., `index.md`) is rendered as the homepage at `/` instead of its own URL.
 - A **`/blog/`** list page is automatically generated with all published posts.
 - Front matter uses a custom YAML-like parser (not PyYAML). Supports: scalars (string/int/bool), inline lists (`[a, b]`), and indented lists (`- item`). Comments (`# ...`) are skipped.
+- Recognized front matter keys: `title`, `date`, `draft` (excludes from lists/feeds), `pinned` (sorts to the top of the homepage and `/blog/`, ahead of date ordering), and `math` (force-loads KaTeX even without `$`/`$$` in the body — otherwise math is auto-detected by regex).
 
 ### Templates
 
