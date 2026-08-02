@@ -9,7 +9,7 @@ from xml.sax.saxutils import escape as xml_escape
 from asset_pipeline import copy_assets
 from config_loader import load_site_config
 from content_loader import load_pages, load_posts
-from date_utils import to_atom_date
+from date_utils import parse_date, to_atom_date
 from markdown_engine import MarkdownEngine
 from template_runtime import clear_cache, render_404, render_home, render_page, render_post, render_posts_list
 
@@ -30,6 +30,9 @@ def _write(public_dir: Path, rel_out_dir: str, html_text: str) -> None:
 
 def _render_atom(cfg, posts) -> str:
     base = cfg.domain.rstrip("/") + "/"
+    if cfg.feed_months > 0:
+        cutoff = dt.date.today() - dt.timedelta(days=30 * cfg.feed_months)
+        posts = [p for p in posts if parse_date(p.date) >= cutoff]
     updated = to_atom_date(posts[0].date) if posts else dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     site_title = xml_escape(cfg.title)
     site_desc = xml_escape(cfg.description)
