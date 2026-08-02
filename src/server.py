@@ -95,15 +95,6 @@ def serve(public_dir: Path, host: str, port: int, root: Path) -> None:
         def __init__(self, *args, **kwargs):
             super().__init__(*args, directory=str(public_dir), **kwargs)
 
-        def _resolved_html_path(self) -> Path | None:
-            req_path = urlsplit(self.path).path
-            fs_path = Path(self.translate_path(req_path))
-            if fs_path.is_dir():
-                fs_path = fs_path / "index.html"
-            if fs_path.exists() and fs_path.suffix.lower() == ".html":
-                return fs_path
-            return None
-
         def _guess_mime(self, path: Path) -> str:
             ext = path.suffix.lower()
             return {
@@ -144,8 +135,10 @@ def serve(public_dir: Path, host: str, port: int, root: Path) -> None:
                 self._serve_live_reload()
                 return
 
-            html_path = self._resolved_html_path()
-            if html_path is not None:
+            req_path = urlsplit(self.path).path
+            fs_path = Path(self.translate_path(req_path))
+            html_path = fs_path / "index.html" if fs_path.is_dir() else fs_path
+            if html_path.exists() and html_path.suffix.lower() == ".html":
                 payload = _inject_live_reload(html_path.read_text(encoding="utf-8")).encode("utf-8")
                 self.send_response(200)
                 self.send_header("Content-Type", "text/html; charset=utf-8")
@@ -155,8 +148,6 @@ def serve(public_dir: Path, host: str, port: int, root: Path) -> None:
                 self.wfile.write(payload)
                 return
 
-            req_path = urlsplit(self.path).path
-            fs_path = Path(self.translate_path(req_path))
             if fs_path.exists() and fs_path.is_file():
                 self._serve_file(fs_path)
                 return
