@@ -5,20 +5,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-python run.py -d                 # build static site to public/
-python run.py -s                 # build + serve with live reload (port 1313)
-python run.py -s -p 8080         # serve on custom port
-python run.py -s -H 0.0.0.0      # serve on custom host
-python run.py -n 2026-04-18-new-post  # create new draft post
-python run.py -f                 # format all posts in-place (pangu spacing, trailing whitespace, blank lines)
-python run.py -h                 # help
+make                       # build + serve with live reload (port 1313, default target)
+make build                 # build static site to public/
+make new NAME=2026-04-18-new-post  # create new draft post
+make pangu                 # format all posts in-place (pangu spacing, trailing whitespace, blank lines)
 ```
 
 There are no tests, no linter, and no formatter configured for the source code. The project has zero external Python dependencies — only the standard library is used.
 
 ## Architecture
 
-A **zero-dependency static site generator** for a personal blog. The entry point is `run.py`, which adds `src/` to the path and calls `cli.main()`.
+A **zero-dependency static site generator** for a personal blog. The entry point is `src/cli.py` (invoked via the `Makefile` or `python src/cli.py`); modules in `src/` use flat imports, which resolve because running the script puts `src/` on the path.
 
 ### Data flow
 
