@@ -23,7 +23,7 @@ def _create_post(root: Path, name: str) -> None:
     slug = name.strip().replace(" ", "-")
     if not slug:
         print("Error: Post name cannot be empty.", file=sys.stderr)
-        print("Usage: python run.py -n 'My Post Title'", file=sys.stderr)
+        print("Usage: make new NAME='My Post Title'", file=sys.stderr)
         sys.exit(1)
 
     post_file = cfg.content_dir / "posts" / f"{slug}.md"
@@ -43,7 +43,7 @@ def _create_post(root: Path, name: str) -> None:
             encoding="utf-8",
         )
         print(f"Created {post_file}")
-        print(f"  Edit the file and add your content, then run: python run.py -s")
+        print(f"  Edit the file and add your content, then run: make serve")
     except OSError as e:
         print(f"Error: Failed to create post: {e}", file=sys.stderr)
         print("Suggestion: Check file permissions and disk space.", file=sys.stderr)
@@ -122,3 +122,7 @@ def main() -> None:
             print(f"\nServer failed: {e}", file=sys.stderr)
             print(f"Suggestion: Check that the port is not already in use.", file=sys.stderr)
             sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
