@@ -70,8 +70,9 @@ def _render_sitemap(cfg, posts, pages) -> str:
     base = cfg.domain.rstrip("/")
     urls = []
 
+    home_lastmod = f"\n    <lastmod>{xml_escape(posts[0].date)}</lastmod>" if posts else ""
     urls.append(f"""  <url>
-    <loc>{xml_escape(base)}/</loc>
+    <loc>{xml_escape(base)}/</loc>{home_lastmod}
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>""")
@@ -90,8 +91,9 @@ def _render_sitemap(cfg, posts, pages) -> str:
         if slug == home_slug:
             continue
         page_url = urljoin(base, page.rel_url.lstrip("/"))
+        page_lastmod = f"\n    <lastmod>{xml_escape(page.date)}</lastmod>" if page.date else ""
         urls.append(f"""  <url>
-    <loc>{xml_escape(page_url)}</loc>
+    <loc>{xml_escape(page_url)}</loc>{page_lastmod}
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>""")
