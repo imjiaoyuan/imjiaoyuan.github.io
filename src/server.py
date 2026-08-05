@@ -123,7 +123,7 @@ def serve(public_dir: Path, host: str, port: int, root: Path) -> None:
             self.send_response(200)
             self.send_header("Content-Type", mime + "; charset=utf-8" if mime.startswith("text/") else mime)
             self.send_header("Content-Length", str(len(payload)))
-            if mime == "text/html":
+            if mime in ("text/html", "text/css", "application/javascript"):
                 self.send_header("Cache-Control", "no-store")
             elif mime.startswith("image/") or mime.startswith("font/"):
                 self.send_header("Cache-Control", "public, max-age=86400")

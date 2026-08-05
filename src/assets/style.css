@@ -38,7 +38,7 @@ nav { display: flex; flex-wrap: wrap; gap: 0.5em 1em; }
 
 h1 { font-size: 1.5em; margin: 0 0 0.6em; }
 
-.content :is(p, pre, blockquote, table, ul, ol, h1, h2, h3, h4, h5, h6, hr) { margin: 0 0 0.6em; }
+.content :is(p, pre, blockquote, table, ul, ol, h1, h2, h3, h4, h5, h6, hr) { margin: 0 0 0.4em; }
 
 .content img {
   max-width: 100%;
@@ -76,4 +76,9 @@ hr { border: 0; border-top: 1px solid; height: 0; }
 @media (max-width: 640px) {
   body { padding: 0.8em 14px 2em; }
   .site-header { flex-wrap: wrap; gap: 0.3em 1em; }
+}
+
+@media print {
+  .site-header { display: none; }
+  body { font-size: 10.5pt; }
 }

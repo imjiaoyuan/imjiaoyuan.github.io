@@ -83,11 +83,14 @@ def _head(cfg: SiteConfig, page_title: str, has_math: bool, description: str = "
 
 
 def _header(cfg: SiteConfig) -> str:
-    nav = "".join(
-        f'<a href="{html.escape(item.get("url", "#"))}">{html.escape(item.get("name", ""))}</a>'
-        for item in cfg.menu
-    )
-    return _render_template("header.html", {"site_title": html.escape(cfg.title), "nav": nav})
+    items: list[str] = []
+    for item in cfg.menu:
+        url = html.escape(item.get("url", "#"))
+        name = html.escape(item.get("name", ""))
+        target = item.get("target")
+        target_attr = f' target="{html.escape(target)}"' if target else ""
+        items.append(f'<a href="{url}"{target_attr}>{name}</a>')
+    return _render_template("header.html", {"site_title": html.escape(cfg.title), "nav": "".join(items)})
 
 
 def render_shell(
