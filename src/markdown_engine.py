@@ -61,6 +61,16 @@ class MarkdownEngine:
                 continue
 
             if not line.strip():
+                if list_stack:
+                    j = i + 1
+                    while j < len(lines) and not lines[j].strip():
+                        j += 1
+                    if j < len(lines) and (
+                        re.match(r"^\s*[-*]\s+", lines[j])
+                        or re.match(r"^\s*\d+\.\s+", lines[j])
+                    ):
+                        i += 1
+                        continue
                 flush_para()
                 close_list()
                 i += 1
