@@ -7,59 +7,56 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 make                       # build + serve with live reload (port 1313, default target)
 make build                 # build static site to public/
-make new NAME=2026-04-18-new-post  # create new draft post
+make new NAME=2026-04-18-new-post  # create a new draft post at content/posts/<NAME>.md
 make pangu                 # format all posts in-place (pangu spacing, trailing whitespace, blank lines)
 ```
 
-There are no tests, no linter, and no formatter configured for the source code. The project has zero external Python dependencies — only the standard library is used.
+Equivalent CLI: `python src/cli.py` with `-s` (serve), `-d` (build), `-n NAME` (new), `-f` (format), `-p PORT`, `-H HOST`.
+
+There are no tests, no linter, and no formatter configured for the source code. The project has **zero external Python dependencies** — only the standard library is used (Python 3.12). `public/` is a build artifact, gitignored.
 
 ## Architecture
 
-A **zero-dependency static site generator** for a personal blog. The entry point is `src/cli.py` (invoked via the `Makefile` or `python src/cli.py`); modules in `src/` use flat imports, which resolve because running the script puts `src/` on the path.
+A hand-written, zero-dependency static site generator for a personal blog. Entry point is `src/cli.py`; the modules in `src/` use **flat imports** (e.g. `from builder import build`) which resolve because running the script puts `src/` on `sys.path`. So `src/` files must be run/imported with that directory as the working path — they are not a package.
 
-### Data flow
+### Build data flow (`builder.build()`)
 
 ```
-content/posts/*.md  ──→ content_loader.load_posts()  ──→ ContentItem list
-content/*.md        ──→ content_loader.load_pages()  ──→ ContentItem dict
-                                                              │
-src/config.py (SITE dict) ──→ config_loader.load_site_config() ──→ SiteConfig
-                                                              │
-src/templates/*.html ──→ template_runtime ({{ key }} engine) ──→ HTML strings
-                                                              │
-                    builder.build() writes public/
+content/posts/*.md  ──→ content_loader.load_posts()  ──→ ContentItem list (sorted: pinned, then date desc)
+content/*.md        ──→ content_loader.load_pages()  ──→ ContentItem dict (keyed by stem)
+src/config.py (SITE) ─→ config_loader ──→ SiteConfig     MarkdownEngine.render() turns body → body_html
+src/templates/*.html ─→ template_runtime ({{ key }})      │
+                                  builder writes public/: each post/page → <slug>/index.html
+                                                       home (/), /blog/ list, atom.xml, sitemap.xml,
+                                                       robots.txt, 404.html
 ```
+
+`_write()` is a smart writer: it skips re-writing a file whose content is unchanged (preserves mtimes — matters for the watcher and incremental deploys).
 
 ### Key modules
 
-- **`src/config.py`** — The only file you edit to configure the site. Defines a `SITE` dict (title, domain, description, menu, etc.). The `description` field feeds `<meta>` tags and the Atom feed subtitle; it defaults to `""` if omitted. Loaded at runtime via `importlib`.
-- **`src/cli.py`** — Argument parsing and top-level orchestration. Handles `-d` (build), `-s` (serve), `-n` (new post), `-f` (format posts). Build errors are caught and printed with suggestions.
+- **`src/config.py`** — The only file to edit for site config. Defines a `SITE` dict (title, domain, description, menu, server, `home_page`, `feed_months`). `description` feeds `<meta>`/Atom subtitle (defaults to `""`). Loaded at runtime via `importlib`.
+- **`src/cli.py`** — argparse + top-level orchestration. Build errors are caught and printed with suggestions (`_BUILD_ERRORS` map).
+- **`src/content_loader.py`** — Custom front-matter parser (YAML-like, not PyYAML) and the markdown file loader. **Post slugs are CRC24 hashes of the filename stem, base36-encoded** — short, collision-resistant, and the original filename is not exposed in the URL. Because the hash is of the stem, **renaming a `.md` file changes its URL**. Reserved slugs (`assets`, `index`, `page`, `atom`) and collisions get a `-N` suffix. Also contains `pangu_format()` / `format_content()`.
+- **`src/markdown_engine.py`** — A from-scratch markdown→HTML renderer (not a library). Supports headings (with slugged `id`), paragraphs, nested ordered/unordered/task lists, fenced code (`<pre><code>`, **no syntax highlighting**), tables, blockquotes with nested paragraphs, footnotes (`[^id]`), and inline code/links/images/bold/italic/strikethrough. Blank lines between list items are tolerated. Math (`$$…$$`/`$…$`) is preserved for **client-side KaTeX rendering**, not rendered here. Inline links/images are only emitted when the URL matches an allowlist (`https?://`, `mailto:`, `/`, `./`, `../`).
+- **`src/template_runtime.py`** — `{{ placeholder }}` regex substitution over `src/templates/`. A missing key raises `KeyError` (surfaced by the CLI). Template file cache is cleared at the start of each build. `shell.html` wraps every page (head + header/nav + main). Posts append a `comment.html` footer using the site email.
+- **`src/server.py`** — `ThreadingHTTPServer` dev server with live reload. Polls mtimes of `content/` and `src/` every 0.8s, rebuilds on change, and pushes reloads to browsers via SSE at `/__live_reload`. Injects a `<script>` before `</body>` in served HTML (dev only — not in build output).
+- **`src/asset_pipeline.py`** — Copies `src/assets/`: `style.css` → `public/assets/site/style.css`; KaTeX (`src/assets/vendor/`) copied **only when `needs_math`** (at least one post/page has math), else removed; everything else (e.g. `favicon.ico`) copied straight to `public/`.
+- **`src/models.py`** — `SiteConfig` and `ContentItem` dataclasses.
+- **`src/date_utils.py`** — `parse_date` (string→`date`, falls back to 1970-01-01) and `to_atom_date` for feeds.
 
-- **`src/config_loader.py`** — Wraps `src/config.py` into a `SiteConfig` dataclass with resolved paths and defaults.
-- **`src/models.py`** — `SiteConfig` and `ContentItem` dataclasses. `ContentItem` holds parsed markdown: title, date, body_html, rel_url, out_dir, draft/pinned flags, has_math.
-- **`src/content_loader.py`** — Front matter parser (handles YAML-like scalars, lists, nested lists), markdown file loader. Post slugs are CRC24 hashes of the filename stem — renaming a `.md` file changes its URL. (The hash ensures short, collision-resistant URLs without exposing the original filename.) Slugs colliding with each other or with reserved names (`assets`, `index`, `page`, `atom`) get a `-N` suffix. Also provides `pangu_format()` and `format_content()` for post formatting.
-- **`src/markdown_engine.py`** — Custom markdown-to-HTML renderer. Supports: headings with slugged IDs, paragraphs, ordered/unordered/task lists with nesting, fenced code blocks (plain `<pre><code>`, no syntax highlighting), tables, blockquotes with nested paragraphs, footnotes, inline code/images/links, bold/italic/strikethrough. Math (`$$...$$` / `$...$`) is detected but rendered client-side by KaTeX. Inline links and images are only rendered when the URL matches an allowlist (`https?://`, `mailto:`, `/`, `./`, `../`).
-- **`src/template_runtime.py`** — Simple `{{ key }}` placeholder replacement. Templates live in `src/templates/`. Functions: `render_shell` (wraps all pages), `render_home`, `render_post`, `render_page`, `render_posts_list`, `render_404`. The shell template (`shell.html`) includes head, header with nav menu, main content, footer, and a dark/light theme toggle. Posts include a `comment.html` footer with the site email for replies.
-- **`src/builder.py`** — Orchestrates the build: loads config → loads posts/pages → copies static assets → writes HTML for each post/page → writes homepage → writes `/blog/` list page → generates `atom.xml`, `sitemap.xml`, `robots.txt`, `404.html`. Also copies a root `static/` directory to `public/static/` if it exists (for user files outside the asset pipeline).
-- **`src/server.py`** — `ThreadingHTTPServer` with live reload. Watches `content/` and `src/` for changes (polling every 0.8s), rebuilds automatically, and pushes reloads to browsers via SSE (`/__live_reload`). Injects a small `<script>` before `</body>` in HTML responses.
-- **`src/asset_pipeline.py`** — Copies static files from `src/assets/` to `public/assets/site/`. KaTeX vendor files are only copied when `needs_math` is true (i.e., at least one post/page contains math).
-- **`src/date_utils.py`** — `parse_date` (string → `datetime.date`, falls back to 1970-01-01) and `to_atom_date` for feed generation.
+### Static assets — two distinct paths
 
-### Static assets
-
-Two paths for static files, with different behaviors:
-
-- **`src/assets/`** — Managed by the asset pipeline (`asset_pipeline.py`). `style.css` goes to `public/assets/site/style.css`; KaTeX vendor files (`src/assets/vendor/`) are only copied when at least one post/page contains math; everything else (e.g. `favicon.ico`) is copied directly to `public/`.
-- **`static/`** (repo root) — User-controlled. Copied as-is to `public/static/` with no transformation. Only exists if you create it.
+- **`src/assets/`** — managed by the pipeline (see above). CSS, KaTeX, favicon.
+- **`static/`** (repo root) — user files, copied verbatim to `public/static/`. Images live here as `static/images/*.webp`. Posts reference them with **relative** paths like `../../static/images/<hash>.webp` (note the `../../`, since a post is served from `/<slug>/`).
 
 ### Content model
 
-- **Posts** live in `content/posts/<name>.md`. They are **drafts by default** (`draft: true` in front matter) — drafts are excluded from the homepage, `/blog/` list, and feeds. Remove the `draft` line to publish.
-- **Pages** live in `content/*.md` (top-level only). The page matching `home_page` in config (e.g., `index.md`) is rendered as the homepage at `/` instead of its own URL.
-- A **`/blog/`** list page is automatically generated with all published posts.
-- Front matter uses a custom YAML-like parser (not PyYAML). Supports: scalars (string/int/bool), inline lists (`[a, b]`), and indented lists (`- item`). Comments (`# ...`) are skipped.
-- Recognized front matter keys: `title`, `date`, `draft` (excludes from lists/feeds), `pinned` (sorts to the top of the homepage and `/blog/`, ahead of date ordering), and `math` (force-loads KaTeX even without `$`/`$$` in the body — otherwise math is auto-detected by regex).
+- **Posts**: `content/posts/<YYYY-MM-DD>-<name>.md`. **Drafts by default** (`draft: true`) — excluded from home, `/blog/`, and feeds. Delete the `draft` line to publish.
+- **Pages**: top-level `content/*.md`, URL = stem. The page whose stem matches `home_page` (e.g. `index`) renders as the homepage at `/` instead of its own path.
+- **`/blog/`** list page is auto-generated from all published posts.
+- Front matter is parsed by a custom parser (scalars, `true/false`, ints, inline `[a, b]`, indented `- item`, `#` comments). Recognized keys: `title`, `date`, `draft`, `pinned` (sorts above date ordering on home + `/blog/`), `math` (force KaTeX even without `$`/`$$` — otherwise auto-detected by regex with code fences stripped).
 
-### Templates
+## Deployment
 
-All templates in `src/templates/` use `{{ placeholder_name }}` syntax. The `shell.html` template wraps every page. Menu navigation is generated from `SITE["menu"]` in config. The theme toggle (dark/light) is implemented in the shell via vanilla JS, persisted to `localStorage`. Posts include a `comment.html` footer with the site email for replies.
+GitHub Actions (`.github/workflows/deploy.yml`) on push to `main`: `make build` → deploy `public/` to GitHub Pages. Python 3.12. `public/` is the Pages artifact and is not committed.
