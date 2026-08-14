@@ -21,16 +21,25 @@ Packages I maintain:
 
 - [seqtk](https://aur.archlinux.org/packages/seqtk): Toolkit for processing sequences in FASTA/Q formats
 - [seqkit-bin](https://aur.archlinux.org/packages/seqkit-bin): A cross-platform and ultrafast toolkit for FASTA/Q file manipulation in Golang
+- [autocycler-bin](https://aur.archlinux.org/packages/autocycler-bin): A tool for combining multiple long-read assemblies into a consensus
+- [cgmlst-dists](https://aur.archlinux.org/packages/cgmlst-dists): Pairwise Hamming distance matrix from cgMLST allele call tables
 - [deeptools](https://aur.archlinux.org/packages/deeptools): Tools to process and analyze deep sequencing data (ChIP-seq, ATAC-seq, RNA-seq, etc.)
 - [igblast](https://aur.archlinux.org/packages/igblast): NCBI IgBLAST: immunoglobulin and T-cell receptor sequence annotation
 - [iqtree-bin](https://aur.archlinux.org/packages/iqtree-bin): Efficient phylogenomic software by maximum likelihood (precompiled binary) https://doi.org/10.1093/molbev/msaa015
 - [jcvi](https://aur.archlinux.org/packages/jcvi): Python utility libraries on genome assembly, annotation and comparative genomics
+- [jkey](https://aur.archlinux.org/packages/jkey): Python library for password management and TOTP verification
+- [jsrc](https://aur.archlinux.org/packages/jsrc): Python library for bioinformatics and scientific computing
 - [lexicmap-bin](https://aur.archlinux.org/packages/lexicmap-bin): Efficient sequence alignment tool for querying nucleotide sequences against millions of prokaryotic genomes
 - [magicblast](https://aur.archlinux.org/packages/magicblast): NCBI MagicBLAST: maps next-generation RNA/DNA reads to a genome or transcriptome
+- [miniprot](https://aur.archlinux.org/packages/miniprot): Protein-to-genome aligner with high splicing (intron) accuracy
+- [mlst](https://aur.archlinux.org/packages/mlst): Scan contig files against traditional PubMLST typing schemes
+- [modkit-bin](https://aur.archlinux.org/packages/modkit-bin): A bioinformatics tool for working with modified bases in BAM/CRAM files
+- [oarfish-bin](https://aur.archlinux.org/packages/oarfish-bin): A suite of tools for working with long-read transcriptome data (RNA-seq) from PacBio and Oxford Nanopore
 - [orffinder](https://aur.archlinux.org/packages/orffinder): NCBI ORFfinder: finds Open Reading Frames (ORFs) in a query sequence
 - [paml-bin](https://aur.archlinux.org/packages/paml-bin): Phylogenetic analysis by maximum likelihood (precompiled binary) https://doi.org/10.1093/molbev/msm088
-- [python-jkey](https://aur.archlinux.org/packages/python-jkey): Python library for password management and TOTP verification
-- [python-jsrc](https://aur.archlinux.org/packages/python-jsrc): Python library for bioinformatics and scientific computing
+- [polypolish-bin](https://aur.archlinux.org/packages/polypolish-bin): Short-read polishing tool for bacterial genome assemblies
 - [raxml-ng-bin](https://aur.archlinux.org/packages/raxml-ng-bin): A phylogenetic tree inference tool which uses maximum-likelihood (ML) optimality criterion (precompiled binary) https://doi.org/10.1093/bioinformatics/btz305
+- [snp-dists](https://aur.archlinux.org/packages/snp-dists): Pairwise SNP distance matrix from a FASTA multiple sequence alignment
+- [strdust-bin](https://aur.archlinux.org/packages/strdust-bin): A tandem repeat genotyper for long reads
 - [table2asn](https://aur.archlinux.org/packages/table2asn): NCBI tool that converts 5-column feature tables into ASN.1 for GenBank submission (successor to tbl2asn)
 - [taxonkit-bin](https://aur.archlinux.org/packages/taxonkit-bin): A practical and efficient NCBI Taxonomy toolkit in Go
