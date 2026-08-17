@@ -43,3 +43,10 @@ Packages I maintain:
 - [strdust-bin](https://aur.archlinux.org/packages/strdust-bin): A tandem repeat genotyper for long reads
 - [table2asn](https://aur.archlinux.org/packages/table2asn): NCBI tool that converts 5-column feature tables into ASN.1 for GenBank submission (successor to tbl2asn)
 - [taxonkit-bin](https://aur.archlinux.org/packages/taxonkit-bin): A practical and efficient NCBI Taxonomy toolkit in Go
+- [ucsc-bigbed-bin](https://aur.archlinux.org/packages/ucsc-bigbed-bin): UCSC bigBed format utilities: bedToBigBed, bigBedToBed, bigBedInfo
+- [ucsc-bigwig-bin](https://aur.archlinux.org/packages/ucsc-bigwig-bin): UCSC bigWig format utilities: wigToBigWig, bedGraphToBigWig, bigWigToBedGraph, bigWigInfo, bigWigAverageOverBed, bigWigSummary, fetchChromSizes
+- [ucsc-blat-bin](https://aur.archlinux.org/packages/ucsc-blat-bin): UCSC BLAT alignment suite: blat, gfServer, gfClient, isPcr
+- [ucsc-genepred-bin](https://aur.archlinux.org/packages/ucsc-genepred-bin): UCSC genePred format converters: gtfToGenePred, genePredToGtf, gff3ToGenePred, genePredToBed, bedToGenePred
+- [ucsc-liftover-bin](https://aur.archlinux.org/packages/ucsc-liftover-bin): UCSC liftOver: converts genome coordinates between assemblies
+- [ucsc-psl-bin](https://aur.archlinux.org/packages/ucsc-psl-bin): UCSC PSL alignment utilities: pslToBed, pslReps, pslCDnaFilter
+- [ucsc-twobit-bin](https://aur.archlinux.org/packages/ucsc-twobit-bin): UCSC twoBit genome format utilities: faToTwoBit, twoBitToFa, twoBitInfo
