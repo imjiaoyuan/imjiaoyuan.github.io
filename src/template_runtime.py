@@ -44,20 +44,79 @@ def _render_template(name: str, context: dict[str, str]) -> str:
     return _PLACEHOLDER_RE.sub(replace, template)
 
 
+def _abs_url(cfg: SiteConfig, path: str) -> str:
+    base = cfg.domain.rstrip("/")
+    if not path:
+        return base
+    if path.startswith(("http://", "https://")):
+        return path
+    return base + path if path.startswith("/") else f"{base}/{path}"
+
+
+def _ld_json(obj: dict) -> str:
+    body = json.dumps(obj, ensure_ascii=False).replace("<", "\\u003c")
+    return f'<script type="application/ld+json">{body}</script>'
+
+
+def _page_desc(item: ContentItem) -> str:
+    if getattr(item, "description", "").strip():
+        return item.description.strip()
+    return _extract_description(item.body_html)
+
+
 def _jsonld_blog_post(cfg: SiteConfig, item: ContentItem) -> str:
     post_url = f"{cfg.domain.rstrip('/')}{item.rel_url}"
     obj = {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         "headline": item.title,
+        "description": _page_desc(item),
         "datePublished": item.date,
         "dateModified": item.date,
-        "author": {"@type": "Person", "name": cfg.title},
+        "author": {"@type": "Person", "name": cfg.author or cfg.title},
+        "image": _abs_url(cfg, cfg.og_image),
+        "publisher": {
+            "@type": "Organization",
+            "name": cfg.title,
+            "logo": {"@type": "ImageObject", "url": _abs_url(cfg, cfg.icon)},
+        },
         "url": post_url,
         "mainEntityOfPage": {"@type": "WebPage", "@id": post_url},
     }
-    body = json.dumps(obj, ensure_ascii=False).replace("<", "\\u003c")
-    return f'<script type="application/ld+json">{body}</script>'
+    return _ld_json(obj)
+
+
+def _jsonld_website(cfg: SiteConfig) -> str:
+    return _ld_json({
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": cfg.title,
+        "url": _abs_url(cfg, ""),
+    })
+
+
+def _jsonld_person(cfg: SiteConfig) -> str:
+    obj: dict = {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": cfg.author or cfg.title,
+        "url": _abs_url(cfg, ""),
+    }
+    if cfg.email:
+        obj["email"] = f"mailto:{cfg.email}"
+    if cfg.og_image:
+        obj["image"] = _abs_url(cfg, cfg.og_image)
+    return _ld_json(obj)
+
+
+def _jsonld_webpage(cfg: SiteConfig, item: ContentItem) -> str:
+    return _ld_json({
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": item.title,
+        "description": _page_desc(item),
+        "url": f"{cfg.domain.rstrip('/')}{item.rel_url}",
+    })
 
 
 def _head(cfg: SiteConfig, page_title: str, has_math: bool, description: str = "", url: str = "", og_type: str = "website", jsonld: str = "") -> str:
@@ -124,7 +183,7 @@ def render_post(cfg: SiteConfig, item: ContentItem) -> str:
             "comment_html": comment_html,
         },
     )
-    description = _extract_description(item.body_html)
+    description = _page_desc(item)
     jsonld = _jsonld_blog_post(cfg, item)
     return render_shell(cfg, item.title, body, has_math=item.has_math, description=description, url=item.rel_url, og_type="article", jsonld=jsonld)
 
@@ -137,8 +196,9 @@ def render_page(cfg: SiteConfig, item: ContentItem) -> str:
             "body": item.body_html,
         },
     )
-    description = _extract_description(item.body_html)
-    return render_shell(cfg, item.title, body, has_math=item.has_math, description=description, url=item.rel_url, og_type="article")
+    description = _page_desc(item)
+    jsonld = _jsonld_webpage(cfg, item)
+    return render_shell(cfg, item.title, body, has_math=item.has_math, description=description, url=item.rel_url, og_type="article", jsonld=jsonld)
 
 
 def render_404(cfg: SiteConfig) -> str:
@@ -154,8 +214,10 @@ def render_home(cfg: SiteConfig, page: ContentItem | None = None) -> str:
     else:
         body = f'<div class="content">{page.body_html}</div>'
         has_math = page.has_math
-        description = _extract_description(page.body_html)
-    return render_shell(cfg, "", body, has_math=has_math, description=description)
+        description = _page_desc(page)
+    description = cfg.description or description
+    jsonld = _jsonld_person(cfg) + _jsonld_website(cfg)
+    return render_shell(cfg, "", body, has_math=has_math, description=description, jsonld=jsonld)
 
 
 def render_posts_list(cfg: SiteConfig, posts: list[ContentItem]) -> str:

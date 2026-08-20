@@ -77,6 +77,12 @@ def _render_sitemap(cfg, posts, pages) -> str:
     <priority>1.0</priority>
   </url>""")
 
+    urls.append(f"""  <url>
+    <loc>{xml_escape(base)}/blog/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>""")
+
     for post in posts:
         post_url = urljoin(base, post.rel_url.lstrip("/"))
         urls.append(f"""  <url>
