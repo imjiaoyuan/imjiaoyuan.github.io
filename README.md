@@ -20,5 +20,7 @@ title: My Post Title
 date: 2026-06-20
 draft: true       # delete this line to publish
 pinned: true      # optional, pin to top of homepage
+description:      # optional, overrides the auto-extracted <meta> description / JSON-LD
+math: true        # optional, force KaTeX even without $ formulas
 ---
 ```
