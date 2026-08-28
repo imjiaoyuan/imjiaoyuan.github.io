@@ -20,6 +20,8 @@ class SiteConfig:
     server: dict[str, Any]
     home_page: str = ""
     feed_months: int = 12
+    author: str = ""
+    og_image: str = ""
 
 
 @dataclass
@@ -33,3 +35,4 @@ class ContentItem:
     draft: bool = False
     pinned: bool = False
     has_math: bool = False
+    description: str = ""

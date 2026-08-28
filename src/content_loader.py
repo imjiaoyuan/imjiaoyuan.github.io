@@ -131,6 +131,7 @@ def _load_markdown_file(path: Path, rel_url: str, out_dir: str, engine: Markdown
     body = pangu_format(body)
     title = str(meta.get("title", path.stem))
     date = str(meta.get("date", ""))
+    description = str(meta.get("description", "")).strip()
     draft = bool(meta.get("draft"))
     pinned = bool(meta.get("pinned"))
     has_math = bool(MATH_RE.search(_FENCE_RE.sub("", body))) or bool(meta.get("math"))
@@ -144,6 +145,7 @@ def _load_markdown_file(path: Path, rel_url: str, out_dir: str, engine: Markdown
         draft=draft,
         pinned=pinned,
         has_math=has_math,
+        description=description,
     )
 
 
