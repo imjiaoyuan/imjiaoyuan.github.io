@@ -2,7 +2,7 @@ SITE = {
     "title": "JiaoYuan",
     "description": "Jiao Yuan (焦元) — bioinformatics at Sichuan University. Notes on scRNA-seq, phylogenomics, deep learning, and life as an Arch Linux user.",
     "author": "Jiao Yuan (焦元)",
-    "og_image": "/favicon.ico",
+    "og_image": "/static/images/og-card.png",
     "domain": "https://jiaoyuan.org",
     "icon": "/favicon.ico",
     "email": "imjiaoyuan@gmail.com",

@@ -124,6 +124,7 @@ def _head(cfg: SiteConfig, page_title: str, has_math: bool, description: str = "
     atom_url = html.escape(f"{cfg.domain.rstrip('/')}/atom.xml")
     page_desc = html.escape(description) if description else html.escape(cfg.description)
     page_url = html.escape(f"{cfg.domain.rstrip('/')}{url}" if url else cfg.domain.rstrip("/"))
+    og_image_abs = html.escape(_abs_url(cfg, cfg.og_image)) if cfg.og_image else ""
     math_block = _load_template("math_block.html") if has_math else ""
     return _render_template(
         "head.html",
@@ -131,6 +132,7 @@ def _head(cfg: SiteConfig, page_title: str, has_math: bool, description: str = "
             "full_title": full_title,
             "page_desc": page_desc,
             "page_url": page_url,
+            "og_image_abs": og_image_abs,
             "og_type": html.escape(og_type),
             "site_title": html.escape(cfg.title),
             "icon": html.escape(cfg.icon),
@@ -198,7 +200,7 @@ def render_page(cfg: SiteConfig, item: ContentItem) -> str:
     )
     description = _page_desc(item)
     jsonld = _jsonld_webpage(cfg, item)
-    return render_shell(cfg, item.title, body, has_math=item.has_math, description=description, url=item.rel_url, og_type="article", jsonld=jsonld)
+    return render_shell(cfg, item.title, body, has_math=item.has_math, description=description, url=item.rel_url, og_type="website", jsonld=jsonld)
 
 
 def render_404(cfg: SiteConfig) -> str:
@@ -210,12 +212,10 @@ def render_home(cfg: SiteConfig, page: ContentItem | None = None) -> str:
     if page is None:
         body = ""
         has_math = False
-        description = ""
     else:
         body = f'<div class="content">{page.body_html}</div>'
         has_math = page.has_math
-        description = _page_desc(page)
-    description = cfg.description or description
+    description = (getattr(page, "description", "").strip() if page else "") or cfg.description
     jsonld = _jsonld_person(cfg) + _jsonld_website(cfg)
     return render_shell(cfg, "", body, has_math=has_math, description=description, jsonld=jsonld)
 
