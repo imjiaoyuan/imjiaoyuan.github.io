@@ -4,7 +4,7 @@ import html
 import re
 from urllib.parse import quote
 
-_URL_RE = re.compile(r'^(https?://|mailto:|/|\.\./|\./)')
+_URL_RE = re.compile(r'^(https?://|mailto:|/|#|\.\./|\./)')
 
 class MarkdownEngine:
     _TABLE_SEP_RE = re.compile(r"^\s*\|?[\s:-]+\|[\s|:-]*\|?\s*$")
