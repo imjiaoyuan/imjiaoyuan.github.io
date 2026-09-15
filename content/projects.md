@@ -21,6 +21,8 @@ The Arch User Repository (AUR) is a community-driven collection of PKGBUILD reci
 Packages I maintain:
 
 - [pi-coding-agent](https://aur.archlinux.org/packages/pi-coding-agent): Coding agent CLI with read, bash, edit, write tools and session management
+- [unikmer-bin](https://aur.archlinux.org/packages/unikmer-bin): Versatile toolkit for nucleotide k-mers with taxonomic information
+- [unikmer](https://aur.archlinux.org/packages/unikmer): Versatile toolkit for nucleotide k-mers with taxonomic information
 - [taxonkit-bin](https://aur.archlinux.org/packages/taxonkit-bin): Cross-platform and efficient toolkit for rapid taxonomic operations on BARCODE, ASV, OTU or any biological sequences with taxonomy annotation
 - [taxonkit](https://aur.archlinux.org/packages/taxonkit): Cross-platform and efficient toolkit for rapid taxonomic operations on BARCODE, ASV, OTU or any biological sequences with taxonomy annotation
 - [table2asn](https://aur.archlinux.org/packages/table2asn): NCBI tool that converts 5-column feature tables into ASN.1 for GenBank submission (successor to tbl2asn)
@@ -31,6 +33,8 @@ Packages I maintain:
 - [seqkit](https://aur.archlinux.org/packages/seqkit): Cross-platform and ultrafast toolkit for FASTA/Q file manipulation in Golang
 - [rust-llm-bin](https://aur.archlinux.org/packages/rust-llm-bin): Terminal-first AI hub in Rust for prompting, chat, templates, embeddings and dev workflows
 - [rust-llm](https://aur.archlinux.org/packages/rust-llm): Terminal-first AI hub in Rust for prompting, chat, templates, embeddings and dev workflows
+- [repaq](https://aur.archlinux.org/packages/repaq): Fast lossless FASTQ compressor with ultra-high compression ratio
+- [rclone-sync-timer](https://aur.archlinux.org/packages/rclone-sync-timer): systemd user units to periodically sync rclone remotes to local directories
 - [raxml-ng-bin](https://aur.archlinux.org/packages/raxml-ng-bin): Phylogenetic tree inference tool which uses maximum-likelihood (ML) optimality criterion
 - [polypolish-bin](https://aur.archlinux.org/packages/polypolish-bin): Short-read polishing tool for bacterial genome assemblies
 - [plink2-bin](https://aur.archlinux.org/packages/plink2-bin): Whole-genome association analysis toolset for large-scale variant data
@@ -38,12 +42,15 @@ Packages I maintain:
 - [paml](https://aur.archlinux.org/packages/paml): Phylogenetic analysis by maximum likelihood
 - [orffinder](https://aur.archlinux.org/packages/orffinder): NCBI ORFfinder: finds Open Reading Frames (ORFs) in a query sequence
 - [oarfish-bin](https://aur.archlinux.org/packages/oarfish-bin): Suite of tools for working with long-read transcriptome data (RNA-seq) from PacBio and Oxford Nanopore
+- [mutscan](https://aur.archlinux.org/packages/mutscan): Detect and visualize target mutations by scanning FastQ files directly
 - [modkit-bin](https://aur.archlinux.org/packages/modkit-bin): Bioinformatics tool for working with modified bases in BAM/CRAM files
 - [mmseqs2-bin](https://aur.archlinux.org/packages/mmseqs2-bin): Ultra fast and sensitive sequence search and clustering suite
 - [miniprot](https://aur.archlinux.org/packages/miniprot): Protein-to-genome aligner with high splicing (intron) accuracy
 - [minigraph](https://aur.archlinux.org/packages/minigraph): Pangenome graph construction and sequence-to-graph alignment tool
 - [metabuli-bin](https://aur.archlinux.org/packages/metabuli-bin): Specific and sensitive metagenomic classification via joint amino acid and DNA k-mer analysis
 - [metabuli](https://aur.archlinux.org/packages/metabuli): Specific and sensitive metagenomic classification via joint amino acid and DNA k-mer analysis
+- [magmax-bin](https://aur.archlinux.org/packages/magmax-bin): Enhance genome recovery across metagenomic assemblies, from dereplication to enrichment
+- [magmax](https://aur.archlinux.org/packages/magmax): Enhance genome recovery across metagenomic assemblies, from dereplication to enrichment
 - [magicblast](https://aur.archlinux.org/packages/magicblast): NCBI MagicBLAST: maps next-generation RNA/DNA reads to a genome or transcriptome
 - [lexicmap-bin](https://aur.archlinux.org/packages/lexicmap-bin): Efficient sequence alignment against millions of prokaryotic and viral genomes
 - [lexicmap](https://aur.archlinux.org/packages/lexicmap): Efficient sequence alignment against millions of prokaryotic and viral genomes
@@ -52,12 +59,17 @@ Packages I maintain:
 - [jcvi](https://aur.archlinux.org/packages/jcvi): Python utility libraries on genome assembly, annotation and comparative genomics
 - [iqtree-bin](https://aur.archlinux.org/packages/iqtree-bin): Efficient phylogenomic software by maximum likelihood
 - [igblast](https://aur.archlinux.org/packages/igblast): NCBI IgBLAST: immunoglobulin and T-cell receptor sequence annotation
+- [genefuse](https://aur.archlinux.org/packages/genefuse): Gene fusion detection and visualization from raw FastQ files
+- [gencore](https://aur.archlinux.org/packages/gencore): Generate duplex/single consensus reads to reduce sequencing noise
 - [foldseek-bin](https://aur.archlinux.org/packages/foldseek-bin): Fast and sensitive comparison of large protein structure sets
 - [foldseek](https://aur.archlinux.org/packages/foldseek): Fast and sensitive comparison of large protein structure sets
 - [foldmason-bin](https://aur.archlinux.org/packages/foldmason-bin): Multiple protein structure alignment at scale
 - [folddisco-bin](https://aur.archlinux.org/packages/folddisco-bin): Fast indexing and search of discontinuous motifs in protein structures
 - [foldcomp-bin](https://aur.archlinux.org/packages/foldcomp-bin): Compress and index protein structures with torsion angles
 - [foldcomp](https://aur.archlinux.org/packages/foldcomp): Compress and index protein structures with torsion angles
+- [fastv](https://aur.archlinux.org/packages/fastv): Ultra-fast tool for identifying anomic microbes from sequencing data
+- [fastplong](https://aur.archlinux.org/packages/fastplong): Ultra-fast preprocessing and quality control for long-read sequencing data
 - [deeptools](https://aur.archlinux.org/packages/deeptools): Tools to process and analyze deep sequencing data (ChIP-seq, ATAC-seq, RNA-seq, etc.)
+- [ctty](https://aur.archlinux.org/packages/ctty): Lightweight all-in-one TUI connection manager for SSH, serial, SFTP, telnet and FTP
 - [cgmlst-dists](https://aur.archlinux.org/packages/cgmlst-dists): Pairwise Hamming distance matrix from cgMLST allele call tables
 - [autocycler-bin](https://aur.archlinux.org/packages/autocycler-bin): Tool for combining multiple long-read assemblies into a consensus
