@@ -26,7 +26,6 @@ class SiteConfig:
 
 @dataclass
 class ContentItem:
-    source: Path
     title: str
     date: str
     body_html: str
