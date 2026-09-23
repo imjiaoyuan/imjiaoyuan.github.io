@@ -136,7 +136,6 @@ def _load_markdown_file(path: Path, rel_url: str, out_dir: str, engine: Markdown
     pinned = bool(meta.get("pinned"))
     has_math = bool(MATH_RE.search(_FENCE_RE.sub("", body))) or bool(meta.get("math"))
     return ContentItem(
-        source=path,
         title=title,
         date=date,
         body_html=engine.render(body),
