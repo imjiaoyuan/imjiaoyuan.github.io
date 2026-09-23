@@ -152,7 +152,8 @@ def build(root: Path) -> None:
         _write(cfg.public_dir, slug, render_page(cfg, p))
 
     home_page = pages.get(home_slug) if home_slug else None
-    html = render_home(cfg, home_page)
+    recent = posts[:10]
+    html = render_home(cfg, home_page, recent_posts=recent)
     _write(cfg.public_dir, "", html)
 
     _write(cfg.public_dir, "blog", render_posts_list(cfg, posts))
