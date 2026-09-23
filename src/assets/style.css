@@ -34,6 +34,13 @@ a { color: LinkText; }
 
 nav { display: flex; flex-wrap: wrap; gap: 0.5em 1em; }
 
+.home .content { margin-bottom: 2em; }
+
+.recent-posts { list-style: none; padding: 0; margin: 0 0 0.4em; }
+.recent-posts li { display: flex; justify-content: space-between; gap: 1em; padding: 0.25em 0; }
+.recent-posts time { opacity: 0.7; white-space: nowrap; }
+.more-posts { opacity: 0.85; }
+
 .date { opacity: 0.7; }
 
 h1 { font-size: 1.5em; margin: 0 0 0.6em; }

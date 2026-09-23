@@ -208,16 +208,29 @@ def render_404(cfg: SiteConfig) -> str:
     return render_shell(cfg, "404", body, has_math=False, description="Page not found", url="/404.html")
 
 
-def render_home(cfg: SiteConfig, page: ContentItem | None = None) -> str:
+def render_home(cfg: SiteConfig, page: ContentItem | None = None, recent_posts: list[ContentItem] | None = None) -> str:
     if page is None:
         body = ""
         has_math = False
     else:
-        body = f'<div class="content">{page.body_html}</div>'
+        body = page.body_html
         has_math = page.has_math
+    recent = _render_template(
+        "recent_posts.html",
+        {"items": _recent_items_html(recent_posts or [])},
+    ) if recent_posts else ""
+    body = _render_template("home.html", {"body": body, "recent": recent})
     description = (getattr(page, "description", "").strip() if page else "") or cfg.description
     jsonld = _jsonld_person(cfg) + _jsonld_website(cfg)
     return render_shell(cfg, "", body, has_math=has_math, description=description, jsonld=jsonld)
+
+
+def _recent_items_html(posts: list[ContentItem]) -> str:
+    return "\n".join(
+        f'<li><a href="{p.rel_url}">{html.escape(p.title)}</a>'
+        f' <time datetime="{p.date}">{html.escape(p.date)}</time></li>'
+        for p in posts
+    )
 
 
 def render_posts_list(cfg: SiteConfig, posts: list[ContentItem]) -> str:
