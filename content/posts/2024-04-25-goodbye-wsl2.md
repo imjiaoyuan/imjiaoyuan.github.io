@@ -9,11 +9,11 @@ date: 2024-04-25
 
 下图是开虚拟化平台之前的跑分：
 
-![](../../static/images/063547fd.webp)
+![](/static/images/063547fd.webp)
 
 下图是开虚拟化平台之后的跑分：
 
-![](../../static/images/7356b1e2.webp)
+![](/static/images/7356b1e2.webp)
 
 为了保证跑分结果准确，我特意在两种情况下多跑了几次，分值都差不多。主要的损失来自于 CPU，而 CPU 12%的性能损失还是挺严重的。
 
@@ -214,4 +214,4 @@ scoop update            # 更新 scoop 和 buckets
 
 不需要再一个个下载安装包一直点下一步了。总之感觉是挺舒服的~
 
-![](../../static/images/4fc77b91.webp)
+![](/static/images/4fc77b91.webp)

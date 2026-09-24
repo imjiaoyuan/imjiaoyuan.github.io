@@ -64,6 +64,10 @@ def _page_desc(item: ContentItem) -> str:
     return _extract_description(item.body_html)
 
 
+def page_description(item: ContentItem) -> str:
+    return _page_desc(item)
+
+
 def _jsonld_blog_post(cfg: SiteConfig, item: ContentItem) -> str:
     post_url = f"{cfg.domain.rstrip('/')}{item.rel_url}"
     obj = {

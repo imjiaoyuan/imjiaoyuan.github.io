@@ -5,7 +5,7 @@ date: 2024-03-20
 
 最近微信出新版的原生 Linux 客户端了，加上为了 aur 和 wiki，装上了 ArchLinux。
 
-![](../../static/images/8ad2959b.webp)
+![](/static/images/8ad2959b.webp)
 
 启动盘用的是 Ventoy，由于安装介质中的控制台不能用校园网（或者说是我不会），使用 USB 共享网络。下面便是安装与配置的步骤。
 

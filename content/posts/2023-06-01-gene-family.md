@@ -95,35 +95,35 @@ date: 2023-06-01
 
 打开 [RAP-DB](https://rapdb.dna.affrc.go.jp/) 网站首页的 ID converter 工具，输入基因 ID 进行转换，以 Os 开头的是 RAP ID，以 LOC 开头的是 MSU ID，这里我们要将 RAP ID 转为 LOC ID ，点击 ② 处的按钮选择 RAP ID 转为 LOC ID，点击 converter 进行转换
 
-![](../../static/images/63339f42.webp)
+![](/static/images/63339f42.webp)
 
 我们现在可以看到下方出现一个列表，点击 RAP ID 列的 Os05g0409300 进入该基因的详情页
 
-![](../../static/images/cec360a2.webp)
+![](/static/images/cec360a2.webp)
 
 再点击 Transcript variants （转录变体）下的基因名称进入该基因转录本的详情页
 
-![](../../static/images/58e331f8.webp)
+![](/static/images/58e331f8.webp)
 
 下滑到最下方即可得到蛋白质序列，复制下来保存即可
 
-![](../../static/images/a27d2cb0.webp)
+![](/static/images/a27d2cb0.webp)
 
 当然，也可以在 ID 转换后点击 LOC ID 列的基因名称，进入详情页后点击 Download Sequence 后下滑到最下方即可得到蛋白质序列，这两种方法得到的蛋白质序列是相同的，注意复制蛋白质序列时末尾的 * 不需要复制
 
 随后打开 [SMART 网站](https://smart.embl.de/smart/set_mode.cgi?NORMAL=1)
 粘贴刚刚得到的蛋白质序列搜索其结构域
 
-![](../../static/images/bece982d.webp)
+![](/static/images/bece982d.webp)
 
 搜索完成后我们可以看到，SMART 网站已经将结构域的位置等信息列出来了，下方表格中 E-value
  小于十的负五次方的通常认为其可信，而 E-value 值为 N/A 的即为空值，不需要管它
 
-![](../../static/images/2dd62947.webp)
+![](/static/images/2dd62947.webp)
 
 点击下方表格中的结构域名称我们可以得到该结构域的全称、描述等详细信息，可以看到我这个基因的结构域为 Cystatin，所以后面我便以水稻 Cystatin 基因家族为基础展开一系列生物信息学分析
 
-![](../../static/images/77fa6a71.webp)
+![](/static/images/77fa6a71.webp)
 
 ### 搜索相关文献
 
@@ -133,9 +133,9 @@ date: 2023-06-01
 
 首先使用 Ensembl Plants 网站下载物种的全部基因组序列作为参考序列，并下载 Gff3 注释文件
 
-![](../../static/images/ba92b187.webp)
+![](/static/images/ba92b187.webp)
 
-![](../../static/images/843dd99e.webp)
+![](/static/images/843dd99e.webp)
 
 ### 隐马尔可夫模型下载
 
@@ -156,7 +156,7 @@ date: 2023-06-01
 点击此链接下载 HMMER Windows 版本 [hmmer-3.0-windows.zip](http://eddylab.org/software/hmmer3/3.0/hmmer-3.0-windows.zip)
 将压缩包解压在任意位置，进入 HMMER 文件夹，确保当前可以看到。exe 的可执行程序
 
-![](../../static/images/5303ddd3.webp)
+![](/static/images/5303ddd3.webp)
 
 在 Windows 资源管理器地址栏中输入 CMD 回车在此位置打开 CMD 命令行，命令与 Linux 系统下一致
 
@@ -174,7 +174,7 @@ hmmsearch Cystatin.hmm allprotein.fasta > result.out
 
 最终得到搜索结果如下图所示，我们可以通过这两列 E-value 来判断基因是否属于 Cystatin 基因家族，下图中，最后三个基因的 E-value 均小于 10^-5，但在某些情况下，我们可以将其先保留，进行进一步判断
 
-![](../../static/images/05e41938.webp)
+![](/static/images/05e41938.webp)
 
 HMMER 的搜索结果显示水稻中 Cystatin 基因家族有下面 14 个基因
 
@@ -198,11 +198,11 @@ HMMER 的搜索结果显示水稻中 Cystatin 基因家族有下面 14 个基因
 
 打开 TBtools 的 Blast Compare Two Seqs 工具，输入查询序列、基因组序列并设置输出文件，将输出格式改为 Table 方便查看，然后进行比对
 
-![](../../static/images/39ba7253.webp)
+![](/static/images/39ba7253.webp)
 
 得出结果后，查看 evalue 这一列，所有的值均小于 10 的-5 次方，我们现在可以认为 HMMER 搜索结果是准确的，这 14 个基因都属于 Cystatin 基因家族
 
-![](../../static/images/b45a5032.webp)
+![](/static/images/b45a5032.webp)
 这里我对以上已经基本确定的 14 个基因进行重命名，如下表，名称参考于文献 [《拟南芥和水稻 cystatin 基因家族的生物信息学分析_杨泽峰》](https://kns.cnki.net/kcms2/article/abstract?v=3uoqIhG8C44YLTlOAiTRKgchrJ08w1e7aLpFYbsPrqG02PVaNoRx8xASd1XAoELXBBfr2KhcrR-UX_ySuxOUWnA95rNmfFRQ&uniplatform=NZKPT) 中的命名方式
 
 | Os ID | Rename | Os ID |Rename |
@@ -221,11 +221,11 @@ HMMER 的搜索结果显示水稻中 Cystatin 基因家族有下面 14 个基因
 
 先使用 [NCBI CD Search](https://www.ncbi.nlm.nih.gov/Structure/bwrpsb/bwrpsb.cgi) 进行结构域的查找
 
-![](../../static/images/827aa2c5.webp)
+![](/static/images/827aa2c5.webp)
 
 然后使用 TBtools 进行可视化
 
-![](../../static/images/9e9793bd.webp)
+![](/static/images/9e9793bd.webp)
 
 通过 TBtools 绘制的图像可以看出，这些基因是全部具有 Cystatin 结构域的
 
@@ -233,13 +233,13 @@ HMMER 的搜索结果显示水稻中 Cystatin 基因家族有下面 14 个基因
 
 将候选基因的蛋白质上传至 MEME 网站
 
-![](../../static/images/0df69b16.webp)
+![](/static/images/0df69b16.webp)
 
 然后使用 TBtools 进行可视化
 
-![](../../static/images/cc924eda.webp)
+![](/static/images/cc924eda.webp)
 
-![](../../static/images/430a9d4e.webp)
+![](/static/images/430a9d4e.webp)
 
 从 TBtools 绘制的图像可以看出，这些基因的保守基序大致上也是比较相近的
 
@@ -255,23 +255,23 @@ https://www.megasoftware.net/older_versions
 
 按 Ctrl+A 全选，点击 Alignment，选择使用 ClustalW 算法进行多序列比对
 
-![](../../static/images/a76a49a8.webp)
+![](/static/images/a76a49a8.webp)
 
 比对完成后点击左上角的 Data，选择 Phylogenetic Analysis 进行进化树分析
 
-![](../../static/images/c6ff2a40.webp)
+![](/static/images/c6ff2a40.webp)
 
 进化树分析完成后，点击上方 Phylogeny，选择 NJ 算法构建进化树
 
-![](../../static/images/112cbb60.webp)
+![](/static/images/112cbb60.webp)
 
-![](../../static/images/a3c964e4.webp)
+![](/static/images/a3c964e4.webp)
 
 这个进化树貌似并不是很美观，我们为保证图的美观性和统一性，要把进化树中基因名字根据前文所命名的样式进行重命名，直接在比对所使用的 fasta 文件中进行修改，将 > 后的名称改为我们重命名的名称即可
 
 然后点击 File 里面的 export current tree(Newick)，点开后点 export，再点击保存图标保存进化树的结果，后面我们可以使用 [evoliview](http://www.evolgenius.info/evolview/#/treeview) 或者 [iTOL](https://itol.embl.de/) 网站对保存的结果进行美化
 
-![](../../static/images/f3ccedac.webp)
+![](/static/images/f3ccedac.webp)
 
 从其系统发育树来看，只有 Os05t0594299-01 这一个基因的发育与其它基因相差较大
 
@@ -283,37 +283,37 @@ https://www.megasoftware.net/older_versions
 
 打开 TBtools 的 Protein Paramter Calc 功能，导入蛋白质序列文件，并设置输出文件，点击 Compute 进行分析
 
-![](../../static/images/b304d193.webp)
+![](/static/images/b304d193.webp)
 
 得到分析结果
 
-![](../../static/images/549ed4db.webp)
+![](/static/images/549ed4db.webp)
 
 ### 染色体定位分析
 
-![](../../static/images/6f46d3fe.webp)
+![](/static/images/6f46d3fe.webp)
 
 得到染色体位置分布图
 
-![](../../static/images/a5cb5583.webp)
+![](/static/images/a5cb5583.webp)
 
 我们导入重命名文件，使其名称全部变为我们命名的格式
 
-![](../../static/images/5c194001.webp)
+![](/static/images/5c194001.webp)
 
 注意重命名文件的格式
 
-![](../../static/images/e628f072.webp)
+![](/static/images/e628f072.webp)
 
 可以在这里对颜色和字体进行简单的美化
 
-![](../../static/images/cef01878.webp)
+![](/static/images/cef01878.webp)
 
 当然，如果你不想对它们进行统一的更改，可以点击任意一个基因名称，再点击右键对其进行单独的更改，对于染色体的名称也同样适用
 
 调整过后的图就好看了很多
 
-![](../../static/images/1cb315b3.webp)
+![](/static/images/1cb315b3.webp)
 
 ## 基因家族成员的基因分析
 
@@ -321,49 +321,49 @@ https://www.megasoftware.net/older_versions
 
 这里使用的也是 TBtools 中多图结合的插件，打开 Gene Structure View 功能，粘贴基因列表，导入注释文件后即可得到内含子和外显子的位置信息
 
-![](../../static/images/e625c3fc.webp)
+![](/static/images/e625c3fc.webp)
 
-![](../../static/images/24551f2c.webp)
+![](/static/images/24551f2c.webp)
 
 ### 基因表达量分析
 
 首先在 [Rice Expression Database](http://expression.ic4r.org) 中搜索基因列表
 
-![](../../static/images/8d8fd381.webp)
+![](/static/images/8d8fd381.webp)
 
 选择 DRP000391 这个项目
 
-![](../../static/images/20802280.webp)
+![](/static/images/20802280.webp)
 
 随后点击 Show data —— Export —— CSV 导出数据，由于 Chrome 和 Edge 早已不支持使用 Flash，所以这里用 360 极速浏览器导出
 
 用 Excel 打开数据，在 Tissue 这一列进行筛选，分别获得基因在水稻的 Callus、Leaf、Panicle、Panicle、Root、Seed、Shoot 等部位的表达数据，如果有些数据有两个，那么求平均值
 
-![](../../static/images/c45066ae.webp)
+![](/static/images/c45066ae.webp)
 
 整理成如下样式
 
-![](../../static/images/222e52a7.webp)
+![](/static/images/222e52a7.webp)
 
 然后对数据进行 LOG2 处理，如果出现#NUM! 字样，全部改为 0
 
-![](../../static/images/3ae0a406.webp)
+![](/static/images/3ae0a406.webp)
 
 重新整理得到最终数据，打开 TBtools 的 Heat Map 功能，把刚刚整理的数据粘贴进去进行绘图
 
-![](../../static/images/42aba432.webp)
+![](/static/images/42aba432.webp)
 
 得到基因家族的表达热图
 
-![](../../static/images/ddcb8379.webp)
+![](/static/images/ddcb8379.webp)
 
 对基因进行重命名即将复制进去的表格中的基因名称进行修改即可
 
-![](../../static/images/42676eec.webp)
+![](/static/images/42676eec.webp)
 
 然后重新制图
 
-![](../../static/images/5d1317d3.webp)
+![](/static/images/5d1317d3.webp)
 
 也可以对图像进行美化
 
@@ -373,15 +373,15 @@ https://www.megasoftware.net/older_versions
 
 打开 [string 数据库](https://cn.string-db.org) ，点击 search ，输入蛋白质的 Os ID 并选择蛋白质的物种，点击 search
 
-![](../../static/images/d64d36ed.webp)
+![](/static/images/d64d36ed.webp)
 
 搜索完成后就得到了蛋白质的互相作用网络
 
-![](../../static/images/2ac5607a.webp)
+![](/static/images/2ac5607a.webp)
 
 点击每一个圆珠我们就可以查看其信息，包括基因 ID、物种等，圆珠直接的黑色线条表示共表达蛋白质，黄色线条表示在其他生物体中共同提及推定的同源物。
 
-![](../../static/images/aaba5817.webp)
+![](/static/images/aaba5817.webp)
 
 ### 顺式作用元件分析
 
@@ -393,69 +393,69 @@ https://www.megasoftware.net/older_versions
 
 提取时需要在初始化后将 TBtools 的设置改为如下配置
 
-![](../../static/images/38ee6422.webp)
+![](/static/images/38ee6422.webp)
 
 然后提取目标基因的启动子序列，打开 TBtools 的 Fasta Extract or Filter，设置好序列文件、输出文件、基因 ID，点击 start 开始
 
-![](../../static/images/42eed897.webp)
+![](/static/images/42eed897.webp)
 
 打开 Sequenxe Manipulate 工具，将提取出来的所有序列复制进去，全部转为大写
 
-![](../../static/images/924fe1c2.webp)
+![](/static/images/924fe1c2.webp)
 
 新建文本文档保存转换后的序列
 
 现在需要打开网站 http://bioinformatics.psb.ugent.be/webtools/plantcare/html/ 将刚刚保存的序列上传进行顺势作用元件预测
 
-![](../../static/images/47fcb587.webp)
+![](/static/images/47fcb587.webp)
 
-![](../../static/images/07b8878a.webp)
+![](/static/images/07b8878a.webp)
 
 等待一会后会收到网站发出的一封邮件，下载邮件中的附件然后解压，解压之后得到一个拓展名为 tar 的文件，再进行解压
 
-![](../../static/images/b683da1f.webp)
+![](/static/images/b683da1f.webp)
 
 用 excel 打开解压出来的 tab 文件，此时 excel 中显示的就是这些基因的元件信息
 
-![](../../static/images/dae4bcf5.webp)
+![](/static/images/dae4bcf5.webp)
 
 筛选我们需要的物种，这里我选择了水稻
 
-![](../../static/images/a48a58bd.webp)
+![](/static/images/a48a58bd.webp)
 
 删除元件名称、元件序列、增减个数、加/减、物种等我们不需要的信息，然后为了保证最后的图片可看，这里需要扩大一下起始位置，较大的可以减少 20，较小的可以增大 20。并且需要将含有空白信息的项删除，不然 TBtools 会报错。最终整理成如下格式：
 
-![](../../static/images/4252b6f4.webp)
+![](/static/images/4252b6f4.webp)
 
 下面需要再新建一个关于序列长度的文件，格式如下：
 
-![](../../static/images/8bd83f1f.webp)
+![](/static/images/8bd83f1f.webp)
 
 打开 TBtools 的 Simple BioSequence Viewer 功能，导入长度信息文件和元件信息，点击 start 开始
 
-![](../../static/images/7cd38ec7.webp)
+![](/static/images/7cd38ec7.webp)
 
 最终得到可视化结果
 
-![](../../static/images/a5144f3f.webp)
+![](/static/images/a5144f3f.webp)
 
 这是我做的顺式作用元件分析的图，可以对其进行简一些美化
 
-![](../../static/images/ce282186.webp)
+![](/static/images/ce282186.webp)
 
 ### 多序列比对
 
 在 [CLUSTALW 网站](https://www.genome.jp/tools-bin/clustalw) 上传基因家族的蛋白质序列进行多序列比对，比对完成后下载比对结果的 aln 文件
 
-![](../../static/images/d4a9768f.webp)
+![](/static/images/d4a9768f.webp)
 
 打开 [ESPript](https://espript.ibcp.fr/ESPript/cgi-bin/ESPript.cgi) ，上传刚刚的 aln 文件进行可视化
 
-![](../../static/images/ebbbc0bf.webp)
+![](/static/images/ebbbc0bf.webp)
 
 下载结果中的 pdf 文件打开后即可得到多序列比对的图像
 
-![](../../static/images/b8c1d6d4.webp)
+![](/static/images/b8c1d6d4.webp)
 
 与进化树相似，修改多序列比对中的基因名称直接在比对的蛋白质序列中进行修改即可
 
@@ -471,84 +471,84 @@ TBtools 软件、物种基因组序列、注释文件
 
 打开 TBtools 的 Fasta Stats 功能，导入物种基因组序列文件，设置好输出文件，获取染色体长度文件
 
-![](../../static/images/79c4e567.webp)
+![](/static/images/79c4e567.webp)
 
 将 chr len.txt 文件的内容粘贴到 Excel，只保留 ID 和 length 两列的数据，删除 chr len.txt 文件中原有的数据，将 ID 和 length 两列数据保存在 chr len.txt 中
 
-![](../../static/images/14870481.webp)
+![](/static/images/14870481.webp)
 
 打开 TBtools 的 One Step MCScanX 功能，这里它需要输入两个物种的基因组序列文件和注释文件，我们两个都导入拟南芥的进行物种内的共线性分析，这个过程中如果出现报错，关掉即可，不用理会
 
-![](../../static/images/a158cdf1.webp)
+![](/static/images/a158cdf1.webp)
 
 打开 TBtools 的 Text Merge for MCScanX 功能，导入上一步分析结果（在输出目录中）中的 Collinearity 文件，将分析结果转换为 GenePairTable
 
-![](../../static/images/f9d640e2.webp)
+![](/static/images/f9d640e2.webp)
 
 打开 TBtools 的 Text Transformat for Micro-Synteny View 功能，导入上一步获得的 GenePairTable 文件和分析结果中的以 gff 为拓展名的文件（即简化后的注释文件），获得 LinkedRegion 文件，也就是基因间的关联文件 LinkedRegion
 
-![](../../static/images/3f091ac2.webp)
+![](/static/images/3f091ac2.webp)
 
 打开 TBtools 的 Advanced Circos 功能，依次导入 chr len.txt、GenePairTable.txt、LinkedRegion.txt 进行绘图
 
-![](../../static/images/f3e46157.webp)
+![](/static/images/f3e46157.webp)
 
 这样就得到拟南芥所有基因的共线性分析 Circos 图了
 
-![](../../static/images/97ca22aa.webp)
+![](/static/images/97ca22aa.webp)
 
 然而还没有结束，我们还需要突出显示出某些基因
 
 我随便抽取一些基因，打开 TBtools 的 Text Block Extract and Filter 功能，从 GenePairTable 文件中获得这些基因的对应关系，生成新的 GenePairTable 文件
 
-![](../../static/images/97392557.webp)
+![](/static/images/97392557.webp)
 
 然后生成新的关联文件 LinkedRegion
 
-![](../../static/images/5da7c379.webp)
+![](/static/images/5da7c379.webp)
 
 然后将新的 LinkedRegion.txt 文件的内容复制到 Excel 中，最后一列加上 RGB 色值
 
-![](../../static/images/734018ba.webp)
+![](/static/images/734018ba.webp)
 
 随后将 Excel 中的内容合并到之前的 LinkedRegion.txt 文件中或者新建一个文本文件保存，如果不想显示全部基因的共线性，仅仅显示选中的这些基因的共线性的话，可以直接使用刚刚保存的带有 RGB 色值的 LinkedRegion.txt 文件
 
-![](../../static/images/4808366c.webp)
+![](/static/images/4808366c.webp)
 
 我们似乎还需要显示出一些基因的名称，那就补充吧
 
 打开 TBtools 的 Table Row Extract or Filter 功能，导入分析结果中简化的注释文件，在弹出的窗口中选择 ID 这一列，在输入框中再输入要展示的基因的 ID（注意名称要对应），这里是需要生成一个用于展示 ID 的新的 GenePairTable 文件
 
-![](../../static/images/14359138.webp)
+![](/static/images/14359138.webp)
 
 最后依次输入染色体长度文件、展示 ID 的 GenePairTable 文件、带有 RGB 色值的 LinkedRegion.txt 文件
 绘图即可
 
-![](../../static/images/a30e0106.webp)
+![](/static/images/a30e0106.webp)
 
 最终结果
 
-![](../../static/images/50a8e73f.webp)
+![](/static/images/50a8e73f.webp)
 
 这里需要注意的是，TBtools 自带的 One Step MCScanX 功能分析很慢，我第一次分析水稻的共线性大概跑了四十分钟左右，这里我们可以使用 One Step MCScanX 的增强版插件，按照如下步骤进行安装
 
-![](../../static/images/e62f4380.webp)
+![](/static/images/e62f4380.webp)
 
 使用方法和之前的插件一样，这个插件跑一次整个水稻的共线性分析只需要几分钟
 
 最终我绘制的图像是这样的
 
-![](../../static/images/1776354a.webp)
+![](/static/images/1776354a.webp)
 
 我们还是希望使用自己命名的基因名称，对显示 ID 文件中的信息进行修改，使用记事本的查找替换功能将文件中转录本的 ID 全部替换为重命名的名称即可
 
-![](../../static/images/a3d71a4f.webp)
+![](/static/images/a3d71a4f.webp)
 
 我们再对其进行一些美化，具体操作请参照 [共线性分析美化](https://www.bilibili.com/video/BV1js4y197d7/?vd_source=f785a7035a51b96b9abcf6b14d1036ea)
 
 下图是我最终美化好的
 
-![](../../static/images/0e237aec.webp)
+![](/static/images/0e237aec.webp)
 
 可以看出 Cystatin 基因家族的共线性一般
 
@@ -562,41 +562,41 @@ TBtools 软件、物种基因组序列、注释文件
 
 **进化树+Motif**
 
-![](../../static/images/79f1ca01.webp)
+![](/static/images/79f1ca01.webp)
 
 **进化树+Motif+Domain**
 
-![](../../static/images/63ee7dc8.webp)
+![](/static/images/63ee7dc8.webp)
 
 **进化树+Motif+Domain+显示外显子、内含子**
 
-![](../../static/images/d25d275a.webp)
+![](/static/images/d25d275a.webp)
 
 **进化树+Motif+Domain+显示外显子、内含子+顺式作用元件**
 
-![](../../static/images/f52bcd94.webp)
+![](/static/images/f52bcd94.webp)
 
 最终得到一张信息整合的图
 
-![](../../static/images/5592d3c1.webp)
+![](/static/images/5592d3c1.webp)
 
 这里必须要注意的问题就是关于每个文件中的基因名称格式，必须统一使用一样的格式才可以，任何一个文件的名称格式对不上 TBtools 都会报错，比如我们这里导入了水稻的注释文件，而水稻注释文件中的名称是 transcript:Os01t0803200-01 这样的，那么其它文件中的基因名称需要全部改为这一名称
 
-![](../../static/images/50231604.webp)
+![](/static/images/50231604.webp)
 
 如果想对基因进行重命名，准备好重命名文件，文件格式与染色体定位分析时的一样
 
 在下列位置导入重命名文件
 
-![](../../static/images/7d673fb7.webp)
+![](/static/images/7d673fb7.webp)
 
 另外，如果我们不要进化树，比如在基因很少或只有单条基因的时候，可能无法做出进化树或者进化树很稀疏，那么我们可以不用导入进化树，在 Gene Structure View 功能填写进化树信息的地方我们填入基因列表即可
 
-![](../../static/images/acb69ce6.webp)
+![](/static/images/acb69ce6.webp)
 
 得出图像
 
-![](../../static/images/c9b743c4.webp)
+![](/static/images/c9b743c4.webp)
 
 跟前文染色体定位分析时一样，我们可以对图像进行一些更改，这个比较复杂，具体操作请参照 [TBtools 美化](https://www.bilibili.com/video/BV1sk4y1j7iq/?vd_source=f785a7035a51b96b9abcf6b14d1036ea) 进行操作
 
@@ -612,27 +612,27 @@ TBtools 软件、物种基因组序列、注释文件
 
 功能富集分析的算法有很多种，能够做功能富集分析的工具也非常多，如果大家想深入了解的话，下面是一个工具列表可供大家学习。
 
-![](../../static/images/db022075.webp)
+![](/static/images/db022075.webp)
 
 在以上所有的工具中，有一个工具是最为常用，也最为权威，那就是 DAVID，DAVID 是由美国 Leidos 生物医学研究公司的 LHRI 团队开发的一个在线基因注释及功能富集网站，其网址为 https://david.ncifcrf.gov 为什么说 DAVID 它是最权威的呢？看下图就知道了：仅 DAVID 这一个软件就发表了 10 篇 sci 文章，其中 5 分以上 7 篇，累计影响因子将近 85 分。其他用 DAVID 进行分析并发表的文章就更不计其数了
 
 ### GO 富集分析
 
-![](../../static/images/e81db8cb.webp)
+![](/static/images/e81db8cb.webp)
 
 打开 DAVID 官网：https://david.ncifcrf.gov/
 
 点击上方功能菜单 Functional Annotation
 
-![](../../static/images/ab203457.webp)
+![](/static/images/ab203457.webp)
 
 选择上方的 upload 选项卡，在编辑框内粘贴基因 ID 列表，选 ID 类型为 ENSEMBL_GENE_ID  ，选择列表类型为基因列表，最后上传列表
 
-![](../../static/images/ce225aa9.webp)
+![](/static/images/ce225aa9.webp)
 
 现在展示出的即富集分析结果，取消勾选上方 Check Defaults 取消全选，展开 Gene_Ontology 项，勾选 BP、CC、MF 项，点击最下方 Functional Annotation Chart 将勾选的项目以列表形式给出
 
-![](../../static/images/80fe39cf.webp)
+![](/static/images/80fe39cf.webp)
 
 随后就会跳出一个浏览器页面，以列表的形式将上述结果展示给我们了，点击右上方 Doanload File 将新弹出窗口中的数据复制保存在 Excel 表格中，按顺序保留下列数据
 
@@ -658,15 +658,15 @@ GO 是 Gene Ontology 的缩写，是一种用于生物信息学和计算生物�
 
 在制作气泡图时，通常会对富集分析结果中的 P 值进行转换，以避免图像上 P 值的差异过分压缩的情况。常用的转换方式是将 P 值进行-log10（以对数值）的处理
 
-![](../../static/images/fc2edb90.webp)
+![](/static/images/fc2edb90.webp)
 
 对数据进行整理，简化一下名称，最终得到如下数据
 
-![](../../static/images/deb4c492.webp)
+![](/static/images/deb4c492.webp)
 
 打开微生信平台（http://www.bioinformatics.com.cn/）的富集气泡图功能进行绘图，也可以使用 R 和 Excel，R 的环境比较复杂，这里我就不放代码了。
 
-![](../../static/images/ebe773be.webp)
+![](/static/images/ebe773be.webp)
 
 在这个 GO 富集分析结果中，我们可以从不同的角度来分析：
 
