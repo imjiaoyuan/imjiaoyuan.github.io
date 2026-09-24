@@ -9,7 +9,7 @@ from xml.sax.saxutils import escape as xml_escape
 from asset_pipeline import copy_assets
 from config_loader import load_site_config
 from content_loader import load_pages, load_posts
-from date_utils import parse_date, to_atom_date
+from date_utils import parse_date
 from markdown_engine import MarkdownEngine
 from template_runtime import clear_cache, page_description, render_404, render_home, render_page, render_post, render_posts_list
 
@@ -33,7 +33,7 @@ def _render_atom(cfg, posts) -> str:
     if cfg.feed_months > 0:
         cutoff = dt.date.today() - dt.timedelta(days=30 * cfg.feed_months)
         posts = [p for p in posts if parse_date(p.date) >= cutoff]
-    updated = to_atom_date(posts[0].date) if posts else dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    updated = f"{parse_date(posts[0].date).isoformat()}T00:00:00Z" if posts else dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     site_title = xml_escape(cfg.title)
     site_desc = xml_escape(cfg.description)
     site_link = xml_escape(base)
@@ -47,7 +47,7 @@ def _render_atom(cfg, posts) -> str:
 <title>{xml_escape(post.title)}</title>
 <link href="{xml_escape(post_url)}"/>
 <id>{xml_escape(post_url)}</id>
-<updated>{to_atom_date(post.date)}</updated>
+<updated>{parse_date(post.date).isoformat()}T00:00:00Z</updated>
 <summary>{xml_escape(page_description(post))}</summary>
 <content type="html">{xml_escape(post.body_html)}</content>
 </entry>"""
@@ -138,10 +138,7 @@ def build(root: Path) -> None:
 
     static_dir = root / "static"
     if static_dir.exists():
-        dst = cfg.public_dir / "static"
-        if dst.exists():
-            shutil.rmtree(dst)
-        shutil.copytree(static_dir, dst)
+        shutil.copytree(static_dir, cfg.public_dir / "static", dirs_exist_ok=True)
 
     for p in posts:
         _write(cfg.public_dir, p.out_dir, render_post(cfg, p))

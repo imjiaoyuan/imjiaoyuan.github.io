@@ -95,37 +95,15 @@ def serve(public_dir: Path, host: str, port: int, root: Path) -> None:
         def __init__(self, *args, **kwargs):
             super().__init__(*args, directory=str(public_dir), **kwargs)
 
-        def _guess_mime(self, path: Path) -> str:
-            ext = path.suffix.lower()
-            return {
-                ".html": "text/html",
-                ".css": "text/css",
-                ".js": "application/javascript",
-                ".json": "application/json",
-                ".png": "image/png",
-                ".jpg": "image/jpeg",
-                ".jpeg": "image/jpeg",
-                ".webp": "image/webp",
-                ".gif": "image/gif",
-                ".svg": "image/svg+xml",
-                ".ico": "image/x-icon",
-                ".woff2": "font/woff2",
-                ".woff": "font/woff",
-                ".ttf": "font/ttf",
-                ".otf": "font/otf",
-                ".xml": "application/xml",
-                ".txt": "text/plain",
-            }.get(ext, "application/octet-stream")
-
         def _serve_file(self, fs_path: Path) -> None:
-            mime = self._guess_mime(fs_path)
+            mime = self.guess_type(str(fs_path))
             payload = fs_path.read_bytes()
             self.send_response(200)
             self.send_header("Content-Type", mime + "; charset=utf-8" if mime.startswith("text/") else mime)
             self.send_header("Content-Length", str(len(payload)))
-            if mime in ("text/html", "text/css", "application/javascript"):
+            if mime.startswith("text/") or mime in ("application/javascript", "application/json"):
                 self.send_header("Cache-Control", "no-store")
-            elif mime.startswith("image/") or mime.startswith("font/"):
+            elif mime.startswith(("image/", "font/")):
                 self.send_header("Cache-Control", "public, max-age=86400")
             self.end_headers()
             self.wfile.write(payload)

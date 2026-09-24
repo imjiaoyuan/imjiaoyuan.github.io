@@ -10,8 +10,6 @@ class MarkdownEngine:
     _TABLE_SEP_RE = re.compile(r"^\s*\|?[\s:-]+\|[\s|:-]*\|?\s*$")
 
     def render(self, text: str) -> str:
-        self._fn_ids: dict[str, None] = {}
-        self._fn_defs: dict[str, str] = {}
         lines = text.replace("\r\n", "\n").split("\n")
         out: list[str] = []
         para: list[str] = []
@@ -80,15 +78,6 @@ class MarkdownEngine:
                 flush_para()
                 close_list()
                 out.append(line)
-                i += 1
-                continue
-
-            fn_def = re.match(r"^\[\^([^\]]+)\]:\s+(.*)", line)
-            if fn_def:
-                flush_para()
-                close_list()
-                fid = fn_def.group(1).strip()
-                self._fn_defs[fid] = self._inline(fn_def.group(2))
                 i += 1
                 continue
 
@@ -167,16 +156,7 @@ class MarkdownEngine:
                 mode = "ul" if ul else "ol"
                 indent = len(line) - len(line.lstrip())
                 content = (ul.group(1) if ul else ol.group(1)).strip()
-                task_checked = None
-                if ul:
-                    tm = re.match(r"^\[([ xX])\]\s+(.*)", content)
-                    if tm:
-                        task_checked = tm.group(1).lower() == "x"
-                        content = tm.group(2)
                 inline_html = self._inline(content)
-                if task_checked is not None:
-                    checked = " checked" if task_checked else ""
-                    inline_html = f'<input type="checkbox"{checked} disabled> {inline_html}'
                 if not list_stack:
                     out.append(f"<{mode}>")
                     out.append(f"<li>{inline_html}")
@@ -226,20 +206,6 @@ class MarkdownEngine:
         close_list()
         if in_code:
             out.append(self._render_code_block(code_lines))
-
-        if self._fn_defs:
-            fn_items = []
-            for fid in self._fn_ids:
-                if fid in self._fn_defs:
-                    fn_items.append(
-                        f'<li id="fn-{fid}"><p>{self._fn_defs[fid]} '
-                        f'<a href="#fnref-{fid}">↩</a></p></li>'
-                    )
-            if fn_items:
-                out.append('<hr>')
-                out.append('<section class="footnotes"><ol>')
-                out.extend(fn_items)
-                out.append('</ol></section>')
 
         return "\n".join(out)
 
@@ -322,16 +288,9 @@ class MarkdownEngine:
         def _restore_code(m: re.Match[str]) -> str:
             return f"<code>{html.escape(code[int(m.group(1))])}</code>"
 
-        s = re.sub(r"\x01(\d+)\x01", _restore_code, s)
-
-        s = re.sub(r"~~([^~]+)~~", r"<del>\1</del>", s)
         s = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)
         s = re.sub(r"\*([^*]+)\*", r"<em>\1</em>", s)
 
-        def replace_fn(match: re.Match[str]) -> str:
-            fid = match.group(1).strip()
-            self._fn_ids[fid] = None
-            return f'<sup><a href="#fn-{fid}" id="fnref-{fid}">[{fid}]</a></sup>'
-
-        s = re.sub(r"\[\^([^\]]+)\]", replace_fn, s)
+        # Restore inline code last so the emphasis passes can't mangle its contents.
+        s = re.sub(r"\x01(\d+)\x01", _restore_code, s)
         return s
