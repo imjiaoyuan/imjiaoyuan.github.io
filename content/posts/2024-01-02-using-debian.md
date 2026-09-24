@@ -7,7 +7,7 @@ date: 2024-01-02
 
 先来张桌面图
 
-![](../../static/images/f5a9eb05.webp)
+![](/static/images/f5a9eb05.webp)
 
 安装的软件有：
 

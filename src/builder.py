@@ -11,7 +11,7 @@ from config_loader import load_site_config
 from content_loader import load_pages, load_posts
 from date_utils import parse_date, to_atom_date
 from markdown_engine import MarkdownEngine
-from template_runtime import clear_cache, render_404, render_home, render_page, render_post, render_posts_list
+from template_runtime import clear_cache, page_description, render_404, render_home, render_page, render_post, render_posts_list
 
 
 def _write(public_dir: Path, rel_out_dir: str, html_text: str) -> None:
@@ -48,7 +48,7 @@ def _render_atom(cfg, posts) -> str:
 <link href="{xml_escape(post_url)}"/>
 <id>{xml_escape(post_url)}</id>
 <updated>{to_atom_date(post.date)}</updated>
-<summary>{xml_escape(post.title)}</summary>
+<summary>{xml_escape(page_description(post))}</summary>
 <content type="html">{xml_escape(post.body_html)}</content>
 </entry>"""
         )
@@ -60,6 +60,7 @@ def _render_atom(cfg, posts) -> str:
 <link href="{site_link}"/>
 <link href="{feed_link}" rel="self" type="application/atom+xml"/>
 <id>{feed_id}</id>
+<author><name>{xml_escape(cfg.author or cfg.title)}</name></author>
 <updated>{updated}</updated>
 {entries_xml}
 </feed>

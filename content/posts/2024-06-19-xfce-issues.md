@@ -49,4 +49,4 @@ VScode+httpgd 出图还是很丝滑。
 
 整体感觉还算可以。
 
-![](../../static/images/c433a4ab.webp)
+![](/static/images/c433a4ab.webp)

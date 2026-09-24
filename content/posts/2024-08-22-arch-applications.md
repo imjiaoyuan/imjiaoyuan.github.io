@@ -11,7 +11,7 @@ Arch 滚起来爽，一直滚一直爽！虽说现在 Linux 生态还是不如 W
 
 输入法当然是 fcitx5 + Rime + 雾凇拼音，这应该是当前（几乎）最好的中文输入方案了，除了切换方式不太习惯，其他还是不错的，也有很多主题。
 
-![](../../static/images/666940e9.webp)
+![](/static/images/666940e9.webp)
 
 用 Linux，那就不得不说终端了，以前我一直用 zsh，现在换成 bash 了，稳稳当当地，毕竟很多情况下是没有 zsh 的，如集群和服务器里。
 
@@ -45,7 +45,7 @@ Linux 下最好用的办公软件就是 WPS，这个没的说，虽然我也很�
 
 （这个通义灵码有点呆呆的感觉）
 
-![](../../static/images/dacdaa94.webp)
+![](/static/images/dacdaa94.webp)
 
 ## 分析软件
 
@@ -53,7 +53,7 @@ Linux 下最好用的办公软件就是 WPS，这个没的说，虽然我也很�
 
 生物信息学分析大部分的其实还是在 R 了，我也不例外，不过大部分用 R 的似乎都用 Rstudio，我一直用 VSCode，配合 httpgd 出图太爽了。
 
-![](../../static/images/140938aa.webp)
+![](/static/images/140938aa.webp)
 
 其他用来分析的就用 conda 了，但是 conda 太慢了，我用 mamba，速度更快。
 
@@ -65,4 +65,4 @@ Linux 下最好用的办公软件就是 WPS，这个没的说，虽然我也很�
 
 常用的软件应该就这些了，这里再放一张 fetch😄（哦对了，neofetch 不更新了，建议换 fastfetch）
 
-![](../../static/images/1ed7a1a6.webp)
+![](/static/images/1ed7a1a6.webp)
