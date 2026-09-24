@@ -85,28 +85,12 @@ def _parse_front_matter(text: str) -> tuple[dict, str]:
     fm = "\n".join(lines[1:end_idx])
     body = "\n".join(lines[end_idx + 1:])
     meta: dict = {}
-    current_key: str | None = None
     for raw_line in fm.splitlines():
         line = raw_line.rstrip()
-        if not line.strip():
+        if not line.strip() or line.lstrip().startswith("#") or ":" not in line:
             continue
-        if line.lstrip().startswith("#"):
-            continue
-        if line.startswith("  - ") and current_key:
-            meta.setdefault(current_key, [])
-            meta[current_key].append(_parse_scalar(line[4:].strip()))
-            continue
-        if ":" not in line:
-            continue
-        k, v = line.split(":", 1)
-        key = k.strip()
-        val = v.strip()
-        if not val:
-            meta[key] = []
-            current_key = key
-        else:
-            meta[key] = _parse_scalar(val)
-            current_key = key
+        key, val = line.split(":", 1)
+        meta[key.strip()] = _parse_scalar(val.strip())
     return meta, body
 
 
@@ -116,11 +100,6 @@ def _parse_scalar(val: str):
     low = val.lower()
     if low in {"true", "false"}:
         return low == "true"
-    if re.fullmatch(r"-?\d+", val):
-        return int(val)
-    if val.startswith("[") and val.endswith("]"):
-        parts = [x.strip() for x in val[1:-1].split(",") if x.strip()]
-        return [_parse_scalar(x) for x in parts]
     return val
 
 

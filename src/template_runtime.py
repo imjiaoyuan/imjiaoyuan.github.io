@@ -4,6 +4,7 @@ import html
 import json
 import re
 from pathlib import Path
+from urllib.parse import urljoin
 
 from models import ContentItem, SiteConfig
 
@@ -46,15 +47,11 @@ def _render_template(name: str, context: dict[str, str]) -> str:
 
 def _abs_url(cfg: SiteConfig, path: str) -> str:
     base = cfg.domain.rstrip("/")
-    if not path:
-        return base
-    if path.startswith(("http://", "https://")):
-        return path
-    return base + path if path.startswith("/") else f"{base}/{path}"
+    return urljoin(base + "/", path) if path else base
 
 
 def _ld_json(obj: dict) -> str:
-    body = json.dumps(obj, ensure_ascii=False).replace("<", "\\u003c")
+    body = json.dumps({"@context": "https://schema.org", **obj}, ensure_ascii=False).replace("<", "\\u003c")
     return f'<script type="application/ld+json">{body}</script>'
 
 
@@ -71,7 +68,6 @@ def page_description(item: ContentItem) -> str:
 def _jsonld_blog_post(cfg: SiteConfig, item: ContentItem) -> str:
     post_url = f"{cfg.domain.rstrip('/')}{item.rel_url}"
     obj = {
-        "@context": "https://schema.org",
         "@type": "BlogPosting",
         "headline": item.title,
         "description": _page_desc(item),
@@ -90,32 +86,22 @@ def _jsonld_blog_post(cfg: SiteConfig, item: ContentItem) -> str:
     return _ld_json(obj)
 
 
-def _jsonld_website(cfg: SiteConfig) -> str:
-    return _ld_json({
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": cfg.title,
-        "url": _abs_url(cfg, ""),
-    })
-
-
-def _jsonld_person(cfg: SiteConfig) -> str:
-    obj: dict = {
-        "@context": "https://schema.org",
+def _jsonld_home(cfg: SiteConfig) -> str:
+    person: dict = {
         "@type": "Person",
         "name": cfg.author or cfg.title,
         "url": _abs_url(cfg, ""),
     }
     if cfg.email:
-        obj["email"] = f"mailto:{cfg.email}"
+        person["email"] = f"mailto:{cfg.email}"
     if cfg.og_image:
-        obj["image"] = _abs_url(cfg, cfg.og_image)
-    return _ld_json(obj)
+        person["image"] = _abs_url(cfg, cfg.og_image)
+    website = {"@type": "WebSite", "name": cfg.title, "url": _abs_url(cfg, "")}
+    return _ld_json(person) + _ld_json(website)
 
 
 def _jsonld_webpage(cfg: SiteConfig, item: ContentItem) -> str:
     return _ld_json({
-        "@context": "https://schema.org",
         "@type": "WebPage",
         "name": item.title,
         "description": _page_desc(item),
@@ -225,7 +211,7 @@ def render_home(cfg: SiteConfig, page: ContentItem | None = None, recent_posts: 
     ) if recent_posts else ""
     body = _render_template("home.html", {"body": body, "recent": recent})
     description = (getattr(page, "description", "").strip() if page else "") or cfg.description
-    jsonld = _jsonld_person(cfg) + _jsonld_website(cfg)
+    jsonld = _jsonld_home(cfg)
     return render_shell(cfg, "", body, has_math=has_math, description=description, jsonld=jsonld)
 
 

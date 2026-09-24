@@ -1,33 +1,32 @@
 from __future__ import annotations
 
-import importlib.util
+import importlib
+import sys
 from pathlib import Path
 
 from models import SiteConfig
 
 
 def load_site_config(root: Path) -> SiteConfig:
-    config_path = root / "src" / "config.py"
-    if not config_path.exists():
+    src_dir = root / "src"
+    if not (src_dir / "config.py").exists():
         raise FileNotFoundError(f"src/config.py not found in {root}")
 
-    spec = importlib.util.spec_from_file_location("site_config", config_path)
-    if spec is None or spec.loader is None:
-        raise RuntimeError("failed to load src/config.py")
+    if str(src_dir) not in sys.path:
+        sys.path.insert(0, str(src_dir))
+    import config
 
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    site = getattr(mod, "SITE", None)
+    importlib.reload(config)
+
+    site = getattr(config, "SITE", None)
     if not isinstance(site, dict):
         raise ValueError("src/config.py must define a SITE dictionary")
 
     domain = site.get("domain", "/")
     if not domain or domain == "/":
-        import sys
         print("Warning: SITE['domain'] is not set. Atom feed and sitemap will use relative URLs.",
               file=sys.stderr)
 
-    menu = list(site.get("menu", []))
     return SiteConfig(
         title=site.get("title", "Site"),
         domain=domain,
@@ -38,7 +37,7 @@ def load_site_config(root: Path) -> SiteConfig:
         content_dir=root / site.get("content_dir", "content"),
         static_dir=root / site.get("static_dir", "src/assets"),
         public_dir=root / site.get("public_dir", "public"),
-        menu=menu,
+        menu=list(site.get("menu", [])),
         server=site.get("server", {"host": "127.0.0.1", "port": 1313}),
         home_page=site.get("home_page", ""),
         feed_months=site.get("feed_months", 12),
