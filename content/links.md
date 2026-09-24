@@ -1,0 +1,92 @@
+---
+title: Links
+---
+
+> Some blogs and websites I read regularly. Looking forward to growing together with bloggers who love sharing and connecting.
+
+- [二丫讲梵](https://wiki.eryajf.net/): 💻学习📝记录🔗分享
+- [杜老师说](https://dusays.com/): 分享技术、经验与资源的个人博客
+- [子夜松声](https://xyzbz.cn/): 小宋的个人博客,记录生活、美食与分享
+- [登山亦有道](https://chenyan98.cn/): 苑晨岩的个人站点,记录生活的瞬间,分享学习的心得。
+- [紫慕碎碎念](https://90zm.net/): 清澈、明净、优雅,愿以此为人生路上的航标!
+- [青山小站](https://blog.yanqingshan.com/): 在帝都搬砖的新时代农民工的小破站,分享生活、摄影、学习与工作上的知识。
+- [花猪](https://cnhuazhu.top/cards/): 佛系青年
+- [威言威语](https://www.weisay.com/blog/): 融合技术探索与生活点滴,记录开发实践、软件体验与亲子时光。
+- [拾风草堂](https://www.leolin86.com/): 拾风记录日常生活与分享
+- [Airing 的博客](https://ursb.me/): Airing 的个人博客,记录技术与生活
+- [This Cute World](https://thiscute.world/): 关于技术与世界的个人随笔
+- [保持思考、等待、斋戒](https://polebug.github.io/): polebug 的个人博客
+- [HelloGitHub](https://hellogithub.com/): 每月分享 GitHub 上有趣、入门级的开源项目
+- [Long Luo's Life Notes](https://www.longluo.me/): Long Luo 的技术与生活笔记
+- [BMPI](https://www.bmpi.dev/): 终身学习 × 全栈技术 × 投资理财,探索人生杠杆
+- [虹线](https://1q43.blog/): 评论尸的自留地,记录阅读与思考
+- [ManateeLazyCat](https://manateelazycat.github.io/): 分享 Emacs、开源工具与效率实践
+- [非理勿试](https://www.ntiy.com/): 记录所思所想的个人博客
+- [cyp0633's Blog](https://cyp0633.com/): cyp0633 的技术博客
+- [Randy's Blog](https://lutaonan.com/): About life, technology and reading
+- [idealclover](https://idealclover.top/): 翠翠的个人名片👋
+- [EAimTY's Blog](https://www.eaimty.com/): EAimTY 的技术博客,关注开发与系统
+- [Xheldon](https://www.xheldon.com/): The Answer to Life, the Universe and Everything is...
+- [DIYgod](https://diygod.cc/): 写代码是热爱,写到世界充满爱!
+- [DARKNAVY](https://www.darknavy.org/zh/): DARKNAVY 的安全研究与技术洞察
+- [Tw93](https://tw93.fun/): 记录产品工程、AI Coding、开源工具、设计与原生 macOS 软件开发。
+- [Code is cheap, let's talk](https://blog.ferstar.org/): ferstar 的技术博客
+- [依云's Blog](https://blog.lilydjwg.me/): 关注 Linux 与开源的技术博客
+- [Lainme's Blog](https://www.lainme.com/): 个人技术博客与翻译
+- [Leo's Field](https://szclsya.me/zh-cn/): Leo 记录技术与生活的园地
+- [K.I.S.S](https://bigeagle.me/): Keep It Simple, Stupid
+- [太隐](https://wangyurui.com/): 一个人的思想发育史就是他的阅读史
+- [OneV's Den](https://onevcat.com/): 上善若水,人淡如菊。专注 Swift 与 iOS 开发。
+- [竹林里有冰的博客](https://zhul.in/): 分享技术干货、学习心得与生活感悟
+- [Dejavu's Blog](https://blog.dejavu.moe/): 人心有反复,好在山水有重逢。
+- [云风的 BLOG](https://blog.codingnow.com/): 游戏开发者云风的技术博客
+- [阮一峰的网络日志](https://www.ruanyifeng.com/blog/): 科技爱好者,分享知识与见解
+- [唐巧的博客](https://blog.devtang.com/): 总结学习成果,与大家分享交流
+- [pseudoyu](https://www.pseudoyu.com/): 记录开发、区块链与效率工具实践
+- [胡涂说](https://hutusi.com/): 胡涂说博客与好奇心周刊
+- [yihong0618](https://yihong0618.github.io/gitblog/): People Die, but Long Live GitHub
+- [JustGoIdea](https://justgoidea.com/): Observation | Exploration | Zen Life
+- [平凡生活小记](https://caveallegory.cn/): 记录平凡生活的点滴
+- [Cloudflare Blog](https://blog.cloudflare.com/): 技术深度解析、产品更新与团队洞察
+- [Anaconda](https://www.anaconda.com/): AI 原生开发的可信基础平台
+- [Towards Data Science](https://towardsdatascience.com/): 数据科学与 AI 领域的领先出版物
+- [Andrej Karpathy](https://karpathy.github.io/): Musings of a Computer Scientist.
+- [Quanta Magazine](https://www.quantamagazine.org/): 报道数学、物理、生物与计算机科学前沿的独立杂志
+- [Yihui Xie | 谢益辉](https://yihui.org/): 统计学家谢益辉的个人网站
+- [Aloxaf's Blog](https://www.aloxaf.com/): Aloxaf 的技术博客
+- [Deepzz's Blog](https://deepzz.com/): 唯爱与美食不可辜负
+- [Google DeepMind](https://deepmind.google/blog/): DeepMind 官方博客,AI 研究前沿
+- [OpenAI](https://openai.com/blog): OpenAI 官方博客,产品与研究动态
+- [OpenRouter](https://openrouter.ai/): 统一接入全球大模型的平台
+- [NVIDIA Technical Blog](https://developer.nvidia.com/blog): 面向开发者的 GPU 计算与技术教程
+- [Simon Willison](https://simonwillison.net/): Django 联合创始人,专注 LLM 与 Python
+- [DrPika's Blog](https://blog.drpika.com/): 强璐医生的个人随笔与医路见闻
+- [小盖](https://xiaogai.fun/): 记录思考、产品、创作与生活,做有意思的事情。
+- [Mayx的博客](https://mabbs.github.io/): Mayx 的个人主页与博客
+- [扯氮集](http://weiwuhui.com/): 魏武挥的博客,关注互联网与新媒体
+- [4G Spaces](https://blog.youxu.info/): 徐宥(Eric Xu)的中文博客,思考记录
+- [一盘家常菜](https://life.wellwellsleep.com/): 记录生活与思考
+- [Limboy](https://limboy.me/): 关于产品、技术与生活的随笔
+- [极客死亡计划](https://www.geedea.pro/): 这里只有真情流露和赤裸的思考
+- [Elizen](https://elizen.me/): Elizen 的个人博客
+- [雅余](https://yayu.net/): 茶余饭后,闲情雅致
+- [揆机](https://pathos.page/): 法哲学研究者的博客,记录学术之路与社会观察
+- [Surmon.me](https://surmon.me/): 本是浪蝶遊蜂,自留半畝石池
+- [一派胡言](https://yipai.me/): 包含博客、碎片、链接与网页收藏的个人信息平台
+- [四火的唠叨](https://www.raychase.net/): 关于软件架构与编程的思考
+- [王登科-DK博客](https://greatdk.com/): 王登科(DK)的个人博客,记录产品与技术
+- [心的道理](https://stephenleng.com/cn/): 关于心理学与心智的写作
+- [于淼](https://yufree.cn/): 环境化学研究者,写作数据科学与科研随笔
+- [Free Mind](http://freemind.pluskid.org/): pluskid 的机器学习博客
+- [Ouroboros](https://blog.pursuitus.com/): Just another Utopia.
+- [代码家](https://daimajia.com/): 代码家的博客,关注技术与产品
+- [GeekPlux](https://geekplux.com/): Software engineer crafting tools for a lazier life.
+- [罗磊的独立博客](https://luolei.org/): 全栈开发者、ZUOLUOTV 创作者、摄影师和马拉松跑者
+- [Heng Li's blog](https://lh3.github.io/): 生物信息学家李恒的博客
+- [It's FOSS](https://itsfoss.com/): 自 2012 年起帮助用户用好 Linux 的开源媒体
+- [木遥的窗子](https://blog.farmostwood.net/): 数学、编程与随笔
+- [MacTalk](https://macshuo.com/): 池建强的博客,技术与人文
+- [土木坛子](https://tumutanzi.com/): 关注科技、教育与生活的个人博客
+- [Dave Tang's blog](https://davetang.org/muse/): 生物信息学笔记与实践
+- [jenny42's life](https://jenny42.com/): jenny42 的个人博客
+- [Seth Godin's Blog](https://seths.blog/): 关于营销、部落与尊重的每日写作

@@ -16,6 +16,7 @@ SITE = {
         {"name": "About", "url": "/about/"},
         {"name": "Blog", "url": "/blog/"},
         {"name": "Projects", "url": "/projects/"},
+        {"name": "Links", "url": "/links/"},
         {"name": "RSS", "url": "/atom.xml"},
     ],
     "server": {"host": "127.0.0.1", "port": 1313},
