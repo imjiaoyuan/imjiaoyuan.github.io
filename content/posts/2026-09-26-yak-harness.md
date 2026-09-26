@@ -1,0 +1,374 @@
+---
+title: 用 Rust 写了一个行式 coding harness
+date: 2026-09-26
+---
+
+用了一年多 Claude Code，从[本地配合 DeepSeek 跑生信流程](/5v7pe/)，到[在曙光服务器上公共部署](/9z3sa/)，越用越觉得这类工具没必要那么复杂。模型 API 说白了就是一个 HTTP 请求加一个 SSE 流，工具无非是读写文件和跑命令，交互界面就是个终端，连 TUI 都不用做，普通的行式会话就够。抱着这个想法，用 Rust 写了一个自己的 harness，就叫 [yak](https://github.com/imjiaoyuan/yak)，一个静态链接的二进制文件，没有任何运行时依赖，扔到机器上就能跑。和之前 [vibe coding 博客框架](/5xbok/) 是同一个思路，核心只做必须做的事，其余的全部留出扩展的缝，这样出问题也知道去哪修。
+
+## 安装
+
+Linux 和 macOS 下面一行命令，下载预编译二进制，校验 sha256 之后装进 `~/.local/bin`，全程不需要 root
+
+```bash
+curl -fsSL https://jiaoyuan.org/yak/install.sh | sh
+```
+
+PATH 里没有这个目录的话安装脚本会顺手加上。重复执行同一条命令就是更新器，版本有变化会打印 `updating 旧版本 -> 新版本`，没变化就不动，`YAK_VERSION` 可以固定某个 release，`YAK_REPO` 可以从 fork 装，`YAK_FORCE=1` 强制重装，`YAK_INSTALL_DIR` 换安装目录。`YAK_GH_PROXY=1` 让所有下载走 `https://gh-proxy.com/`，也可以填任意前缀式代理 URL，GitHub 慢或者连不上的环境用它，走代理的时候最新版本的查询会从 releases 重定向切到 GitHub API。脚本检测到你在 sudo 下面跑会拒绝并提示去掉 sudo 重来，`YAK_INSTALL_ALLOW_SUDO=1` 才放行。Windows 下面从 PowerShell 做同样的事
+
+```powershell
+irm https://jiaoyuan.org/yak/install.ps1 | iex
+```
+
+Linux 用的是静态 musl 构建，同一个二进制在任何发行版上都能跑，目前提供 x86_64 和 aarch64 的 Linux，x86_64 和 aarch64 的 macOS，还有 x86_64 的 Windows。之前在曙光服务器上部署 Claude Code 的时候，CentOS 7 的 glibc 老得连 conda 都得搬出来兜底，现在这个 musl 二进制 scp 过去 `chmod +x` 直接就能用，省心多了。
+
+想从源码编译也很简单，装好 Rust 工具链以后
+
+```bash
+git clone https://github.com/imjiaoyuan/yak
+cd yak
+cargo build --release
+```
+
+二进制在 `target/release/yak`。所有状态都放在 `~/.yak` 下面（Windows 是 `%USERPROFILE%\.yak`），设置 `YAK_USER_PATH` 可以把整个目录挪走，测试的时候特别有用。
+
+## 登录和模型配置
+
+第一次用进去敲 `/login`，选一个 provider，粘贴 API key，输入是隐藏的，然后从 provider 的实时模型列表里挑一个默认模型，就完事了。存下来的只有你选中的那一个模型，`/model` 的时候列表永远是实时拉的。目录里内置了 42 个 provider 的接入配置，Anthropic、OpenAI、DeepSeek、Google、Groq、Mistral、xAI、OpenRouter 这些都有，Ollama、LM Studio、llama.cpp、vLLM 一类的本地运行时也在。esc 随时取消，不会写入任何东西，`/logout` 删掉一个 provider。
+
+我日常挂的是 DeepSeek。喜欢手动编辑配置的话，向 `~/.yak/config.json` 里写一个块就行
+
+```json
+{
+  "providers": {
+    "deepseek": {
+      "kind": "openai-compat",
+      "base_url": "https://api.deepseek.com",
+      "api_key": "${DEEPSEEK_API_KEY}",
+      "models": ["deepseek-chat", "deepseek-reasoner"]
+    }
+  }
+}
+```
+
+`kind` 只有两种，`openai-compat` 和 `anthropic`。`api_key` 可以直接写 key，也可以写 `${环境变量名}`，请求的时候才去环境里读，key 不用落在配置文件里。同一个 provider 挂两个账号就 `/login` 两次，第二个会建议叫 `NAME-2`，之后模型用 `provider/model` 的完整 id 去挑，两边都提供的裸模型名会被当作歧义拒绝，而不是按顺序瞎猜一个。
+
+模型在会话里用 `/model` 换，列表是实时拉的，你保存过的固定在最上面，`/thinking` 单独调思考深度。`-m` 和环境变量 `YAK_MODEL` 可以按次覆盖。项目还能带自己的默认模型，写在仓库里最近的 `.yak/config.json` 的 `models.default`，在这个项目里开新会话就用它，进行中的会话不受影响。
+
+## 基本用法
+
+最短就三种
+
+```bash
+yak                            # 交互式会话
+yak "fix the failing test"     # 跑一个任务然后退出
+cat error.log | yak "what broke?"   # 提示词从管道来
+```
+
+管道输出是纯文本，没有颜色没有控制字符，直接重定向到文件或者接别的命令都行。
+
+交互会话里该有的细节都有。ctrl+c 或者 esc 中断当前任务，任务跑着的时候终端不接别的输入，敲进去的按键不排队也不积压，下一条消息等任务结束回到完整的行编辑器里再敲，永远不会出现两个界面状态叠在一起的怪相。`!cmd` 直接跑 shell 命令，tab 补全命令名和路径，内置命令、skill、扩展命令、提示词模板一视同仁，认出来的命令行还会加粗回显。ctrl+v 把剪贴板里的图片直接贴成附件，剪贴板里没有图片的话会告诉你它装的到底是什么。粘贴超过 10 行或者 1000 字符会折叠成一个原子 token，提交的时候才展开，不会把输入框撑爆。项目里的 `AGENTS.md` / `AGENTS.override.md` / `CLAUDE.md` 从工作目录往上取最近的一份，整份骑进系统提示词，banner 上会显示用的是哪份。
+
+界面本身有一个刻意的决定，yak 不是 TUI。codex 那类工具的交互是整屏接管的 alternate screen，排版确实漂亮，代价是终端被它接管，输出不进 scrollback，翻页搜索复制全是它自己实现的一套键位，退出之后屏幕恢复原样，刚才聊了什么全靠会话恢复找回来。yak 是普通的行式会话，回答逐行追加在终端的正常缓冲区里，回看历史用终端自己的滚动，搜索复制是终端原生功能，和你在 shell 里的肌肉记忆完全一致。渲染也是 write-once 的，回答区每个字节只写一次，不擦除不重绘，所以 kitty、tmux、纯 ssh 甚至串口控制台下面行为都一样。这类界面正经的名字是 REPL，read-eval-print loop，读一句执行一句打印一句再等下一句，psql、sqlite3、python 的交互模式都是这个形态，yak 的会话就是一个 chat REPL。
+
+附件也可以从命令行给
+
+```bash
+yak -a shot.png "what is wrong here?"
+yak -a https://example.com/page "summarise this"
+yak -a - "what is this?" < shot.png
+```
+
+图片、PDF、wav/mp3 和纯文本按原生内容块发送，模型不接受的格式在请求出机器之前就会被拒绝，不会浪费一次调用。长对话只保留最新的图片附件，旧的折叠成短文本说明，不一直占上下文。
+
+跑单次任务的时候有几个常用 flag
+
+```bash
+yak -m deepseek/deepseek-chat "..."        # 这次用哪个模型
+yak --thinking high "..."                  # off | minimal | low | medium | high | xhigh
+yak -o temperature=0.2 -o top_p=0.9 "..."  # 透传采样参数
+yak -s "you are a Rust reviewer" "..."     # 整个替换系统提示词
+yak --append-system-prompt "be terse" "..." # 在系统提示词后面追加
+yak --tools read,grep "..."                # 收窄工具（名字或 * 通配，+名/-名 在默认集上增删）
+yak --json "..."                           # 事件流输出，代替终端界面
+```
+
+`--thinking` 在 OpenAI 兼容端点上映射成 `reasoning_effort`，在 Anthropic 上映射成思考预算。`--json` 把界面换成一行一个 JSON 对象，`text`、`reasoning`、`tool_start`、`tool_log`、`tool_end`、`turn_end` 加一个收尾的 `result`，stdout 上除了事件什么都没有，给监督进程用的，编辑器、CI 流水线或者另一个 harness 都行，后面讲 subagent 的时候会再遇到它。
+
+## 内置工具
+
+内核只留四个工具，`read`、`write`、`edit`、`bash`。`ls`、grep 和 glob 搜索对、`update_plan` 多步骤清单、`remember` 记忆、`webfetch` 抓网页，这六个以前也是内置的，现在都以扩展的形式放在仓库的 `examples/extensions/` 下面，拷进 `~/.yak/extensions/`（或者项目的 `.yak/extensions/`）就像内置的一样挂载，行为一个字节没变。写代码这件事上读写文件加跑命令已经覆盖绝大多数场景，agent 自己会挑着用，`--tools` 可以临时收窄。
+
+`read` 是分页读大文件而不是整个吞进去，`offset` 和 `limit` 按 2000 行的窗口走，一次最多 50KB，单行封顶 2000 字符，一个压缩过的 bundle 没办法把上下文刷爆。文件没读完会带一句 `[Showing lines a-b of N. Use offset=...]`，agent 自己知道接着翻。
+
+碰到二进制格式 `read` 会直接拒绝，并提示该用哪个本地工具，PDF 用 `pdftotext`，BAM 和 CRAM 用 `samtools`，Parquet、HDF5 用 `duckdb`，老的 Office 文档用 `libreoffice --headless --convert-to csv`。这一条对生信太重要了，动辄几个 GB 的 BAM 文件，agent 老老实实去调 samtools 查头和索引，而不是试图把二进制塞进上下文。图片走视觉附件，直接发给模型看。
+
+`read` 还顺带做了 JSON 查询。路径后面加 `?q=<filter>`，文件就不是整个读进来而是被查询，`data.json?q=.items[0].name`，`log.jsonl?q=.[] | select(.level == "err")`，过滤语言是一个实用的 jq 子集，键路径、迭代、下标、管道、`select()`、`keys`、`length`、`type` 都有，进程内求值，不需要装 jq。JSONL 是一行一行流着处理的，几个 GB 的日志也不会整个载入。
+
+`edit` 在一次调用里做一处或者多处精确替换，参数就是原文和改后的话，匹配不上会报错而不是静默乱改。`write` 创建或者整个重写文件。上下文吃紧的时候，超长的工具结果会被截头去尾，中间丢掉的部分会注明，完整内容仍然在会话日志里，模型需要的时候重新跑一遍命令或者重新读一次文件就回来了。
+
+`remember` 是那个记忆工具，说一句"记住我喜欢简洁回复"，它就把这行事实写进 `~/.yak/YAK.md`，去重之后注入以后每一次会话的系统提示词，手编这个文件效果一样。项目级的规矩该写进仓库的 `AGENTS.md`，不放这里。
+
+## 权限控制
+
+agent 默认自由运行，它自己判断需要做什么就直接做。拦住它的是硬拒绝和黑名单，而不是到处弹的确认框。用别的工具的时候那种每次写文件都要按一下 `y` 的设计，用久了人就麻木了，按键变成肌肉记忆，确认就形同虚设，所以我干脆不做宽泛的询问模式。
+
+整个检查链条画出来是这样的，一次 bash 工具调用从上往下走，命中哪层就在哪层处理
+
+```text
+模型发出 bash 调用 "git push --force origin main"
+    │
+    ▼
+┌─ 硬编码拒绝，无法关闭                  ─┐
+│ sudo/su/doas，mkfs*/fdisk/dd/shred      │
+│ shutdown/reboot/halt，fork 炸弹         │
+│ 写设备节点，rm 对着 / 或者 ~            │
+└─────────────────────┬─────────────────────┘
+                      │ 未命中
+                      ▼
+┌─ per-tool 策略 config.json             ─┐
+│ "write": "deny"    直接拒              │
+│ "bash": "prompt"   弹 y/n/a            │
+└─────────────────────┬─────────────────────┘
+                      │ 未命中（allow 免不了黑名单）
+                      ▼
+┌─ 黑名单文件，只加不减                  ─┐
+│ ~/.yak/blacklist  全局生效             │
+│ .yak/blacklist    只对当前仓库，行优先 │
+│ 命中弹提示，按 a 本次会话放行           │
+└─────────────────────┬─────────────────────┘
+                      │ 未命中
+                      ▼
+                    执行
+```
+
+
+硬编码那一层改配置也关不掉。提权命令 `sudo`、`su`、`doas`，文件系统创建和销毁 `mkfs*`、`mkswap`、`fdisk`、`parted`、`dd`、`shred`、`wipefs`，机器控制 `shutdown`、`reboot`、`poweroff`、`halt`、`init`，还有 fork 炸弹、往真实设备节点里写东西、对 `/` 或者 `~` 的 `rm`，这些直接拒绝，任何配置都救不回来。往 `/dev/sda` 里写会拦，`2>/dev/null` 这种没事。检查读的是命令位置，`nohup`、`xargs`、`env`、`timeout` 这类包装剥掉再看，`shell -c` 的载荷也逃不掉。
+
+第二层是黑名单文件，值得展开讲讲。`~/.yak/blacklist` 对所有项目生效，`.yak/blacklist` 放在仓库根目录只对这个仓库生效，同名规则项目的行优先。这一层只能在硬拒绝之上做加法，你想放行某个硬拒绝是做不到的，硬拒绝就是硬拒绝。
+
+文件首次生成时自带两条规则加一堆语法注释
+
+```text
+rm
+git push --force*
+```
+
+删掉文件下次启动就重置回这两条。每行一个规则，写法有四种
+
+```text
+deploy                        # 命令词，拦 deploy x、deploy --all、echo hi | deploy
+git push --force origin main  # 完整命令段，全部对上才拦
+rm -*                        # glob，拦 rm -rf、rm -r，但拦不住裸 rm
+!git push --force*            # 反向放行，把前面对上的规则又放回来
+```
+
+匹配是对 shell 解析后的命令逐段做的，所以管道后面的段也能命中，`echo hi | deploy` 里 `deploy` 会被单独看到。`!` 开头的行用来在黑名单上开口子，比如全局拦了 `rm -*`，项目里写 `!rm -rf node_modules` 就把这一种放回来了。普通的 `rm` 默认不拦，删文件本来就是日常开发的一部分，真正危险的是 `rm -rf` 指错了地方，默认规则拦得比你想象中宽松，要严可以自己加 `rm -*`。
+
+黑名单命中时会弹提示，高亮匹配到的那一行规则，可以看到到底是哪条规则拦住了你，按 `a` 在本次会话内放行这个模式，后续同模式的调用不再问。`--json` 跑无人值守的时候没有终端给你按，命中就按拒绝收场，fail closed；`--approval allow` 让子进程替你全放行，给 subagent 驱动的子 yak 用的，硬拒绝不受它影响。
+
+要说诚实的话，黑名单这个检查是词法层面的，它看得到的是解析出来的命令段，看不到运行时才拼出来的东西，比如 `cmd="rm"; $cmd -rf /` 这种就不在它的视野里，扩展工具自己 spawn 的进程也不经过这条路。所以它是提示不是紧闭的牢笼，真要防护还是配合用户权限，拿日常账号跑 agent，别拿 root 跑。
+
+再细的控制写在 config.json 里，每个工具都可以单独给策略
+
+```json
+{
+  "agent": {
+    "tools": {"bash": "prompt", "write": "deny"}
+  }
+}
+```
+
+`allow`、`deny`、`prompt` 三个值，双向都行，该问的问，该禁的禁，这一层的优先级最高。
+
+## 扩展系统
+
+这是我最喜欢的设计。任何脚本开头加几行注释，它就变成了一个工具，host 每次调用的时候把它 spawn 起来，喂参数，收 stdout 作为结果
+
+```python
+#!/usr/bin/env python3
+# --- yak-tool: wordcount
+# description: count characters, words and lines of a text
+# args: text (string) the text to measure
+# arg-mode: argv
+# interpreter: python3
+# timeout: 10
+import sys
+text = sys.argv[1] if len(sys.argv) > 1 else ""
+print(f"{len(text)} chars · {len(text.split())} words")
+```
+
+不需要可执行权限，声明了 `interpreter` 就用指定的解释器跑，这一招在 Windows 上同样好使。Python、shell、R，手边有什么就用什么写，Rust 也行，`template.rs` 那种单文件源码 host 会在第一次调用时用 rustc 现场编译，按内容哈希缓存。只有一个参数的时候加一行 `arg-mode: argv`，参数就以普通命令行参数的形式进来，不用解析 JSON，shell 脚本写起来毫无负担。文件放进 `~/.yak/extensions/` 是全局生效，放进项目的 `.yak/extensions/` 只对这个项目生效，两边同名的时候项目那份赢，改完 `/reload` 一下就挂上了。
+
+更重的需求用常驻扩展。没有 manifest 头的文件按会话启动一次，通过 stdio 一行一个 JSON 和 host 通信。启动时 host 先发 `initialize`，扩展声明自己提供哪些工具、哪些斜杠命令、关心哪些事件，之后模型调用工具、用户敲命令、回合边界的时候 host 都会回调。整个协议可以用一小段 Python 讲完
+
+```python
+#!/usr/bin/env python3
+import json, sys
+
+def reply(obj):
+    sys.stdout.write(json.dumps(obj) + "\n")
+    sys.stdout.flush()
+
+for line in sys.stdin:
+    req = json.loads(line)
+    if req.get("type") == "initialize":
+        reply({"id": req["id"], "result": {"tools": [
+            {"name": "deploy", "description": "Deploy the current tree",
+             "parameters": {"type": "object", "properties": {}}}],
+            "commands": [], "events": []}})
+    elif req.get("type") == "call_tool":
+        import subprocess
+        out = subprocess.run(["deploy.sh"], capture_output=True, text=True)
+        reply({"id": req["id"], "result": out.stdout or out.stderr})
+    elif req.get("type") == "shutdown":
+        break
+```
+
+这就是一个完整的部署工具，核心一行都没改。扩展往 stderr 打的任何东西都是给人看的通道，调用进行中时会一行一行流进这次调用的工具日志，相当于长任务的实时进度，但是不会混进给模型的结果里。调用进行中还能往 stdout 流 lane 帧，每个 lane 一行原地重写的状态行，两个并行的 subagent 就是两行各自跳动的进度，只活在屏幕上不进会话记录。工具默认 120 秒超时，跑构建或者跑另一个 agent 这种长活在 `initialize` 里自己报一个更长的期限。扩展崩了会在下次用到的时候懒重启，代价是丢一次调用，不是丢整个会话。
+
+事件里最有用的是 `tool_call`，它在每次工具真正执行之前触发，扩展可以拒绝这次调用，可以改写它的参数，也可以替它跳过审批提示。比如不想让 agent 在某个挂载了网络盘的目录里乱删东西，写一个几行的监听就拦住了，项目级的 guardrail 全靠这条缝，比任何模式开关都精准。`tool_result` 事件更进一步，能拿到工具的完整输出并改写模型实际读到的内容，日志去重、敏感信息脱敏都插在这里，线程文件里仍然保留原始输出，改坏了也赖不掉，而且这条路径 fail-open，超时或者崩了就原样放行工具自己的结果。`compact` 事件最狠，能整场替换掉自动压缩，换成你自己的摘要，这一场任务就以你的摘要收尾，隐私过滤、领域摘要、旁路模型都在这里插针。
+
+仓库里还附了模板。`template.js` 内嵌了一个 JavaScript 运行时，用户区是那套熟悉的扩展 API，`registerTool`、`registerCommand`、`on("tool_call", ...)`，别的 agent 生态里写好的工具命令钩子大部分直接贴进来就能跑；`template.py` 是同样的形状换 Python 写。
+
+## MCP
+
+MCP 没有做进内核，而是作为一个常驻扩展存在。`examples/extensions/mcp_bridge.py` 会读取放在自己旁边的 `mcp.json`，把里面每个 server 的工具挂载成 `server__tool` 形式的工具，审批矩阵照常适用。stdio 和 streamable HTTP 两种传输都支持，token 用 `${VAR}` 从环境变量展开，不用明文写进文件
+
+```json
+{
+  "cloudflare": {
+    "type": "streamable-http",
+    "url": "https://mcp.cloudflare.com/mcp",
+    "headers": {"Authorization": "Bearer ${CLOUDFLARE_MCP_TOKEN}"}
+  },
+  "fetch": {"command": "uvx", "args": ["mcp-server-fetch"]}
+}
+```
+
+把文件拷进扩展目录，改一下旁边的 `mcp.json`，`/reload` 完事。一个 MCP server 握手失败就跳过它打个暗色警告，其余的照常挂载，不会因为一个坏 server 拖死整个会话。
+
+## subagent
+
+subagent 同样是扩展而不是内核特性。`examples/extensions/subagent.py` 挂载一个 `subagent` 工具，spawn 一个子 `yak` 进程，让它在自己的上下文窗口里干活，只把结论作为工具结果交回来。agent 的定义就是带 frontmatter 的 markdown 文件，放在 `~/.yak/agents/` 或者项目的 `.yak/agents/` 下面
+
+```markdown
+---
+name: scout
+description: read-only scout that locates code and files
+tools: read, grep, glob, ls
+---
+You are a scout. Locate code and report paths with brief evidence. Do not edit anything.
+```
+
+`tools`、`model`、`thinking` 都是可选的，正文就是附加的系统提示词。仓库里附了四个可以直接抄的定义，`scout` 和 `reviewer` 只读，`planner` 只思考不动手，`worker` 可以改文件可以跑命令。调用可以给单个 `task`，可以给一批并行的 `tasks`，也可以给一条 `chain` 让每一步拿到上一步的答案接着干。子进程通过 `--json` 输出事件流，扩展把它转成父会话里的实时工具日志，答案从最后的 `result` 对象里拿，完全不用解析面向人类的文本。ctrl+c 会沿着链路传下去把子进程也停掉，深度守卫拒绝套娃，子 agent 的工具白名单也不包含 `subagent` 自己。
+
+会改文件的 writer 型 subagent 在 git 仓库里跑在专门的 git worktree 上，改完提交到分支再合并回来，几个并行的 writer 排队一个个合，冲突就干净地放弃合并，把分支名留给你处置，谁改的东西都不会丢。`YAK_SUBAGENT_WORKTREES=0` 可以关掉这个行为让它原地跑。
+
+核心对 subagent 的存在一无所知，这就是扩展系统该有的样子。
+
+## skills 和提示词模板
+
+skills 放在 `~/.yak/skills/` 下面，一个目录一个 `SKILL.md`，`description` 是模型匹配任务的依据，`~/.agents/skills` 和项目里的 `.yak/skills/`、`.agents/skills/` 也在发现路径上，后者同名胜出。agent 会在 `/help` 里列出所有可用的 skill，可以 `/skill:name` 手动跑，模型看任务像的时候也会自己挑。运行的时候 skill 拿到自己所在目录作为工作目录，里面引用的 `references/`、`scripts/` 和各种资源在哪儿启动都能解析对。之前写过的生信项目梳理提示词，现在可以直接做成一个 skill，每个项目目录里一敲就跑。仓库附了三个可以直接抄的，`release-checklist`、`commit-hygiene`、`pkg-skill-audit`。
+
+提示词模板解决另一个问题，就是反复敲同样的话。把一个 `.md` 文件放进 `~/.yak/commands/`（或者项目里的 `.yak/commands/`，项目的那份赢），`/name` 就变成了一个斜杠命令，正文就是提示词，frontmatter 里可以加一个额外的 `system` 提示词，`$input` 接住命令名后面的所有参数，两边都会做替换。比如写一个 `review.md`，之后 `/review src/main.rs` 就是拿模板跑这个文件。文件只在提交命令的那一刻才被读，会话中途扔一个进去也不用 reload，名字直接亮起来进补全。
+
+再往上一层是包管理。`yak install git:github.com/user/repo` 把一个 git 仓库克隆到 `~/.yak/pkg/` 下面，里面的 `extensions/`、`skills/`、`commands/` 会挂进正常的发现路径，`@ref` 可以钉住某个引用，`-l` 装到项目本地，`-g` 是默认的全局，装完会报告它认出了什么。仓库根上一个 `SKILL.md` 也算数，整个仓库变成一个 skill，现在大多数独立 skill 仓库就是这个形状，直接装就能用。重复 install 就是刷新，`yak list` 看每个包带了什么，`yak remove` 删掉。没有 npm 这条路，纯 git，装之前自己审一遍，毕竟扩展是拿你的完整权限跑的。
+
+## 会话管理
+
+每个会话都存成 `~/.yak/threads/` 下面的一个 JSONL 文件，模型、参数、每一轮的 token 用量、工具调用和结果全程在案，随时回来接着聊
+
+```bash
+yak -c "and in python?"       # 接着最新的会话问，先看当前目录再全局找
+yak -r                        # 浏览并恢复历史会话，可以边打字边过滤
+yak --session 01ABC... "..."  # 指定一个，短前缀就行
+yak --fork "..."              # 从当前会话分叉一条新的
+yak --no-session "..."        # 这次不存
+yak export notes.md           # 把会话导出成 markdown
+```
+
+会话 id 是 ULID，按时间有序。导出的 markdown 里工具调用和结果都在代码块里，思考过程收在专门的段落，系统提示词作为附录，附件按名字和类型记录而不是塞字节，直接能当文档归档。
+
+会话不止一条线。`/tree` 把它摊成一棵树，每条分支的每一轮都在，当前走的那条有标记，选中某一轮就跳过去，会话按那条分支回放，下一条消息从那里继续。跳过去不是删掉，被跳过的轮次留在文件里当兄弟分支，之后 `/tree` 还能再跳回来。回放只动对话记录，agent 写过的文件还在原地，要把工作区一起倒回去，装一个 `workspace_checkpoint.py` 扩展，每一轮都从快照开始，跳转时把丢掉轮次的快照折回工作区。
+
+## 上下文和网络
+
+上下文管理基本不用管，但管得很细。计费上下文超过窗口减 16384 的时候触发 compaction，保留最近 20k token，把丢掉的前缀总结成摘要，窗口大小未知的模型按 64k 走。如果请求发出去被 provider 告知超长，会立刻压缩再重试，不会让会话一次一次撞同一堵墙。`cache_ttl` 可以选 `5m` 或者 `1h`，长的那档写入计费贵一点，但是一次审批提示或者一轮长测试超过五分钟以后，下一轮就不用重写整个对话了，算下来是划算的。
+
+网络层的细节都是踩坑换来的。重试带正负 10% 的抖动，退避从 1 秒到 30 秒，连接失败另有一套 5 秒到 60 秒的预算，服务器发了 `Retry-After` 就尊重它。流中途断了的话，已经产出的部分答案会保留成一条真正的消息接着续，而不是整轮丢掉重来，恢复次数上限五次。完全没有输出就断掉的请求原样重发，因为什么都没交出去，重发不会重复。300 秒没有任何输出的流按空闲错误处理，不让任务干挂在那里。一轮任务最多五百个模型回合，死循环的模型烧不完你的 token。请求体超过 32MB 会被本地拒绝，并且点名是哪些附件把它撑满的，`agent.max_request_bytes` 和 `--max-request-bytes` 可以调低，网关在前面的时候经常比 provider 文档写的上限小得多。
+
+代理走 `ALL_PROXY`、`HTTPS_PROXY`、`HTTP_PROXY` 和 `NO_PROXY`，自动生效，国内环境很实用。
+
+## 项目结构
+
+代码组织按角色分层，一句话说清楚就是命令层薄，内核层厚，协议适配一层一个文件
+
+```text
+yak/
+├── src/
+│   ├── commands/     # 子命令，一个文件一个，flags、help、接线
+│   ├── core/         # 共享内核，配置、线程存储、http、渲染
+│   ├── providers/    # 协议适配器，openai-compat 和 anthropic 各一个，加共享消息模型和 provider 目录
+│   ├── agent/        # agent 领域，循环、工具注册表、审批规则、扩展宿主
+│   ├── term/         # 终端领域，行编辑、选择器、spinner、终端尺寸
+│   └── platform/     # 平台层，linux/macos/windows 各一份实现
+├── examples/
+│   ├── extensions/   # 可运行的扩展，wordcount、websearch、mcp_bridge.py、subagent.py 等
+│   ├── skills/       # 三个示例 skill
+│   ├── agents/       # 四个 subagent 定义，scout、reviewer、planner、worker
+│   └── packages/     # 一个可直接安装的示例包
+└── docs/
+    ├── architecture.md   # 请求路径、agent 循环、工具注册表、扩展宿主、渲染契约
+    ├── extensions.md     # 插件接口，manifest 字段、每个消息和事件、tool_call 门、超时
+    └── usage.md          # 第二天的 everything：工具、审批、会话、插件
+```
+
+这种分法的好处是改哪里都能立刻找到地方。加一个子命令就是往 `commands/` 里放一个新文件，接一个新协议就是往 `providers/` 里放一个适配器，agent 循环本身在 `agent/` 里，和终端呈现完全解耦，`--json` 模式下整个 `term/` 都不参与。测试内联在各模块的 `#[cfg(test)]` 里，就近看行为，单个跑用 `cargo test <name>`，CI 里另有端到端脚本把真实二进制拉起来走完整会话，三大平台各跑一遍。
+
+扩展宿主也遵循同样的克制。host 负责 spawn、stdio、超时和尺寸上限，扩展自己声明工具、命令和事件，核心不认识任何一个具体扩展，MCP 桥和 subagent 都住在 `examples/` 里，和用户自己写的扩展没有地位差别，删掉它们核心照常编译。
+
+想快速冒烟一下不改自己的状态
+
+```bash
+YAK_USER_PATH=/tmp/x cargo run -- "smoke test prompt"
+```
+
+## 和 pi 的对比
+
+写的过程中主要参照的对象是 [pi](https://github.com/earendil-works/pi)，yak 的交互习惯和 compaction 规则都能看到它的影子，`template.js` 模板里那层兼容 API 就是照着它做的，写好的工具命令钩子大部分能直接贴过来用。pi 本身做得很好，但它是 TypeScript 技术栈的，整个项目是一个 npm monorepo，驮着 pi-ai、pi-agent-core、pi-tui 一大堆包，而我一直不喜欢 ts 技术栈的软件，所以动手用 Rust 重写了一个自己的，用下来 yak 比 pi 还快。
+
+启动是最直接的差别。pi 背后是 Node.js 运行时，冷启动要过一遍 node 的初始化，而 yak 是 Rust 编译出来的单二进制，启动毫秒级，敲下回车会话就起来了，内存占用可以忽略，`grep` 大目录、`read` 分页读文件这些工具全是原生代码，没有一层 JS 转接，流式输出的每个字符直接写 tty，长时间跑下来明显更安静。
+
+依赖面的问题更实在。pi 装完带着一整个 node_modules，为了供应链安全它官方文档里专门有一节讲依赖锁定，直接依赖全部固定精确版本，shrinkwrap、npm audit、生命周期脚本白名单一套全上，可见 ts 生态下这块有多让人操心。yak 这边 musl 静态链接，一个文件没有任何运行时依赖，根本不存在依赖链可被攻击的面，curl 一行装完，scp 到服务器 `chmod +x` 就能用，之前在曙光服务器上为了跑 agent 先装 node 再链 npm 的经历再也不需要了。
+
+权限设计是理念上的分野。pi 不内置权限系统，文件、进程、网络、凭据全靠启动它的用户权限裸跑，官方的建议是需要隔离就拿容器或者沙箱包一层。yak 把这道墙做在了里面，硬拒绝加黑名单两层，提权、文件系统销毁、机器控制这些直接拦死，普通的日常操作又不打断你。我个人更信任后一种，容器隔离对大多数人是个不会去做的可选项，而内置的硬拒绝是每次都在场的事实。
+
+功能上 yak 也做得更克制。pi 的功能基本都在主程序里，yak 把 MCP、subagent、websearch 这些全部拆成了扩展，连 ls 和搜索都不住在内核里，核心只留四个内置工具，表面积小，能出错的地方就少。会话格式两边都是 JSONL，yak 的 `--json` 事件流让子进程可以精确拿到每一轮的 token 用量，监督进程计费不用解析任何面向人类的文本，这一点在写 subagent 的时候特别舒服。
+
+## 和 codex 的对比
+
+Rust 阵营里也试过 [codex](https://github.com/openai/codex)，语言选对了，但功能上不太行。
+
+最明显的是 provider 面窄。codex 是 OpenAI 自家产品，模型选择基本围绕自家接口转，第三方 provider 要靠 profile 手动配置 base_url 去兼容，配 DeepSeek 这类国产 API 能用，但体验明显是后妈养的，模型列表要手写，官方支持永远排在自家后面。yak 内置 42 个 provider 的接入配置，`/login` 选完就跑，`provider/model` 的命名一视同仁，谁也不比谁高贵。
+
+扩展性是更大的差距。codex 没有插件系统，工具就那几个，想加个自己的工具要 fork 源码改 Rust 重新编译。yak 这边任何脚本加几行注释就是一个工具，常驻扩展能挂工具挂命令还能拦 tool_call，MCP 和 subagent 都是这个机制长出来的，核心一个字节没改。这个差别日常用起来就是天壤之别，别人的工具再全，也不可能预判你项目里那个奇怪的需求。
+
+会话管理也单薄。codex 的 resume 能找回上次对话，但没有 `--fork` 分叉、没有会话树、没有导出 markdown、没有 `--json` 事件流给监督进程消费，会话就是会话，不是能被程序接续操作的数据。yak 的线程是纯 JSONL，每轮带 token 用量，导出、分叉、被另一个 agent 当子进程驱动都是原生能力。
+
+界面形态上也有一笔。codex 的交互是 ratatui 写的整屏 TUI，好处是排版规整，代价是输出不进 scrollback，翻页搜索得学它自己的键位，终端里其他工作流的习惯全不通用。yak 是行式的，会话就摊在正常缓冲区里，往上滚就是全部历史，管道接出去又是纯文本，同一个东西既是给人看的也是给程序读的。
+
+然后是体感。codex 背靠大厂，启动要读配置要握手，比 pi 快但比 yak 慢，交互反馈也不如自己写的跟手，毕竟大项目的重心不在这科细节上。还有就是它绑定 OpenAI 生态的思路决定了它更像一个产品而不是一个工具，产品的功能边界由官方定义，工具的边界由使用者定义，我想要后者。
+
+## 测试情况
+
+我主要在 Arch Linux 上测试，滚更很快，内核、终端、Wayland 环境一直在变，用下来没有任何问题。Kitty 和 Konsole 里交互会话、剪贴板贴图、斜杠命令都正常，fish 和 bash 下面管道和重定向也没有碰到过坑。Shell 命令 Linux 和 macOS 上默认走 `sh`，Windows 上默认走 PowerShell，`YAK_SHELL` 可以换成 `cmd`、`pwsh`、`zsh` 或者任何在 PATH 上的 shell。
+
+macOS 和 Windows 我手头没有长期使用的机器，prebuilt 目标都编译了，安装脚本也都在，但是设没设对只有真机知道。感兴趣的朋友可以帮忙测试一下这两个平台，碰到问题直接去 [GitHub Issues](https://github.com/imjiaoyuan/yak/issues) 开一个，附上平台、终端和复现步骤就行。
+
+## 为什么自己写
+
+之前在 [AI paradox](/074s9/) 那篇里写过，工具越顺手人越懒得思考。但一个自己写的 agent 恰好是解药，每一行为什么这么写、每个错误为什么这么报，我都清楚。模型请求失败了，我知道是重试预算用尽还是上下文超长，工具被拒了，我知道是硬拒绝、黑名单还是 per-tool 策略，扩展没挂上，`/status` 会告诉我原因。这种确定感用别人的黑盒工具是换不来的。
+
+Rust 加 musl 的组合还顺手解决了部署问题，启动毫秒级，内存占用可以忽略，一个文件从最新的 Arch 到老掉牙的 CentOS 7 通吃，再也不用为了一台服务器单独折腾环境。
+
+项目在 GitHub，[imjiaoyuan/yak](https://github.com/imjiaoyuan/yak)，MIT 协议，感兴趣的可以装一个玩玩，习惯终端工作流的人应该会觉得顺手。
