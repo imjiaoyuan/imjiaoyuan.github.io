@@ -22,6 +22,7 @@ class SiteConfig:
     feed_months: int = 12
     author: str = ""
     og_image: str = ""
+    avatar: str = ""
 
 
 @dataclass

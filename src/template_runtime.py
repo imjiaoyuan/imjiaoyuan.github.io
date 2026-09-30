@@ -198,6 +198,16 @@ def render_404(cfg: SiteConfig) -> str:
     return render_shell(cfg, "404", body, has_math=False, description="Page not found", url="/404.html")
 
 
+def _home_avatar_html(cfg: SiteConfig) -> str:
+    if not cfg.avatar:
+        return ""
+    alt = html.escape(cfg.author or cfg.title)
+    return (
+        f'<div class="home-avatar"><img src="{html.escape(cfg.avatar)}" '
+        f'alt="{alt}" width="640" height="640"></div>'
+    )
+
+
 def render_home(cfg: SiteConfig, page: ContentItem | None = None, recent_posts: list[ContentItem] | None = None) -> str:
     if page is None:
         body = ""
@@ -209,7 +219,14 @@ def render_home(cfg: SiteConfig, page: ContentItem | None = None, recent_posts: 
         "recent_posts.html",
         {"items": _recent_items_html(recent_posts or [])},
     ) if recent_posts else ""
-    body = _render_template("home.html", {"body": body, "recent": recent})
+    body = _render_template(
+        "home.html",
+        {
+            "body": body,
+            "avatar": _home_avatar_html(cfg),
+            "recent": recent,
+        },
+    )
     description = (getattr(page, "description", "").strip() if page else "") or cfg.description
     jsonld = _jsonld_home(cfg)
     return render_shell(cfg, "", body, has_math=has_math, description=description, jsonld=jsonld)

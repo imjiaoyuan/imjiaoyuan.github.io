@@ -6,6 +6,7 @@ SITE = {
     "domain": "https://jiaoyuan.org",
     "icon": "/favicon.ico",
     "email": "imjiaoyuan@gmail.com",
+    "avatar": "/static/images/avatar.webp",
 
     "content_dir": "content",
     "static_dir": "src/assets",
@@ -13,7 +14,6 @@ SITE = {
     "home_page": "index.md",
     "feed_months": 12,
     "menu": [
-        {"name": "About", "url": "/about/"},
         {"name": "Blog", "url": "/blog/"},
         {"name": "Projects", "url": "/projects/"},
         {"name": "RSS", "url": "/atom.xml"},
