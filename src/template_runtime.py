@@ -92,8 +92,6 @@ def _jsonld_home(cfg: SiteConfig) -> str:
         "name": cfg.author or cfg.title,
         "url": _abs_url(cfg, ""),
     }
-    if cfg.email:
-        person["email"] = f"mailto:{cfg.email}"
     if cfg.og_image:
         person["image"] = _abs_url(cfg, cfg.og_image)
     website = {"@type": "WebSite", "name": cfg.title, "url": _abs_url(cfg, "")}
