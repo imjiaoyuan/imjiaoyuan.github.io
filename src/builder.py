@@ -11,7 +11,7 @@ from config_loader import load_site_config
 from content_loader import load_pages, load_posts
 from date_utils import parse_date
 from markdown_engine import MarkdownEngine
-from template_runtime import clear_cache, page_description, render_404, render_home, render_page, render_post, render_posts_list
+from template_runtime import clear_cache, page_description, render_404, render_home, render_list_page, render_page, render_post
 
 
 def _write(public_dir: Path, rel_out_dir: str, html_text: str) -> None:
@@ -78,10 +78,13 @@ def _render_sitemap(cfg, posts, pages) -> str:
     <priority>1.0</priority>
   </url>""")
 
-    urls.append(f"""  <url>
-    <loc>{xml_escape(base)}/blog/</loc>
+    per_page = max(1, cfg.posts_per_page)
+    total_pages = max(1, (len(posts) + per_page - 1) // per_page)
+    for n in range(2, total_pages + 1):
+        urls.append(f"""  <url>
+    <loc>{xml_escape(base)}/page/{n}/</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.5</priority>
   </url>""")
 
     for post in posts:
@@ -150,11 +153,14 @@ def build(root: Path) -> None:
         _write(cfg.public_dir, slug, render_page(cfg, p))
 
     home_page = pages.get(home_slug) if home_slug else None
-    recent = posts[:10]
-    html = render_home(cfg, home_page, recent_posts=recent)
-    _write(cfg.public_dir, "", html)
-
-    _write(cfg.public_dir, "blog", render_posts_list(cfg, posts))
+    per_page = max(1, cfg.posts_per_page)
+    total_pages = max(1, (len(posts) + per_page - 1) // per_page)
+    for n in range(1, total_pages + 1):
+        chunk = posts[(n - 1) * per_page:n * per_page]
+        if n == 1:
+            _write(cfg.public_dir, "", render_home(cfg, home_page, chunk, 1, total_pages))
+        else:
+            _write(cfg.public_dir, f"page/{n}", render_list_page(cfg, chunk, n, total_pages))
 
     (cfg.public_dir / "atom.xml").write_text(_render_atom(cfg, posts), encoding="utf-8")
 
