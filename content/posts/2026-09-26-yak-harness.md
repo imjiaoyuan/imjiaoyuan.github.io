@@ -343,21 +343,21 @@ YAK_USER_PATH=/tmp/x cargo run -- "smoke test prompt"
 
 权限设计是理念上的分野。pi 不内置权限系统，文件、进程、网络、凭据全靠启动它的用户权限裸跑，官方的建议是需要隔离就拿容器或者沙箱包一层。yak 把这道墙做在了里面，硬拒绝加黑名单两层，提权、文件系统销毁、机器控制这些直接拦死，普通的日常操作又不打断你。我个人更信任后一种，容器隔离对大多数人是个不会去做的可选项，而内置的硬拒绝是每次都在场的事实。
 
-功能上 yak 也做得更克制。pi 的功能基本都在主程序里，yak 把 MCP、subagent、websearch 这些全部拆成了扩展，连 ls 和搜索都不住在内核里，核心只留四个内置工具，表面积小，能出错的地方就少。会话格式两边都是 JSONL，yak 的 `--json` 事件流让子进程可以精确拿到每一轮的 token 用量，监督进程计费不用解析任何面向人类的文本，这一点在写 subagent 的时候特别舒服。
+功能上两边都是小核心加扩展，pi 甚至走得更前面。扩展、skills、prompt 模板、主题在 pi 那边都打包成可分享的 Pi package，用 `pi install npm:@scope/package` 或 git 装，连 subagent 和 plan mode 这类都不内置，要用自己装；yak 这边核心只留四个内置工具，MCP、subagent、websearch 全在扩展里，扩展、skills、prompt 同样能打包，只是只认 git、没有 npm 通道。差别落到扩展怎么跑：pi 的扩展是 `jiti` 就地加载的 TypeScript 模块，和主进程同一个 OS 权限，能注册工具、命令、事件处理器、provider 甚至 TUI；yak 的扩展是核心 spawn 出来的子进程，走 stdio 协议，Python、shell、Rust、JS 都能写，隔离在进程边界上。工具和命令倒是不用重写，`template.js` 那层 shim 认 pi 的 `registerTool`、`registerCommand`、`on`，大部分贴过来就能跑。会话格式两边都是 JSONL，pi 的 session 文件本身就是一棵 id/parentId 的树，能原地分叉，`--mode json` 也和 yak 的 `--json` 一样逐事件报 token 用量，监督进程两边都不用解析面向人类的文本。
 
 ## 和 codex 的对比
 
-Rust 阵营里也试过 [codex](https://github.com/openai/codex)，语言选对了，但功能上不太行。
+Rust 阵营里也试过 [codex](https://github.com/openai/codex)，语言选对了，功能和生态都比我做得厚，但它的路子和我要的不是一条。
 
 最明显的是 provider 面窄。codex 是 OpenAI 自家产品，模型选择基本围绕自家接口转，第三方 provider 要靠 profile 手动配置 base_url 去兼容，配 DeepSeek 这类国产 API 能用，但体验明显是后妈养的，模型列表要手写，官方支持永远排在自家后面。yak 内置 42 个 provider 的接入配置，`/login` 选完就跑，`provider/model` 的命名一视同仁，谁也不比谁高贵。
 
-扩展性是更大的差距。codex 没有插件系统，工具就那几个，想加个自己的工具要 fork 源码改 Rust 重新编译。yak 这边任何脚本加几行注释就是一个工具，常驻扩展能挂工具挂命令还能拦 tool_call，MCP 和 subagent 都是这个机制长出来的，核心一个字节没改。这个差别日常用起来就是天壤之别，别人的工具再全，也不可能预判你项目里那个奇怪的需求。
+扩展性上两边都能长，只是长法不同。codex 有正经的插件系统：插件根目录放一份 `plugin.json`，声明 skills、MCP server、app connector 和 hooks，工具本体多数跑在进程外的 MCP server 里，从 marketplace 装完即用。规范还是跨厂商的 Agent Plugins v1，连 Claude、Cursor 的插件清单都一并认。hooks 也齐，PreToolUse 能拦下一次工具调用甚至改写入参，和 yak 拦 tool_call 是同一档的能力。yak 这边更土：任何脚本加几行注释就是一个工具，常驻扩展和核心同进程，能挂工具挂命令，MCP 和 subagent 都是这个机制长出来的。区别不在能不能扩，而在扩一个私货工具要付多少手续，codex 那边要写清单、起进程、走一遍安装确认，yak 这边往目录里丢个脚本就行。别人的工具再全，也不可能预判你项目里那个奇怪的需求，所以加私货的成本才是我在意的。
 
-会话管理也单薄。codex 的 resume 能找回上次对话，但没有 `--fork` 分叉、没有会话树、没有导出 markdown、没有 `--json` 事件流给监督进程消费，会话就是会话，不是能被程序接续操作的数据。yak 的线程是纯 JSONL，每轮带 token 用量，导出、分叉、被另一个 agent 当子进程驱动都是原生能力。
+会话管理也不是差距。codex 的 rollout 同样是 JSONL，`codex fork` 能分叉历史，`codex exec --json` 输出结构化事件流、每轮 token 用量都在里面，TUI 里 `/export` 还能导出 markdown，subagent 也是默认开着的。这块两边给我的东西差不多，硬要说差别，codex 把会话摊在 `$CODEX_HOME/sessions` 一整套索引和归档里，yak 保持一个线程就是一个 JSONL 文件，导出、分叉、被另一个 agent 当子进程驱动都直接作用在那个文件上，少一层中间层。
 
 界面形态上也有一笔。codex 的交互是 ratatui 写的整屏 TUI，好处是排版规整，代价是输出不进 scrollback，翻页搜索得学它自己的键位，终端里其他工作流的习惯全不通用。yak 是行式的，会话就摊在正常缓冲区里，往上滚就是全部历史，管道接出去又是纯文本，同一个东西既是给人看的也是给程序读的。
 
-然后是体感。codex 背靠大厂，启动要读配置要握手，比 pi 快但比 yak 慢，交互反馈也不如自己写的跟手，毕竟大项目的重心不在这科细节上。还有就是它绑定 OpenAI 生态的思路决定了它更像一个产品而不是一个工具，产品的功能边界由官方定义，工具的边界由使用者定义，我想要后者。
+然后是体感。codex 背靠大厂，启动要读配置要握手，比 pi 快但比 yak 慢，交互反馈也不如自己写的跟手，毕竟大项目的重心不在这类细节上。还有就是它绑定 OpenAI 生态的思路决定了它更像一个产品而不是一个工具，插件规范再开放，边界也是官方先画好的那套，工具的边界由使用者定义，我想要后者。
 
 ## 测试情况
 
